@@ -1,0 +1,37 @@
+{
+	"InstallScripts" : 
+	[
+		"F:/code store/game test/Clash_of_Clans/build/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/cocos/core/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/Box2D/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/chipmunk/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/freetype2/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/recast/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/bullet/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/jpeg/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/openssl/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/uv/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/webp/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/websockets/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/tinyxml2/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/xxhash/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/xxtea/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/clipper/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/edtaa3func/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/ConvertUTF/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/poly2tri/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/md5/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/curl/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/png/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/win32-specific/gles/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/win32-specific/icon/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/win32-specific/MP3Decoder/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/win32-specific/OggDecoder/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/win32-specific/OpenalSoft/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/glfw3/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/zlib/cmake_install.cmake",
+		"F:/code store/game test/Clash_of_Clans/build/engine/external/unzip/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -1,0 +1,945 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|win32">
+      <Configuration>Debug</Configuration>
+      <Platform>win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|win32">
+      <Configuration>Release</Configuration>
+      <Platform>win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{951836A8-1891-39DA-9C69-91EBD862B2EC}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>win32</Platform>
+    <ProjectName>Clash_of_Clans</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">F:\code store\game test\Clash_of_Clans\build\bin\Clash_of_Clans\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">Clash_of_Clans.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">Clash_of_Clans</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|win32'">F:\code store\game test\Clash_of_Clans\build\bin\Clash_of_Clans\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|win32'">Clash_of_Clans.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|win32'">Clash_of_Clans</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">F:\code store\game test\Clash_of_Clans\build\bin\Clash_of_Clans\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">Clash_of_Clans.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">Clash_of_Clans</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">F:\code store\game test\Clash_of_Clans\build\bin\Clash_of_Clans\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">Clash_of_Clans.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">Clash_of_Clans</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/Box2D/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/chipmunk/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/freetype2/include/win32/freetype2" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/bullet/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/bullet/include/bullet" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/jpeg/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/uv/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/webp/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/websockets/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/curl/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/png/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/icon/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/glfw3/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;COCOS2D_DEBUG=1;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;COCOS2D_DEBUG=1;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\include\win32\freetype2;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include\bullet;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\include\OGLES;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\include\win32\freetype2;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include\bullet;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\include\OGLES;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>												</Message>
+      <Command>setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/libssl-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/libcrypto-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/uv/prebuilt/win32/uv.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/uv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/websockets/prebuilt/win32/websockets.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/websockets.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/curl/prebuilt/win32/libcurl.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/libcurl.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/glew32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/iconv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/libmpg123.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/libogg.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/libvorbis.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/libvorbisfile.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/OpenAL32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/zlib1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\Debug\cocos2d.lib;lib\Debug\external.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\prebuilt\win32\debug\libbox2d.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\prebuilt\win32\debug-lib\libchipmunk.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\Debug\ext_recast.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\prebuilt\win32\debug\libbullet.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\prebuilt\win32\libwebp.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\prebuilt\win32\websockets.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\prebuilt\win32\libssl.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\prebuilt\win32\uv_a.lib;lib\Debug\ext_tinyxml2.lib;lib\Debug\ext_xxhash.lib;lib\Debug\ext_xxtea.lib;lib\Debug\ext_clipper.lib;lib\Debug\ext_edtaa3func.lib;lib\Debug\ext_convertUTF.lib;lib\Debug\ext_poly2tri.lib;lib\Debug\ext_md5.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\prebuilt\win32\libcurl.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\prebuilt\win32\libpng.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\Debug\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>F:/code store/game test/Clash_of_Clans/build/Debug/Clash_of_Clans.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Debug/Clash_of_Clans.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/Box2D/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/chipmunk/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/freetype2/include/win32/freetype2" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/bullet/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/bullet/include/bullet" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/jpeg/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/uv/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/webp/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/websockets/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/curl/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/png/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/icon/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/glfw3/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\include\win32\freetype2;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include\bullet;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\include\OGLES;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\include\win32\freetype2;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include\bullet;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\include\OGLES;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>												</Message>
+      <Command>setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/libssl-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/libcrypto-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/uv/prebuilt/win32/uv.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/uv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/websockets/prebuilt/win32/websockets.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/websockets.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/curl/prebuilt/win32/libcurl.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/libcurl.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/glew32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/iconv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/libmpg123.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/libogg.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/libvorbis.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/libvorbisfile.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/OpenAL32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/zlib1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\Release\cocos2d.lib;lib\Release\external.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\prebuilt\win32\release\libbox2d.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\Release\ext_recast.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\prebuilt\win32\release\libbullet.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\prebuilt\win32\libwebp.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\prebuilt\win32\websockets.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\prebuilt\win32\libssl.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\prebuilt\win32\uv_a.lib;lib\Release\ext_tinyxml2.lib;lib\Release\ext_xxhash.lib;lib\Release\ext_xxtea.lib;lib\Release\ext_clipper.lib;lib\Release\ext_edtaa3func.lib;lib\Release\ext_convertUTF.lib;lib\Release\ext_poly2tri.lib;lib\Release\ext_md5.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\prebuilt\win32\libcurl.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\prebuilt\win32\libpng.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\Release\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>F:/code store/game test/Clash_of_Clans/build/Release/Clash_of_Clans.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/Release/Clash_of_Clans.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/Box2D/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/chipmunk/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/freetype2/include/win32/freetype2" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/bullet/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/bullet/include/bullet" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/jpeg/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/uv/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/webp/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/websockets/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/curl/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/png/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/icon/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/glfw3/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\include\win32\freetype2;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include\bullet;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\include\OGLES;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\include\win32\freetype2;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include\bullet;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\include\OGLES;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>												</Message>
+      <Command>setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/libssl-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/libcrypto-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/uv/prebuilt/win32/uv.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/uv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/websockets/prebuilt/win32/websockets.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/websockets.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/curl/prebuilt/win32/libcurl.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/libcurl.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/glew32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/iconv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/libmpg123.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/libogg.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/libvorbis.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/libvorbisfile.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/OpenAL32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/zlib1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\MinSizeRel\cocos2d.lib;lib\MinSizeRel\external.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\prebuilt\win32\release\libbox2d.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\MinSizeRel\ext_recast.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\prebuilt\win32\release\libbullet.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\prebuilt\win32\libwebp.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\prebuilt\win32\websockets.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\prebuilt\win32\libssl.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\prebuilt\win32\uv_a.lib;lib\MinSizeRel\ext_tinyxml2.lib;lib\MinSizeRel\ext_xxhash.lib;lib\MinSizeRel\ext_xxtea.lib;lib\MinSizeRel\ext_clipper.lib;lib\MinSizeRel\ext_edtaa3func.lib;lib\MinSizeRel\ext_convertUTF.lib;lib\MinSizeRel\ext_poly2tri.lib;lib\MinSizeRel\ext_md5.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\prebuilt\win32\libcurl.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\prebuilt\win32\libpng.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\MinSizeRel\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>F:/code store/game test/Clash_of_Clans/build/MinSizeRel/Clash_of_Clans.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/MinSizeRel/Clash_of_Clans.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/Box2D/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/chipmunk/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/freetype2/include/win32/freetype2" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/bullet/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/bullet/include/bullet" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/jpeg/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/uv/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/webp/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/websockets/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/curl/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/png/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/icon/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/glfw3/include/win32" /external:I "F:/code store/game test/Clash_of_Clans/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MinimalRebuild></MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\include\win32\freetype2;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include\bullet;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\include\OGLES;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>F:\code store\game test\Clash_of_Clans\Classes;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\audio\include;F:\code store\game test\Clash_of_Clans\cocos2d;F:\code store\game test\Clash_of_Clans\cocos2d\cocos;F:\code store\game test\Clash_of_Clans\cocos2d\extensions;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\editor-support;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\base;F:\code store\game test\Clash_of_Clans\cocos2d\cocos\platform\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\recast\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\tinyxml2\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxhash\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\xxtea\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\clipper\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\edtaa3func\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\ConvertUTF\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\poly2tri\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\md5\..;F:\code store\game test\Clash_of_Clans\cocos2d\external\unzip\.;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\include\win32\freetype2;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\include\bullet;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\include\OGLES;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\include;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\include\win32;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>												</Message>
+      <Command>setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/libssl-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/libcrypto-1_1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/uv/prebuilt/win32/uv.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/uv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/websockets/prebuilt/win32/websockets.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/websockets.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/curl/prebuilt/win32/libcurl.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/libcurl.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/glew32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/iconv.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/libmpg123.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/libogg.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/libvorbis.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/libvorbisfile.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/OpenAL32.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+F:\tools\CMake\bin\cmake.exe -E copy_if_different "F:/code store/game test/Clash_of_Clans/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll" "F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/zlib1.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\RelWithDebInfo\cocos2d.lib;lib\RelWithDebInfo\external.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\Box2D\prebuilt\win32\release\libbox2d.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\RelWithDebInfo\ext_recast.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\bullet\prebuilt\win32\release\libbullet.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\webp\prebuilt\win32\libwebp.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\websockets\prebuilt\win32\websockets.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\prebuilt\win32\libssl.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\uv\prebuilt\win32\uv_a.lib;lib\RelWithDebInfo\ext_tinyxml2.lib;lib\RelWithDebInfo\ext_xxhash.lib;lib\RelWithDebInfo\ext_xxtea.lib;lib\RelWithDebInfo\ext_clipper.lib;lib\RelWithDebInfo\ext_edtaa3func.lib;lib\RelWithDebInfo\ext_convertUTF.lib;lib\RelWithDebInfo\ext_poly2tri.lib;lib\RelWithDebInfo\ext_md5.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\curl\prebuilt\win32\libcurl.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\png\prebuilt\win32\libpng.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;F:\code store\game test\Clash_of_Clans\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\RelWithDebInfo\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <DataExecutionPrevention></DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers></ImageHasSafeExceptionHandlers>
+      <ImportLibrary>F:/code store/game test/Clash_of_Clans/build/RelWithDebInfo/Clash_of_Clans.lib</ImportLibrary>
+      <LinkErrorReporting></LinkErrorReporting>
+      <ProgramDataBaseFile>F:/code store/game test/Clash_of_Clans/build/bin/Clash_of_Clans/RelWithDebInfo/Clash_of_Clans.pdb</ProgramDataBaseFile>
+      <RandomizedBaseAddress></RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="F:\code store\game test\Clash_of_Clans\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">Building Custom Rule F:/code store/game test/Clash_of_Clans/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">setlocal
+F:\tools\CMake\bin\cmake.exe "-SF:/code store/game test/Clash_of_Clans" "-BF:/code store/game test/Clash_of_Clans/build" --check-stamp-file "F:/code store/game test/Clash_of_Clans/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeCCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeCXXCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeRCCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeSystem.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosBuildSet.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosConfigDefine.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosConfigDepend.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCCompilerABI.c;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXCompilerABI.cpp;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCompilerIdDetection.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCXXCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerABI.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerId.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerSupport.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineRCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineSystem.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeFindBinUtils.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseArguments.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseImplicitIncludeInfo.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseImplicitLinkInfo.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseLibraryArchitecture.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeRCCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystem.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCXXCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCompilerCommon.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestRCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ADSP-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ARMCC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ARMClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\AppleClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Borland-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Cray-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\CrayClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Diab-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GHS-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GNU-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\HP-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IAR-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Intel-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\LCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\NVHPC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\OrangeC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\PGI-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\PathScale-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Renesas-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SCO-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TI-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TIClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Tasking-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Watcom-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XL-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\zOS-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CompilerId\VS-10.vcxproj.in;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeDetermineLinkerId.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCLinker.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCXXLinker.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\FeatureTesting.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-Determine-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">F:\code store\game test\Clash_of_Clans\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|win32'">Building Custom Rule F:/code store/game test/Clash_of_Clans/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|win32'">setlocal
+F:\tools\CMake\bin\cmake.exe "-SF:/code store/game test/Clash_of_Clans" "-BF:/code store/game test/Clash_of_Clans/build" --check-stamp-file "F:/code store/game test/Clash_of_Clans/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|win32'">F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeCCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeCXXCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeRCCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeSystem.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosBuildSet.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosConfigDefine.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosConfigDepend.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCCompilerABI.c;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXCompilerABI.cpp;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCompilerIdDetection.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCXXCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerABI.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerId.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerSupport.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineRCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineSystem.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeFindBinUtils.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseArguments.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseImplicitIncludeInfo.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseImplicitLinkInfo.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseLibraryArchitecture.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeRCCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystem.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCXXCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCompilerCommon.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestRCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ADSP-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ARMCC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ARMClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\AppleClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Borland-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Cray-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\CrayClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Diab-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GHS-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GNU-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\HP-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IAR-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Intel-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\LCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\NVHPC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\OrangeC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\PGI-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\PathScale-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Renesas-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SCO-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TI-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TIClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Tasking-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Watcom-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XL-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\zOS-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CompilerId\VS-10.vcxproj.in;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeDetermineLinkerId.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCLinker.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCXXLinker.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\FeatureTesting.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-Determine-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|win32'">F:\code store\game test\Clash_of_Clans\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">Building Custom Rule F:/code store/game test/Clash_of_Clans/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">setlocal
+F:\tools\CMake\bin\cmake.exe "-SF:/code store/game test/Clash_of_Clans" "-BF:/code store/game test/Clash_of_Clans/build" --check-stamp-file "F:/code store/game test/Clash_of_Clans/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeCCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeCXXCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeRCCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeSystem.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosBuildSet.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosConfigDefine.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosConfigDepend.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCCompilerABI.c;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXCompilerABI.cpp;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCompilerIdDetection.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCXXCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerABI.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerId.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerSupport.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineRCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineSystem.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeFindBinUtils.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseArguments.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseImplicitIncludeInfo.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseImplicitLinkInfo.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseLibraryArchitecture.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeRCCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystem.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCXXCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCompilerCommon.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestRCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ADSP-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ARMCC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ARMClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\AppleClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Borland-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Cray-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\CrayClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Diab-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GHS-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GNU-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\HP-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IAR-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Intel-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\LCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\NVHPC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\OrangeC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\PGI-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\PathScale-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Renesas-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SCO-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TI-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TIClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Tasking-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Watcom-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XL-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\zOS-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CompilerId\VS-10.vcxproj.in;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeDetermineLinkerId.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCLinker.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCXXLinker.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\FeatureTesting.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-Determine-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">F:\code store\game test\Clash_of_Clans\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">Building Custom Rule F:/code store/game test/Clash_of_Clans/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">setlocal
+F:\tools\CMake\bin\cmake.exe "-SF:/code store/game test/Clash_of_Clans" "-BF:/code store/game test/Clash_of_Clans/build" --check-stamp-file "F:/code store/game test/Clash_of_Clans/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeCCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeCXXCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeRCCompiler.cmake;F:\code store\game test\Clash_of_Clans\build\CMakeFiles\4.2.0-rc3\CMakeSystem.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosBuildSet.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosConfigDefine.cmake;F:\code store\game test\Clash_of_Clans\cocos2d\cmake\Modules\CocosConfigDepend.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCCompilerABI.c;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXCompilerABI.cpp;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCXXInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCommonLanguageInclude.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeCompilerIdDetection.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCXXCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerABI.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerId.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineCompilerSupport.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineRCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeDetermineSystem.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeFindBinUtils.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeGenericSystem.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeInitializeConfigs.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeLanguageInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseArguments.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseImplicitIncludeInfo.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseImplicitLinkInfo.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeParseLibraryArchitecture.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeRCCompiler.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeRCInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystem.cmake.in;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeSystemSpecificInitialize.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCXXCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestCompilerCommon.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CMakeTestRCCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ADSP-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ARMCC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\ARMClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\AppleClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Borland-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\CMakeCommonCompilerMacros.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Cray-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\CrayClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Diab-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GHS-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GNU-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\HP-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IAR-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Intel-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\LCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\NVHPC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\OrangeC-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\PGI-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\PathScale-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Renesas-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SCO-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TI-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TIClang-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Tasking-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\Watcom-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XL-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\zOS-C-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;F:\tools\CMake\share\cmake-4.2\Modules\CompilerId\VS-10.vcxproj.in;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCXXLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeCommonLinkerInformation.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeDetermineLinkerId.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCLinker.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\CMakeInspectCXXLinker.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Internal\FeatureTesting.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Linker\MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Linker\Windows-MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-Determine-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-Initialize.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-C.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC-CXX.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows-MSVC.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\Windows.cmake;F:\tools\CMake\share\cmake-4.2\Modules\Platform\WindowsPaths.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">F:\code store\game test\Clash_of_Clans\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\Classes\AppDelegate.h" />
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\Classes\HelloWorldScene.h" />
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\proj.win32\main.h" />
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\proj.win32\resource.h" />
+    <ClCompile Include="F:\code store\game test\Clash_of_Clans\Classes\AppDelegate.cpp" />
+    <ClCompile Include="F:\code store\game test\Clash_of_Clans\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="F:\code store\game test\Clash_of_Clans\proj.win32\main.cpp" />
+    <ResourceCompile Include="F:\code store\game test\Clash_of_Clans\proj.win32\game.rc" />
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\Resources\CloseNormal.png" />
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\Resources\CloseSelected.png" />
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\Resources\HelloWorld.png" />
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\Resources\fonts\Marker Felt.ttf" />
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\Resources\fonts\arial.ttf" />
+    <ClInclude Include="F:\code store\game test\Clash_of_Clans\Resources\res\.gitkeep" />
+    <ClCompile Include="F:\code store\game test\Clash_of_Clans\cocos2d\cocos\precheader.cpp" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\ZERO_CHECK.vcxproj">
+      <Project>{D4E6691C-7A26-38F9-9163-67F50B533451}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\SYNC_RESOURCE-Clash_of_Clans.vcxproj">
+      <Project>{C5310C27-D258-3135-B92F-431AF125CCB2}</Project>
+      <Name>SYNC_RESOURCE-Clash_of_Clans</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\cocos\core\cocos2d.vcxproj">
+      <Project>{0B4C300D-354E-3E90-8B2C-D3A212C7788E}</Project>
+      <Name>cocos2d</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\clipper\ext_clipper.vcxproj">
+      <Project>{F911C8AD-D85A-3D4E-8155-9AF7D0F962C3}</Project>
+      <Name>ext_clipper</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\ConvertUTF\ext_convertUTF.vcxproj">
+      <Project>{3E51E447-783A-360A-A4DF-55B577837442}</Project>
+      <Name>ext_convertUTF</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\edtaa3func\ext_edtaa3func.vcxproj">
+      <Project>{581C84BF-1322-38E2-B80D-92936CC3C78D}</Project>
+      <Name>ext_edtaa3func</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\md5\ext_md5.vcxproj">
+      <Project>{88893B24-3EC5-38F3-9438-E5BF1CDB8091}</Project>
+      <Name>ext_md5</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\poly2tri\ext_poly2tri.vcxproj">
+      <Project>{C714F51C-57D2-34F8-81FF-E008C2A887E5}</Project>
+      <Name>ext_poly2tri</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\recast\ext_recast.vcxproj">
+      <Project>{5421A122-3BF9-3488-A5D0-042FF9DAA076}</Project>
+      <Name>ext_recast</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\tinyxml2\ext_tinyxml2.vcxproj">
+      <Project>{674E193E-58A5-36BA-A95F-41760CFFE124}</Project>
+      <Name>ext_tinyxml2</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\unzip\ext_unzip.vcxproj">
+      <Project>{5A28AA0E-6E9D-3A51-80E7-F0BE5C38764E}</Project>
+      <Name>ext_unzip</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\xxhash\ext_xxhash.vcxproj">
+      <Project>{DA787DC8-2070-3020-A545-843EDBF162DB}</Project>
+      <Name>ext_xxhash</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\xxtea\ext_xxtea.vcxproj">
+      <Project>{425E9E28-6B01-330B-A2D9-1C326AACF846}</Project>
+      <Name>ext_xxtea</Name>
+    </ProjectReference>
+    <ProjectReference Include="F:\code store\game test\Clash_of_Clans\build\engine\external\external.vcxproj">
+      <Project>{3810A70F-836D-3354-A4EA-41C8FEA45AB0}</Project>
+      <Name>external</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
