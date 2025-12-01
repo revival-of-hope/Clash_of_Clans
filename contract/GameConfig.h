@@ -33,7 +33,7 @@ public:
         } else if (type == BuildingType::kWall) {
             stats.width_ = 1;
             stats.height_ = 1;
-            stats.max_hp_ = 500;  // Walls are tough!
+            stats.max_hp_ = 500;
         }
         return stats;
     }
