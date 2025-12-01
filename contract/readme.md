@@ -9,7 +9,7 @@ All code follows **Google C++ Style Guide** conventions for naming, formatting, 
 
 ---
 
-## **📁 File Overview**
+## ** File Overview**
 
 ### **1. `GameConstants.h`**
 
@@ -139,24 +139,3 @@ TODO(developer_name): Explanation of what needs to be done.
 This makes future assignments searchable and traceable.
 
 ---
-
-## **📌 Summary**
-
-These three headers work together to define:
-
-* All constants and identification enums (`GameConstants.h`)
-* All shared data structures (`GameStructs.h`)
-* All stat lookup logic and configuration (`GameConfig.h`)
-
-Following **Google C++ Style** ensures:
-
-* Readable, consistent naming
-* Clear separation of type/function/constant roles
-* Clean and maintainable long-term codebase
-
----
-
-If you want, I can also generate:
-📘 A full project-level coding standard
-⚙️ A `.clang-format` enforcing Google rules
-🧪 Documentation for adding new buildings/troops
