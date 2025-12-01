@@ -10,7 +10,6 @@ public:
 
     // The Lookup Functions
     UnitStats GetTroopStats(TroopType type, int level) {
-        // Example Logic (You will fill this out)
         UnitStats stats;
         if (type == TroopType::kGiant) {
             stats.max_hp_ = 300 + (level * 50);  // Level scaling

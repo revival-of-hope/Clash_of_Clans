@@ -39,7 +39,7 @@ enum class ProjectileType {
     kNone = 99 // Melee units
 };
 
-// 3. Rendering Layers (Z-Order) - Tells Student A how to layer things
+// 3. Rendering Layers (Z-Order)
 enum ZOrder {
     kZGround = 0,
     kZDecoration = 10,
@@ -52,7 +52,7 @@ enum ZOrder {
     kZUiPopup = 200    // Pause Menu
 };
 
-// 4. Physics/Collision Tags (For Student B's Hit Detection)
+// 4. Physics/Collision Tags
 #define kTagBuilding 1001
 #define kTagUnit 1002
 #define kTagProjectile 1003
