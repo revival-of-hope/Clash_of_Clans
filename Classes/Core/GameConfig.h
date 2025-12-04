@@ -1,6 +1,5 @@
 // GameConfig.h
 // Singleton Database for balancing game statistics.
-// Hardcoded (instead of using individual classes) for Compilation Safety, Speed, and the "Flyweight" concept.
 
 #ifndef GAME_CONFIG_H
 #define GAME_CONFIG_H

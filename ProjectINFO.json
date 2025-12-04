@@ -1,0 +1,223 @@
+{
+  "game_design_document": {
+    "basic_info": {
+      "title": "One-Month “Clash of Clans” School Project",
+      "team_size": 3,
+      "Development Task Allocation":{
+        "Developer A" : "Engine",
+        "Developer B" : "GamePlay",
+        "Developer C" : "FullStack"
+      },
+      "description": "Reference the game of the same name, blending real-time strategy & simulation gameplay with resource gathering, building development, troop training, and combat simulation.",
+      "core_features": {
+        "main_hub": "Main Village / Town Hall System",
+        "resources": [
+          "Gold",
+          "Elixir",
+          "Population/Capacity"
+        ],
+        "building_types": [
+          "Resource Generation Buildings (Mines/Collectors)",
+          "Army Camps (Spawn Troops)",
+          "Defense Towers (Archer Towers/Cannons)",
+          "Storage Buildings"
+        ],
+        "troops": [
+          "Archers",
+          "Barbarians",
+          "Wall Breakers",
+          "Giants (High HP Tanks)"
+        ],
+        "ai_combat_system": [
+          "Pathfinding",
+          "Attack Determination",
+          "Building Priority (e.g., prioritize defense towers)"
+        ],
+        "progression": "Multiple Building Levels: At least 3 levels",
+        "combat_flow": [
+          "Deploy Troops",
+          "Troop Auto-Combat",
+          "Win/Loss Determination"
+        ],
+        "maps": "Support at least 2 different maps",
+        "audio": "Background Music & Combat Sound Effects"
+      },
+      "optional_features": [
+        "Multiplayer Attack System",
+        "Alliance System (Join Clans)",
+        "Clan Wars / Online Battles",
+        "Air Troops (Dragons, etc.)",
+        "Traps & Bomb Systems",
+        "Replay System",
+        "Building Construction Time (Speed-up Crystals)"
+      ]
+    },
+    "assets": {
+      "troop_assets": {
+        "cpp_class_base": "Troop",
+        "specifications": "Each unit requires four state sequence frames: Idle, Move, Attack, and Die.",
+        "list": [
+          {
+            "class_name": "Barbarian",
+            "description": "Barbarian: Melee"
+          },
+          {
+            "class_name": "Archer",
+            "description": "Archer: Ranged"
+          },
+          {
+            "class_name": "Giant",
+            "description": "Giant: High HP Tank"
+          },
+          {
+            "class_name": "WallBreaker",
+            "description": "Wall Breaker: Carries Bomb"
+          },
+          {
+            "class_name": "BabyDragon",
+            "description": "Baby Dragon: Air Unit (Optional Feature)"
+          },
+          {
+            "class_name": "N/A",
+            "description": "Generic Shadow: Semitransparent Black Oval (Required for Dragons)"
+          }
+        ]
+      },
+      "building_assets": {
+        "cpp_class_base": "Building",
+        "specifications": "Each building must provide appearances for 3 levels: lvl1, lvl2, lvl3.",
+        "list": [
+          {
+            "class_name": "TownHall",
+            "description": "Town Hall: Core Base"
+          },
+          {
+            "class_name": "GoldMine",
+            "description": "Gold Mine: Produces Resources"
+          },
+          {
+            "class_name": "ElixirCollector",
+            "description": "Elixir Collector: Produces Resources"
+          },
+          {
+            "class_name": "GoldStorage",
+            "description": "Gold Storage: Storage Building"
+          },
+          {
+            "class_name": "ElixirStorage",
+            "description": "Elixir Storage: Storage Building"
+          },
+          {
+            "class_name": "Barracks",
+            "description": "Barracks: Troop Production Building"
+          },
+          {
+            "class_name": "Cannon",
+            "description": "Cannon: Turret must be separate for rotation"
+          },
+          {
+            "class_name": "ArcherTower",
+            "description": "Archer Tower: High Tower Archer"
+          },
+          {
+            "class_name": "AirDefense",
+            "description": "Air Defense: Targets Air Units Only (Optional Extension)"
+          },
+          {
+            "class_name": "Wall",
+            "description": "Wall: Connection Component"
+          }
+        ]
+      },
+      "vfx_and_projectiles": {
+        "cpp_class_base": "Projectile / Effect",
+        "specifications": "Sequence frame animations or single images.",
+        "list": [
+          {
+            "class_name": "ArrowProjectile",
+            "description": "Archer/Tower Arrow"
+          },
+          {
+            "class_name": "CannonBall",
+            "description": "Cannon Shell"
+          },
+          {
+            "class_name": "RocketProjectile",
+            "description": "Air Defense Missile"
+          },
+          {
+            "class_name": "FireBall",
+            "description": "Dragon Fireball"
+          },
+          {
+            "class_name": "ExplosionVfx",
+            "description": "Explosion Effect (Wall Breaker/Shelling)"
+          },
+          {
+            "class_name": "FireImpactVfx",
+            "description": "Fire Splash Effect"
+          },
+          {
+            "class_name": "SpawnSmokeVfx",
+            "description": "Troop Deployment Smoke"
+          }
+        ]
+      },
+      "interface_ui": {
+        "cpp_class_base": "GameHUD / UIElement",
+        "specifications": "Static images or 9-slice images.",
+        "list": [
+          {
+            "module": "HUD (Health Bar)",
+            "description": "Unit Overhead Health Bar (Background/Ally/Enemy)"
+          },
+          {
+            "module": "Icons (Resources)",
+            "description": "Gold/Elixir Icons"
+          },
+          {
+            "module": "Deployment (Cards)",
+            "description": "Bottom Troop Spawn Buttons"
+          },
+          {
+            "module": "Selection (Interaction)",
+            "description": "Highlight Frame for Selected Objects"
+          }
+        ]
+      },
+      "audio": {
+        "specifications": ".mp3 (Music) or .wav (Sound Effects)",
+        "list": [
+          {
+            "type": "BGM",
+            "description": "Combat Background Music"
+          },
+          {
+            "type": "SFX",
+            "description": "Barbarian Attack"
+          },
+          {
+            "type": "SFX",
+            "description": "Arrow Shot"
+          },
+          {
+            "type": "SFX",
+            "description": "Cannon Fire"
+          },
+          {
+            "type": "SFX",
+            "description": "Explosion (Wall Breaker/Shell)"
+          },
+          {
+            "type": "SFX",
+            "description": "Dragon Breath"
+          },
+          {
+            "type": "SFX",
+            "description": "Building Collapse"
+          }
+        ]
+      }
+    }
+  }
+}

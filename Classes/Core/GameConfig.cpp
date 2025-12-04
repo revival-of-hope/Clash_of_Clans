@@ -1,3 +1,6 @@
+// GameConfig.cpp
+// Used for balance tuning.
+// Hardcoded (instead of using individual classes) for Compilation Safety, Speed, and the "Flyweight" concept.
 #include "GameConfig.h"
 
 namespace Core {
