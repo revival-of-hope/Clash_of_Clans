@@ -14,17 +14,6 @@ This header defines all core, global constants and enumerations used throughout 
 * **Strongly typed enums** (`enum class`) for units, buildings, projectiles, and rendering layers
 * **Physics/collision tags** for hit detection
 
-All enumerators use the Google style **`kPascalCase`** naming for constants, e.g.:
-
-```cpp
-enum class BuildingType {
-    kTownHall,
-    kGoldMine,
-    kElixirStorage,
-    ...
-};
-```
-
 This file acts as the "authoritative source" for identifiers used universally across the engine.
 
 ---
@@ -36,20 +25,6 @@ Defines the core **data structures** used during gameplay:
 * `BuildingData` – Represents buildings as saved in a player’s village
 * `UnitStats` – Combat statistics for troops
 * `BuildingStats` – Combat/resource statistics for buildings
-
-All struct **member variables follow Google style field naming**:
-
-```
-snake_case_   // with trailing underscore
-```
-
-Example:
-
-```cpp
-int max_hp_;
-float attack_speed_;
-BuildingType favorite_target_;
-```
 
 ---
 
