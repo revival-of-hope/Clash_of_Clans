@@ -38,7 +38,9 @@ struct BuildingStats {
     int width_;               // Size in tiles
     int height_;
     int resource_capacity_;   // Storage capacity
+    int troop_capacity_;      // [NEW] Specifically for Army Camp
     int production_rate_;     // Per hour
+    TargetType target_type_;  // [NEW]
 };
 } // namespace Core
 

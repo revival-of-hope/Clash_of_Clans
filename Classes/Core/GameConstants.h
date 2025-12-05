@@ -28,6 +28,7 @@ enum class BuildingType {
     kArcherTower = 7,
     kAirDefense = 8,
     kWall = 9,
+    kArmyCamp = 10,
     kNone = 99
 };
 
@@ -47,6 +48,12 @@ enum class ProjectileType {
     kNone = 99
 };
 
+enum class TargetType {
+    kNone = 0,          // 不攻击 (如资源建筑)
+    kGround = 1,        // 仅地面 (如加农炮)
+    kAir = 2,           // 仅空中 (如防空火箭)
+    kGroundAndAir = 3   // 地面和空中 (如箭塔)
+};
 // 3. Rendering Layers (Z-Order)
 // NOTE: Since this is an enum class, you must static_cast<int> 
 // when passing to Cocos2d functions: 

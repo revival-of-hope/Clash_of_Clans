@@ -1,3 +1,6 @@
+// GameConfig.cpp
+// Used for balance tuning.
+// Hardcoded (instead of using individual classes) for Compilation Safety, Speed, and the "Flyweight" concept.
 #include "GameConfig.h"
 
 namespace Core {
@@ -87,17 +90,26 @@ namespace Core {
 
     BuildingStats GetBuildingStats(BuildingType type, int level) {
         BuildingStats stats;
+        // [NEW] 初始化默认值，防止垃圾数据
+        stats.damage_ = 0;
+        stats.range_ = 0.0f;
+        stats.attack_speed_ = 0.0f;
+        stats.resource_capacity_ = 0;
+        stats.production_rate_ = 0;
+        stats.troop_capacity_ = 0;              // [NEW] 默认人口为0
+        stats.target_type_ = TargetType::kNone; // [NEW] 默认不攻击
         switch (type) {
         case BuildingType::kTownHall:
             stats.width_ = 4;
             stats.height_ = 4;
-            stats.max_hp_ = 2000 + (level * 200);
+            stats.max_hp_ = 2000 + (level * 500);
+            stats.resource_capacity_ = 1000 + (level * 1000); // 存少量资源
             break;
 
         case BuildingType::kWall:
             stats.width_ = 1;
             stats.height_ = 1;
-            stats.max_hp_ = 1000 + (level * 200); // 墙血量通常很高
+            stats.max_hp_ = 1000 + (level * 500);
             break;
 
         case BuildingType::kCannon:
@@ -107,6 +119,59 @@ namespace Core {
             stats.damage_ = 40 + (level * 10);
             stats.attack_speed_ = 1.0f;
             stats.range_ = 7.0f;
+            stats.target_type_ = TargetType::kGround; // [NEW] 只对地
+            break;
+
+        case BuildingType::kArcherTower: // [NEW] 新增箭塔
+            stats.width_ = 3;
+            stats.height_ = 3;
+            stats.max_hp_ = 700 + (level * 80);
+            stats.damage_ = 25 + (level * 8);     // 单发伤害低
+            stats.attack_speed_ = 0.5f;           // 攻速快
+            stats.range_ = 8.0f;                  // 射程远
+            stats.target_type_ = TargetType::kGroundAndAir; // [NEW] 对地且对空
+            break;
+
+        case BuildingType::kAirDefense: // [NEW] 新增防空火箭
+            stats.width_ = 3;
+            stats.height_ = 3;
+            stats.max_hp_ = 900 + (level * 100);
+            stats.damage_ = 150 + (level * 20);   // 对空伤害极高
+            stats.attack_speed_ = 1.0f;
+            stats.range_ = 10.0f;                 // 超远射程
+            stats.target_type_ = TargetType::kAir; // [NEW] 只对空
+            break;
+
+            // Resources  - [NEW]
+        case BuildingType::kGoldMine:
+        case BuildingType::kElixirCollector:
+            stats.width_ = 3;
+            stats.height_ = 3;
+            stats.max_hp_ = 500 + (level * 50);
+            stats.production_rate_ = 200 + (level * 50);  // 每小时产量
+            stats.resource_capacity_ = 500 + (level * 200); // 暂存容量
+            break;
+
+        case BuildingType::kGoldStorage:
+        case BuildingType::kElixirStorage:
+            stats.width_ = 3;
+            stats.height_ = 3;
+            stats.max_hp_ = 1500 + (level * 200);       // 血厚肉盾
+            stats.resource_capacity_ = 5000 + (level * 5000); // 大容量
+            break;
+
+            // Military (军事设施) - [NEW]
+        case BuildingType::kArmyCamp: // 兵营
+            stats.width_ = 5;
+            stats.height_ = 5;
+            stats.max_hp_ = 600 + (level * 60);
+            stats.troop_capacity_ = 20 + (level * 10); // [NEW] 提供人口
+            break;
+
+        case BuildingType::kBarracks: // 训练营 用于解锁新兵种和练兵
+            stats.width_ = 3;
+            stats.height_ = 3;
+            stats.max_hp_ = 600 + (level * 60);
             break;
 
         }
