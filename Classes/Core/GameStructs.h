@@ -28,6 +28,7 @@ struct UnitStats {
     int housing_space_;            // How much capacity it takes (e.g., Giant = 5)
     BuildingType favorite_target_; // Logic: Giant targets defense
     ProjectileType projectile_;    // What does it shoot?
+    GeneralType unit_type_;      // Its own type as a target
 };
 
 struct BuildingStats {
@@ -40,7 +41,7 @@ struct BuildingStats {
     int resource_capacity_;   // Storage capacity
     int troop_capacity_;      // [NEW] Specifically for Army Camp
     int production_rate_;     // Per hour
-    TargetType target_type_;  // [NEW]
+    GeneralType target_type_;  // [NEW] 
 };
 } // namespace Core
 
