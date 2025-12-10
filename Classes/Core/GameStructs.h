@@ -10,12 +10,34 @@ namespace Core {
 // 1. The Save Data
 struct BuildingData {
     int instance_id_;          // Unique ID (e.g., 1001)
+    int owner_id_;             // The Player ID of the building's owner. Used to distinguish enemies and allies.
+
     BuildingType type_;        // What is it?
     int level_;                // 1, 2, or 3
+
     int grid_x_;               // Logic Coordinate (0–39), NOT screen pixel X
     int grid_y_;               // Logic Coordinate (0–39)
+    
+    // Logic State
     bool is_constructing_;     // Is it currently upgrading?
     long finish_time_;         // Timestamp for when upgrade finishes
+};
+
+struct UnitData {
+    int instance_id_;       // Unique ID for this specific unit
+    int owner_id_;          // The Player ID of the unit's owner. Used to distinguish enemies and allies.
+    
+    TroopType type_;        // To look up the UnitStats blueprint
+    int level_;             // To look up the correct stats row
+    
+    float x_;               // Exact float position (pixel precision)
+    float y_;
+    
+    int current_hp_;        // Current health (mutable)
+    
+    // Logic State
+    int target_id_;         // Instance ID of what it is attacking (-1 if none)
+    bool is_alive_;         // Simple flag for cleanup
 };
 
 // 2. The Combat Stats
@@ -28,7 +50,7 @@ struct UnitStats {
     int housing_space_;            // How much capacity it takes (e.g., Giant = 5)
     BuildingType favorite_target_; // Logic: Giant targets defense
     ProjectileType projectile_;    // What does it shoot?
-    GeneralType unit_type_;      // Its own type as a target
+    GeneralType unit_type_;        // Its own type as a target
 };
 
 struct BuildingStats {
