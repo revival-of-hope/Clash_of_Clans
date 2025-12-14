@@ -1,0 +1,7 @@
+build/
+.vs/
+*.ipch
+*.lib
+*.pdb
+*.obj
+*.exe

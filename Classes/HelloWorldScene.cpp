@@ -1,28 +1,10 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 #include "HelloWorldScene.h"
+#include "Gameplay/Entities/Unit.h"
+#include "Gameplay/Entities/Building.h"
+#include "Gameplay/Logic/CombatResolver.h"
+#include "Core/GameConstants.h"
+#include <cmath> 
+#include <vector>
 
 USING_NS_CC;
 
@@ -31,102 +13,144 @@ Scene* HelloWorld::createScene()
     return HelloWorld::create();
 }
 
-// Print useful error message instead of segfaulting when files are not there.
-static void problemLoading(const char* filename)
-{
-    printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
-}
-
-// on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if ( !Scene::init() )
+    if (!Scene::init())
     {
         return false;
     }
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Vec2 centerPos = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
+    // 1. 设置战场背景 (深色调，模拟夜战)
+    auto backgroundLayer = LayerColor::create(Color4B(30, 30, 50, 255));
+    this->addChild(backgroundLayer, -1);
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+    // 2. 初始化战斗系统
+    CombatResolver::GetInstance()->Initialize(this);
 
-    if (closeItem == nullptr ||
-        closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0)
-    {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    }
-    else
-    {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(x,y));
-    }
+    // 3. UI 提示
+    auto label = Label::createWithTTF("Scenario: Dragon's Keep\nDefender: Walls + Cannons + AIR UNITS!\nAttacker: Combined Arms", "fonts/Marker Felt.ttf", 28);
+    label->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 60));
+    this->addChild(label, 100);
 
-    // create menu, it's an autorelease object
+    auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
+        CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+    closeItem->setPosition(Vec2(origin.x + visibleSize.width - 50, origin.y + 50));
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+    this->addChild(menu, 100);
 
-    /////////////////////////////
-    // 3. add your codes below...
+    // =========================================================================
+    //  防守方 (Defender - ID 1)
+    //  布局：坚固的城墙 + 内部火力网 + 空中支援
+    // =========================================================================
+    cocos2d::log("--- Spawning Defenders ---");
 
-    // add a label shows "Hello World"
-    // create and initialize a label
+    // [核心] 大本营
+    auto townHall = Building::create(Core::BuildingType::kTownHall, 1, 1);
+    townHall->setPosition(centerPos);
+    this->addChild(townHall);
 
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    if (label == nullptr)
-    {
-        problemLoading("'fonts/Marker Felt.ttf'");
+    // [防御] 4个加农炮，镇守四角
+    std::vector<Vec2> towerOffsets = {
+        Vec2(-200, 150), Vec2(200, 150),
+        Vec2(-200, -150), Vec2(200, -150)
+    };
+    for (auto offset : towerOffsets) {
+        auto cannon = Building::create(Core::BuildingType::kCannon, 1, 1);
+        cannon->setPosition(centerPos + offset);
+        this->addChild(cannon);
     }
-    else
-    {
-        // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - label->getContentSize().height));
 
-        // add the label as a child to this layer
-        this->addChild(label, 1);
+    // [城墙] 构建一个巨大的封闭矩形
+    float wallW = 400.0f; // 宽
+    float wallH = 300.0f; // 高
+    float step = 64.0f;   // 瓦片尺寸
+
+    auto createWall = [&](float x, float y) {
+        auto wall = Building::create(Core::BuildingType::kWall, 1, 1);
+        wall->setPosition(Vec2(x, y));
+        this->addChild(wall);
+        };
+
+    // 上下墙
+    for (float x = centerPos.x - wallW; x <= centerPos.x + wallW; x += step) {
+        createWall(x, centerPos.y + wallH);
+        createWall(x, centerPos.y - wallH);
+    }
+    // 左右墙
+    for (float y = centerPos.y - wallH + step; y < centerPos.y + wallH; y += step) {
+        createWall(centerPos.x - wallW, y);
+        createWall(centerPos.x + wallW, y);
     }
 
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
+    // [防守方部队 - 空中] 2只 飞龙宝宝 (Baby Dragon)
+    // 这是测试关键：进攻方的近战单位（野蛮人/巨人）应该无视它们，因为打不到
+    for (int i = 0; i < 2; ++i) {
+        auto dragon = Unit::create(Core::TroopType::kBabyDragon, 1, 1); // ID 1 = Defender
+        // 它们盘旋在大本营上方
+        dragon->setPosition(centerPos + Vec2((i == 0 ? -100 : 100), 200));
+        this->addChild(dragon);
     }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
+    // [防守方部队 - 地面] 5个 弓箭手 (Archer)
+    // 站在城墙内侧，测试隔墙射击
+    for (int i = 0; i < 5; ++i) {
+        auto defArch = Unit::create(Core::TroopType::kArcher, 1, 1); // ID 1
+        defArch->setPosition(centerPos + Vec2(-100 + i * 50, -50));
+        this->addChild(defArch);
     }
+
+    // =========================================================================
+    // 进攻方 (Attacker - ID 0)
+    // 多兵种协同作战
+    // =========================================================================
+    cocos2d::log("--- Spawning Attackers ---");
+
+    Vec2 spawnBase = centerPos + Vec2(-600, -500); // 左下角集结
+
+    // 1. [先锋] 炸弹人 (Wall Breakers) x5
+    // 任务：炸开城墙
+    for (int i = 0; i < 15; ++i) {
+        auto wb = Unit::create(Core::TroopType::kWallBreaker, 1, 0);
+        wb->setPosition(spawnBase + Vec2(100 + i * 40, 100));
+        this->addChild(wb);
+    }
+
+    // 2. [肉盾] 巨人 (Giants) x4
+    // 任务：吸引加农炮火力。注意：它们打不到飞龙。
+    for (int i = 0; i < 4; ++i) {
+        auto giant = Unit::create(Core::TroopType::kGiant, 1, 0);
+        giant->setPosition(spawnBase + Vec2(i * 80, 0));
+        this->addChild(giant);
+    }
+
+    // 3. [防空主力] 弓箭手 (Archers) x15
+    // 任务：只有她们能处理防守方的飞龙宝宝！
+    // 如果这些弓箭手死了，进攻方就输定了（会被飞龙白嫖）。
+    for (int i = 0; i < 20; ++i) {
+        auto arch = Unit::create(Core::TroopType::kArcher, 1, 0);
+        float row = (i / 5) * 40;
+        float col = (i % 5) * 40;
+        arch->setPosition(spawnBase + Vec2(col - 100, row - 100)); // 站在后排
+        this->addChild(arch);
+    }
+
+    // 4. [杂兵] 野蛮人 (Barbarians) x10
+    // 任务：一旦墙破了，冲进去拆建筑
+    for (int i = 0; i < 50; ++i) {
+        auto barb = Unit::create(Core::TroopType::kBarbarian, 1, 0);
+        barb->setPosition(spawnBase + Vec2(i * 30 + 200, -50));
+        this->addChild(barb);
+    }
+
     return true;
 }
 
-
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-    //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
-
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
-
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-
-
 }

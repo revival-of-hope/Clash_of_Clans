@@ -7,22 +7,22 @@
 #include <map>
 
 namespace Core {
-class GameConfig {
-public:
-    // Singleton access
-    static GameConfig* GetInstance();
+    class GameConfig {
+    public:
+        // Singleton access
+        static GameConfig* GetInstance();
 
-    // The Lookup Functions
-    UnitStats GetTroopStats(TroopType type, int level);
+        // The Lookup Functions
+        UnitStats GetTroopStats(TroopType type, int level);
 
-    BuildingStats GetBuildingStats(BuildingType type, int level);
-    
-    // Resource Costs(inline)
-    int GetUpgradeCost(BuildingType type, int level) {
-        // Return gold/elixir cost
-        return 500 * level; 
-    }
-};
+        BuildingStats GetBuildingStats(BuildingType type, int level);
+
+        // Resource Costs(inline)
+        int GetUpgradeCost(BuildingType type, int level) {
+            // Return gold/elixir cost
+            return 500 * level;
+        }
+    };
 } // namespace Core
 
 #endif // GAME_CONFIG_H
