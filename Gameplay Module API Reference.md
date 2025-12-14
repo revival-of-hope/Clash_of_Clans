@@ -17,9 +17,11 @@
 3. [组件访问 (Components)](#3-组件访问-components)
 4. [集成示例 (Integration Examples)](#4-集成示例)
 
+
+
 ---
 
-## 1. 核心系统 (Systems)
+## 1. 核心系统 Systems
 
 这些是全局单例类，负责管理游戏的宏观逻辑。
 
