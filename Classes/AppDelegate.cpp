@@ -5,7 +5,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "TestScene.h"
 
  // #define USE_AUDIO_ENGINE 1
 
@@ -16,7 +16,7 @@ using namespace cocos2d::experimental;
 
 USING_NS_CC;
 
-// [保持] 保持跟刚刚一样的大分辨率 1920 x 1280
+//default resolution size
 static cocos2d::Size designResolutionSize = cocos2d::Size(1920, 1280);
 
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
@@ -59,10 +59,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
-    director->setDisplayStats(true);
-    director->setAnimationInterval(1.0f / 60);
-
-    // 适配策略: SHOW_ALL 保持比例完整显示
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::SHOW_ALL);
 
     auto frameSize = glview->getFrameSize();
@@ -81,7 +77,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    auto scene = HelloWorld::createScene();
+	// create a scene here to run your program
+    auto scene = TEST::createScene();
     director->runWithScene(scene);
 
     return true;
