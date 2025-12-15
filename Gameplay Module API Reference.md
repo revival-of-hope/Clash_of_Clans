@@ -90,6 +90,7 @@
 
 **主要用户:** Dev A (LevelManager), Dev C (Gameplay Input)
 **用途:** 生成士兵、投放士兵。
+**Z-Order:** 20（固定）
 
 | 接口方法 | 参数 | 返回值 | 说明 |
 | :--- | :--- | :--- | :--- |
@@ -113,7 +114,7 @@ if (EconomySystem::GetInstance()->AddTroopPopulation(housing_space)) {
 ```
 **主要用户:** Dev A (MapSystem), Dev C (Construction UI)
 **用途:** 建造建筑、收集资源、点击交互。
-
+**Z-Order:** 10（固定）
 | 接口方法 | 参数 | 返回值 | 说明 |
 | :--- | :--- | :--- | :--- |
 | `create(...)` | `BuildingType, level, owner_id` | `Building*` | 静态工厂。创建建筑对象 |
