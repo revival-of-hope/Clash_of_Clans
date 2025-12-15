@@ -49,7 +49,6 @@ namespace Core {
         kNone = 99
     };
 
-<<<<<<< HEAD
 // Used to define the type of a unit as a target, and the target type of a building.
 enum class GeneralType : unsigned int {
     kNone   = 0,        // 0000
@@ -83,13 +82,6 @@ enum class ZOrder {
     kUiHud = 100,
     kUiPopup = 200
 };
-=======
-    enum class CampType {
-        kPlayer = 0, // 进攻士兵
-        kEnemy = 1,  // 敌人建筑
-        kNeutral = 2
-    };
->>>>>>> 26b9dcb (完成 Gameplay 核心模块开发 (Entities, Components, Logic) resource文件中添加了基本贴图（并未完全添加）)
 
     // Used to define the type of a unit as a target, and the target type of a building.
     enum class GeneralType : unsigned int {

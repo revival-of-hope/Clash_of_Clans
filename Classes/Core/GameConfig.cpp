@@ -14,7 +14,6 @@ namespace Core {
     // 2. The Logic Implementation
     UnitStats GameConfig::GetTroopStats(TroopType type, int level) {
         UnitStats stats;
-<<<<<<< HEAD
         
         // Default initialization
         stats.unit_type_ = GeneralType::kGround; 
@@ -55,24 +54,6 @@ namespace Core {
             stats.housing_space_ = 5;
             stats.range_ = 1.0f;
             stats.favorite_target_ = BuildingType::kCannon;
-=======
-
-        // Default initialization
-        stats.unit_type_ = GeneralType::kGround;
-
-        switch (type) {
-            // ---------------------------------------------------------
-            // Ground Units
-            // ---------------------------------------------------------
-        case TroopType::kBarbarian:
-            stats.max_hp_ = 110 + (level * 15);
-            stats.damage_per_shot_ = 15 + (level * 2);
-            stats.attack_speed_ = 1.0f;
-            stats.move_speed_ = 2.5f;
-            stats.housing_space_ = 1;
-            stats.range_ = 0.5f;
-            stats.favorite_target_ = BuildingType::kNone;
->>>>>>> 26b9dcb (完成 Gameplay 核心模块开发 (Entities, Components, Logic) resource文件中添加了基本贴图（并未完全添加）)
             stats.projectile_ = ProjectileType::kNone;
             stats.unit_type_ = GeneralType::kGround; // IS Ground
             break;
