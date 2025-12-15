@@ -34,9 +34,7 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
         return false;
     }
 
-    // 单位永远在第 20 层。
-    // 建筑在第 10 层。
-    this->setLocalZOrder(20);
+    this->setLocalZOrder(static_cast<int>(Core::ZOrder::kUnits));
     //保存类型信息
     this->type_ = type;
     //去GameConfig中调用
