@@ -33,9 +33,7 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
         return false;
     }
 
-    // 建筑永远在第 10 层。
-    // 这比 TileMap (-1) 高，但比 Unit (20) 低。
-    this->setLocalZOrder(10);
+    this->setLocalZOrder(static_cast<int>(Core::ZOrder::kBuildingBase));
     //保存类型和等级
     this->type_ = type;
     this->level_ = level;
