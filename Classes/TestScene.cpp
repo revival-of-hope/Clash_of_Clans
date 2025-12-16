@@ -3,7 +3,7 @@
 #include "Gameplay/Entities/Building.h"
 #include "Gameplay/Logic/CombatResolver.h"
 #include "Core/GameConstants.h"
-#include "GameEngine/GameTileMap.h"
+#include "Engine/GameTileMap.h"
 
 
 #include <cmath> 
@@ -28,7 +28,7 @@ bool TEST::init()
     Vec2 centerPos = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
 
     this->addChild(GameTileMap::create("images/maps/test2.tmx"));
-    bool enablesimulate=0;
+    bool enablesimulate=1;
     if(enablesimulate){
             // 2. 初始化战斗系统
         CombatResolver::GetInstance()->Initialize(this);

@@ -54,24 +54,10 @@ if(APPLE OR WINDOWS)
     cocos_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
-# add cross-platforms source files and header files 
-list(APPEND GAME_SOURCE
-     Classes/AppDelegate.cpp
-     Classes/HelloWorldScene.cpp
-     
-     # CORE
-     Classes/Core/GameConfig.cpp
-     )
-
-list(APPEND GAME_HEADER
-     Classes/AppDelegate.h
-     Classes/HelloWorldScene.h
-     
-     # CORE
-     Classes/Core/GameConfig.h
-     Classes/Core/GameConstants.h
-     Classes/Core/GameStructs.h
-     )
+# 通用 C++ 文件
+# 自动收集 Classes 目录下所有 cpp 和 h 文件（包含子目录）
+file(GLOB_RECURSE GAME_SOURCE "Classes/*.cpp")
+file(GLOB_RECURSE GAME_HEADER "Classes/*.h")
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml

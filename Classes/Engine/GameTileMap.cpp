@@ -1,5 +1,5 @@
 #include "GameTileMap.h"
-#include "GameEngine/TileHighlighter.h"
+#include "TileHighlighter.h"
 
 
 GameTileMap* GameTileMap::create(const std::string& tmxFile)
