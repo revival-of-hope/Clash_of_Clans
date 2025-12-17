@@ -2,7 +2,7 @@
 #define TILE_PLACEMENT_CONTROLLER_H
 
 #include "cocos2d.h"
-#include "GameTileMap.h"
+#include "Engine/MapSystem/MapLayer.h"
 
 USING_NS_CC;
 
@@ -11,14 +11,13 @@ class TilePlacementController
 public:
     TilePlacementController(Node* owner);
     ~TilePlacementController();
-    // ⭐ 核心接口：给“外部菜单图标”绑定放置功能
     void bindMenuIcon(
         Sprite* menuIcon,
-        GameTileMap* map,
+        MapLayer* map,
         const std::string& unitSpriteFile
     );
 
-    void startPlacement(GameTileMap* map,
+    void startPlacement(MapLayer* map,
         const std::string& unitSpriteFile);
 
     void cancelPlacement();
@@ -31,7 +30,7 @@ private:
 
 private:
     Node* _owner = nullptr;          // Scene / UI Root
-    GameTileMap* _gameMap = nullptr;
+    MapLayer* _gameMap = nullptr;
     TMXTiledMap* _map = nullptr;
 
     Sprite* _dragSprite = nullptr;   

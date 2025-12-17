@@ -20,10 +20,10 @@ TilePlacementController::~TilePlacementController()
 }
 
 void TilePlacementController::startPlacement(
-    GameTileMap* map,
+    MapLayer* map,
     const std::string& unitSpriteFile)
 {
-    CCASSERT(map, "GameTileMap is null");
+    CCASSERT(map, "MapLayer is null");
 
     cancelPlacement();
 
@@ -139,11 +139,11 @@ bool TilePlacementController::worldPosToTileCenter(
 
 void TilePlacementController::bindMenuIcon(
     Sprite* menuIcon,
-    GameTileMap* map,
+    MapLayer* map,
     const std::string& unitSpriteFile)
 {
     CCASSERT(menuIcon, "Menu icon is null");
-    CCASSERT(map, "GameTileMap is null");
+    CCASSERT(map, "MapLayer is null");
 
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);

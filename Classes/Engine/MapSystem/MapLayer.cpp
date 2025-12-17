@@ -1,10 +1,10 @@
-#include "GameTileMap.h"
+#include "MapLayer.h"
 #include "TileHighlighter.h"
 
 
-GameTileMap* GameTileMap::create(const std::string& tmxFile)
+MapLayer* MapLayer::create(const std::string& tmxFile)
 {
-    auto ret = new (std::nothrow) GameTileMap();
+    auto ret = new (std::nothrow) MapLayer();
     if (ret && ret->initWithTMX(tmxFile))
     {
         ret->autorelease();
@@ -13,7 +13,7 @@ GameTileMap* GameTileMap::create(const std::string& tmxFile)
     CC_SAFE_DELETE(ret);
     return nullptr;
 }
-void GameTileMap::fitPixelPerfect(float bottomMenuHeight, float rightMenuWidth)
+void MapLayer::fitPixelPerfect(float bottomMenuHeight, float rightMenuWidth)
 {
     if (!_map) return;
 
@@ -70,7 +70,7 @@ void GameTileMap::fitPixelPerfect(float bottomMenuHeight, float rightMenuWidth)
     ));
 }
 
-bool GameTileMap::initWithTMX(const std::string& tmxFile)
+bool MapLayer::initWithTMX(const std::string& tmxFile)
 {
     if (!Node::init()) return false;
 

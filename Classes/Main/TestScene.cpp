@@ -3,9 +3,9 @@
 #include "Gameplay/Entities/Building.h"
 #include "Gameplay/Logic/CombatResolver.h"
 #include "Core/GameConstants.h"
-#include "Engine/GameTileMap.h"
-#include "Engine/TilePlacementController.h"
-#include "Engine/MouseController.h"
+#include "Engine/MapSystem/MapLayer.h"
+#include "Engine/RenderSystem/TilePlacementController.h"
+#include "Engine/Input/MouseController.h"
 
 #include <cmath> 
 #include <vector>
@@ -29,7 +29,7 @@ bool TEST::init()
     Vec2 centerPos = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
 
     //创建地图
-    auto map = GameTileMap::create("maps/test2.tmx");
+    auto map = MapLayer::create("maps/test2.tmx");
     this->addChild(map);
 
     // 菜单图标 —— 你自己创建、布局、管理

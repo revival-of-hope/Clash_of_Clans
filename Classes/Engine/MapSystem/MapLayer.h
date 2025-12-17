@@ -5,10 +5,10 @@
 
 USING_NS_CC;
 
-class GameTileMap : public Node
+class MapLayer : public Node
 {
 public:
-    static GameTileMap* create(const std::string& tmxFile);
+    static MapLayer* create(const std::string& tmxFile);
 
     TMXTiledMap* getMap() const { return _map; }
 
