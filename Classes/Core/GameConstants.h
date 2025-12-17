@@ -13,7 +13,7 @@ namespace Core {
     // 1. Grid & World Settings
     // Use constexpr instead of #define for type safety.
     constexpr int kTileWidth = 64;
-    constexpr int kTileHeight = 32;
+    constexpr int kTileHeight = 64;
     constexpr int kMapWidth = 40;
     constexpr int kMapHeight = 40;
 
