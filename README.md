@@ -261,13 +261,13 @@ Classes/
 │   └── ResourceStructs.h       (从 JSON 加载的部队/建筑属性)
 ├── Engine/                     <-- 开发人员 A (仅限渲染与物理)
 │   ├── RenderSystem/
-│   │   ├── SpriteBatch.cpp
+│   │   ├── 
 │   │   └── AnimationController.cpp
 │   ├── MapSystem/
-│   │   ├── IsometricGrid.cpp   (数学: 屏幕坐标 <-> 等轴坐标)
+│   │   ├── TileHighlighter.cpp (高亮瓦片)
 │   │   └── MapLayer.cpp        (绘制瓦片)
 │   └── Input/
-│       └── TouchHandler.cpp    (原始输入检测)
+│       └── MouseController.cpp    (鼠标输入处理)
 ├── Gameplay/                   <-- 开发人员 B (仅限逻辑与规则)
 │   ├── Entities/
 │   │   ├── BaseEntity.h        (ID, 位置, 所有者)
