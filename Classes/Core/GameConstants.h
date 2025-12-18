@@ -16,6 +16,10 @@ namespace Core {
     constexpr int kTileHeight = 64;
     constexpr int kMapWidth = 40;
     constexpr int kMapHeight = 40;
+    // fixed-step accumulator
+    // We want Deterministic replay: record initial state + commands + seed
+    constexpr int kSimHz = 60;
+    constexpr float kFixedDt = 1.0f / kSimHz;
 
     // 2. Identification Enums
     enum class BuildingType : uint8_t {
@@ -48,11 +52,7 @@ namespace Core {
         kFireBall = 3,
         kNone = 99
     };
-    enum class CampType {
-        kPlayer = 0, // 进攻士兵
-        kEnemy = 1,  // 敌人建筑
-        kNeutral = 2
-    };
+
     // Used to define the type of a unit as a target, and the target type of a building.
     enum class GeneralType : unsigned int {
         kNone = 0,        // 0000
