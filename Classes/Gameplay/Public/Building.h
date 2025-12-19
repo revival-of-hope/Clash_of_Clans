@@ -3,6 +3,8 @@
 // Author: Developer B
 //
 // Building class. Handles construction, resources, and defensive logic.
+// [FIXED] Added onEnter/onExit to handle Obstacle Registration at the correct position.
+// [REFACTOR] Adopted Core::BuildingAnimationState for state management.
 
 #ifndef GAMEPLAY_ENTITIES_BUILDING_H_
 #define GAMEPLAY_ENTITIES_BUILDING_H_
@@ -22,6 +24,10 @@ public:
     // 初始化函数：读取配置、加载图片
     virtual bool init(Core::BuildingType type, int level, int owner_id);
 
+    // [新增] 覆盖生命周期函数，确保在坐标设置完成后才注册障碍物
+    virtual void onEnter() override;
+    virtual void onExit() override;
+
     // 每一帧更新：处理攻击冷却、资源产出
     virtual void update(float dt) override;
 
@@ -34,7 +40,7 @@ public:
      * @brief 检查是否正在建造/升级中
      * 如果为 true，该建筑通常失效 (不攻击、不产出、不提供容量)
      */
-    bool IsConstructing() const { return is_constructing_; }
+    bool IsConstructing() const { return current_state_ == Core::BuildingAnimationState::kConstructing; }
 
     /**
      * @brief 开始建造或升级
@@ -88,6 +94,9 @@ public:
     // 获取建筑类型
     Core::BuildingType GetBuildingType() const { return type_; }
 
+    // 获取当前状态
+    Core::BuildingAnimationState GetState() const { return current_state_; }
+
 private:
     // [数据] 从 GameConfig 读取的静态属性
     Core::BuildingStats stats_;
@@ -98,14 +107,18 @@ private:
 
     // 状态数据
     int level_;                 // 当前等级
-    bool is_constructing_;      // 是否正在建造
     float construction_timer_;  // 建造倒计时
+
+    // [Refactor] 使用全局状态枚举替代布尔标记
+    Core::BuildingAnimationState current_state_ = Core::BuildingAnimationState::kIdle;
 
     // [经济状态]
     // 当前累积的未收集资源 (如果是金矿的话)
     float stored_resource_ = 0.0f;
-    //标记是否开始播放已经倒塌动画
-    bool is_collapsing_ = false;
+
+    // [新增] 防止重复注册障碍物的标记
+    bool obstacle_registered_ = false;
+
     // 辅助函数
 
     // 根据建筑类型获取图片文件名
@@ -118,5 +131,8 @@ private:
     Core::ProjectileType GetProjectileTypeFromBuilding(Core::BuildingType type);
     // 生产资源 (矿机逻辑)
     void ProduceResource(float dt);
+
+    // 切换状态
+    void SetState(Core::BuildingAnimationState new_state);
 };
 #endif // GAMEPLAY_ENTITIES_BUILDING_H_

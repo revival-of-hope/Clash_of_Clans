@@ -5,10 +5,10 @@
 // Implementation of AttackComp.
 
 #include "AttackComp.h"
-#include "Gameplay/Components/HealthComp.h"
-#include "Gameplay/Entities/Building.h"
+#include "GamePlay/Public/HealthComp.h"
+#include "GamePlay/Public/Building.h"
 #include "Core/GameConstants.h"
-#include "Gameplay/Logic/CombatResolver.h"
+#include "GamePlay/Public/CombatResolver.h"
 
 bool AttackComp::init() {
     if (!cocos2d::Node::init()) {

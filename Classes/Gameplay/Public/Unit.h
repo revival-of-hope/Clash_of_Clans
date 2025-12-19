@@ -47,30 +47,30 @@ public:
 	 */
 	bool CanAttack(Core::GeneralType target_type) const;
 
-	// 自定义状态机枚举
-	enum class State {
-		kIdle,   // 待机
-		kMove,   // 移动
-		kAttack, // 攻击
-		kDead    // 死亡
-	};
-
 	/**
 	 * @brief 切换单位状态
 	 * 会处理状态切换时的逻辑，如播放动画、停止寻路等
-	 * @param new_state 新状态
+	 * @param new_state 新状态 (Core::UnitAnimationState)
 	 */
-	void SetState(State new_state);
+	void SetState(Core::UnitAnimationState new_state);
+
+	/**
+	 * @brief 设置朝向
+	 * @param facing 新朝向
+	 */
+	void SetFacing(Core::Facing facing);
 
 	// 获取当前状态
-	State GetState() const { return current_state_; }
+	Core::UnitAnimationState GetState() const { return current_state_; }
 
 private:
 	Core::UnitStats stats_;                    ///< 核心数值
 	Core::TroopType type_;                     ///< 兵种标记
 	cocos2d::Sprite* visual_sprite_ = nullptr; ///< 外观精灵
 
-	State current_state_ = State::kIdle;       ///< 当前状态
+	// [Refactor] 使用 Core 定义的全局状态枚举
+	Core::UnitAnimationState current_state_ = Core::UnitAnimationState::kIdle;
+	Core::Facing current_facing_ = Core::Facing::kRight;
 
 	/**
 	 * @brief 辅助函数：根据兵种类型返回图片文件名

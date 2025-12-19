@@ -3,13 +3,16 @@
 // Author: Developer B
 //
 // Implementation of Building logic.
+// [FIXED] Moved UpdateObstacle to onEnter/onExit to fix the (0,0) coordinate bug.
+// [REFACTOR] Adopted Core::BuildingAnimationState for state management.
 
-#include "Building.h"
-#include "Unit.h" 
-#include "Gameplay/Components/HealthComp.h" 
-#include "Gameplay/Logic/EconomySystem.h" // 引入经济系统
-#include "Gameplay/Logic/CombatResolver.h"
+#include "GamePlay/Public/Building.h"
+#include "GamePlay/Public/Unit.h" 
+#include "GamePlay/Public/HealthComp.h" 
+#include "GamePlay/Public/EconomySystem.h" // 引入经济系统
+#include "GamePlay/Public/CombatResolver.h"
 #include "Gameplay/Components/AttackComp.h"
+#include "Gameplay/Components/PathAgent.h"
 
 //静态创建函数
 Building* Building::create(Core::BuildingType type, int level, int owner_id) {
@@ -50,9 +53,10 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
         this->set_camp(Core::CampType::kEnemy);
     }
 
-    // 默认不在建造中 (除非加载存档时另行设置)
-    this->is_constructing_ = false;
+    // 默认状态
+    this->current_state_ = Core::BuildingAnimationState::kIdle;
     this->construction_timer_ = 0.0f;
+    this->obstacle_registered_ = false; // 初始化标记
 
     //加载外观
     std::string filename = GetSpriteFilename(type);
@@ -61,109 +65,147 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
     if (visual_sprite_) {
         // 放在节点中心
         visual_sprite_->setPosition(cocos2d::Vec2::ZERO);
-
-        // 稍微调整一下层级，保证建筑盖在地板上，但在单位下面
-        // (虽然 BaseEntity 外部也会设置 ZOrder，这里是内部相对层级)
         this->addChild(visual_sprite_);
     }
     else {
         cocos2d::log("Error: Failed to load building sprite: %s", filename.c_str());
-        // 如果图出现问题，画个红方块代表建筑
         auto debugRect = cocos2d::DrawNode::create();
         debugRect->drawSolidRect(cocos2d::Vec2(-30, -30), cocos2d::Vec2(30, 30), cocos2d::Color4F::RED);
         this->addChild(debugRect);
     }
+
+    // -------------------------------------------------------------------------
+    // [DEBUG] 可视化占地范围 (Obstacle Box Visualization)
+    // -------------------------------------------------------------------------
+    auto debug_grid = cocos2d::DrawNode::create();
+    float total_w = stats_.width_ * Core::kTileWidth;
+    float total_h = stats_.height_ * Core::kTileHeight;
+    cocos2d::Vec2 min_pos(-total_w / 2.0f, -total_h / 2.0f);
+    cocos2d::Vec2 max_pos(total_w / 2.0f, total_h / 2.0f);
+
+    debug_grid->drawRect(min_pos, max_pos, cocos2d::Color4F::RED);
+    debug_grid->drawSolidRect(min_pos, max_pos, cocos2d::Color4F(1.0f, 0.0f, 0.0f, 0.2f));
+    this->addChild(debug_grid, 100);
+
+
     //挂载HealthComp
     auto health_comp = HealthComp::create();
     health_comp->InitStats(stats_.max_hp_);
     health_comp->setName("HealthComp");
-
-    // 建筑通常比较高大，血条挂高
     health_comp->SetHealthBarOffset(cocos2d::Vec2(0, 50));
     this->addChild(health_comp);
 
-    // 只有具有攻击力的建筑才挂载攻击组件，节省内存
+    // 只有具有攻击力的建筑才挂载攻击组件
     if (stats_.damage_ > 0) {
         auto attack_comp = AttackComp::create();
-
-        // 1. 获取对应的投射物类型
         Core::ProjectileType projType = GetProjectileTypeFromBuilding(type);
-
-        // 2. 初始化组件 (伤害, 射程像素, 攻速, 投射物类型)
         attack_comp->InitStats(stats_.damage_, GetRangeInPixels(), stats_.attack_speed_, projType);
-
         attack_comp->setName("AttackComp");
         this->addChild(attack_comp);
     }
 
     stored_resource_ = 0.0f;
-
     return true;
 }
 
-// 每一帧的逻辑 (Update)
-void Building::update(float dt) {
-    auto hp_comp = dynamic_cast<HealthComp*>(this->getChildByName("HealthComp"));
-    // 如要更新动画请在此处
-    if (hp_comp && hp_comp->IsDead() && !is_collapsing_) {
+void Building::onEnter() {
+    BaseEntity::onEnter();
 
-        // 1. 标记状态，防止重复进入
-        is_collapsing_ = true;
+    if (type_ != Core::BuildingType::kNone && !obstacle_registered_) {
+        cocos2d::Rect rect = this->GetOccupiedRect();
+        PathAgent::UpdateObstacle(rect, true); // 注册：设为阻挡
+        obstacle_registered_ = true;
 
-        // 2. 关键：撤销 BaseEntity 的销毁标记
+        cocos2d::log("Building[%d] registered obstacle at GridPos: (%.1f, %.1f)",
+            get_instance_id(), rect.getMidX(), rect.getMidY());
+    }
+}
+
+void Building::onExit() {
+    if (type_ != Core::BuildingType::kNone && obstacle_registered_) {
+        cocos2d::Rect rect = this->GetOccupiedRect();
+        PathAgent::UpdateObstacle(rect, false); // 注销：设为通行
+        obstacle_registered_ = false;
+    }
+    BaseEntity::onExit();
+}
+
+void Building::SetState(Core::BuildingAnimationState new_state) {
+    if (current_state_ == new_state) return;
+    current_state_ = new_state;
+
+    // 状态切换逻辑
+    if (current_state_ == Core::BuildingAnimationState::kDestroyed) {
+        // [新增] 建筑倒塌瞬间，立即移除碰撞体积
+        if (obstacle_registered_) {
+            cocos2d::Rect rect = this->GetOccupiedRect();
+            PathAgent::UpdateObstacle(rect, false);
+            obstacle_registered_ = false;
+        }
+
+        // 撤销 BaseEntity 的销毁标记 (等待动画播放完毕)
         this->is_marked_for_destruction_ = false;
 
-        // 3. 播放倒塌动画
+        // 播放倒塌动画
         if (visual_sprite_) {
-            visual_sprite_->setColor(cocos2d::Color3B::GRAY); // 变灰（废墟感）
-
-            // 动画序列：
-            // 1. 稍微震动一下
-            // 2. 压扁 (ScaleY 变小) 同时 淡出 (FadeOut)
+            visual_sprite_->setColor(cocos2d::Color3B::GRAY);
             auto collapse = cocos2d::Spawn::create(
-                cocos2d::ScaleTo::create(0.5f, 1.2f, 0.1f), // 变宽变扁
-                cocos2d::FadeOut::create(0.5f),             // 慢慢消失
+                cocos2d::ScaleTo::create(0.5f, 1.2f, 0.1f),
+                cocos2d::FadeOut::create(0.5f),
                 nullptr
             );
 
             auto seq = cocos2d::Sequence::create(
                 collapse,
                 cocos2d::CallFunc::create([this]() {
-                    // 4. 戏演完了，再次标记销毁
-                    this->MarkForDestruction();
+                    this->MarkForDestruction(); // 动画结束，真正销毁
                     }),
                 nullptr
             );
             visual_sprite_->runAction(seq);
 
-            // 隐藏血条，因为它已经毁了
-            hp_comp->setVisible(false);
+            auto hp_comp = dynamic_cast<HealthComp*>(this->getChildByName("HealthComp"));
+            if (hp_comp) hp_comp->setVisible(false);
         }
         else {
-            // 如果没有图片，直接销毁
             this->MarkForDestruction();
         }
-        return; // 正在倒塌中，跳过后续逻辑
     }
-    // 调用父类逻辑
+}
+
+// 每一帧的逻辑 (Update)
+void Building::update(float dt) {
+    auto hp_comp = dynamic_cast<HealthComp*>(this->getChildByName("HealthComp"));
+
+    // 检查死亡转换
+    if (hp_comp && hp_comp->IsDead() && current_state_ != Core::BuildingAnimationState::kDestroyed) {
+        SetState(Core::BuildingAnimationState::kDestroyed);
+        return; // 倒塌中，跳过后续逻辑
+    }
+
+    // 倒塌中状态，不执行其他逻辑
+    if (current_state_ == Core::BuildingAnimationState::kDestroyed) {
+        BaseEntity::update(dt);
+        return;
+    }
+
+    // 正常销毁检查
     BaseEntity::update(dt);
     if (IsMarkedForDestruction()) return;
-    if (is_collapsing_) return; // 倒塌中不工作
 
-    if (is_constructing_) {
+    // 建造逻辑
+    if (current_state_ == Core::BuildingAnimationState::kConstructing) {
         construction_timer_ -= dt;
-
-        // 可以在这里添加建造进度条更新逻辑...
 
         if (construction_timer_ <= 0.0f) {
             // 建造完成!
-            is_constructing_ = false;
+            SetState(Core::BuildingAnimationState::kIdle);
             construction_timer_ = 0.0f;
 
             cocos2d::log("Building[%d] construction finished!", this->get_instance_id());
 
-            // 视觉反馈: 恢复正常颜色 (假设建造时是暗色)
             if (visual_sprite_) visual_sprite_->setColor(cocos2d::Color3B::WHITE);
+
             // 通知 EconomySystem 重新计算上限 (Capacity/Population)
             auto parent_node = this->getParent();
             if (parent_node) {
@@ -176,30 +218,22 @@ void Building::update(float dt) {
                         all_buildings.pushBack(b);
                     }
                 }
-
-                // 调用单例重新计算
-                // 因为新建筑(this)的 is_constructing_ 刚刚变为 false，
-                // 所以它现在会被 EconomySystem 纳入计算，从而增加上限。
                 EconomySystem::GetInstance()->RecalculateLimits(all_buildings);
             }
         }
         else {
-            // 还在建造中，跳过后续逻辑
-            // 视觉反馈: 变暗表示正在施工
+            // 还在建造中
             if (visual_sprite_) visual_sprite_->setColor(cocos2d::Color3B::GRAY);
             return;
         }
     }
+
     // 资源生产
-    // 只有产出率 > 0 的建筑（如金矿）才会执行此逻辑
-    // 如加农炮的 production_rate_ 为 0，条件不满足，自动跳过
     if (stats_.production_rate_ > 0) {
         ProduceResource(dt);
     }
 
     // 防御塔索敌
-    // 只有伤害 > 0 的建筑（如加农炮、箭塔）才会执行
-    // 金矿的 damage_ 为 0，条件不满足，自动跳过
     if (stats_.damage_ > 0) {
         UpdateCombatLogic(dt);
     }
@@ -208,7 +242,7 @@ void Building::update(float dt) {
 
 void Building::StartConstruction(float duration) {
     if (duration <= 0) return;
-    is_constructing_ = true;
+    SetState(Core::BuildingAnimationState::kConstructing);
     construction_timer_ = duration;
     cocos2d::log("Building[%d] started construction. Time: %.1f", this->get_instance_id(), duration);
 }

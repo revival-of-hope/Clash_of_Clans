@@ -9,7 +9,7 @@
 #define GAMEPLAY_COMPONENTS_ATTACK_COMP_H_
 
 #include "cocos2d.h"
-#include "Gameplay/Entities/BaseEntity.h" // 引用 BaseEntity 来定义目标类型
+#include "GamePlay/Public/BaseEntity.h" // 引用 BaseEntity 来定义目标类型
 #include "Core/GameConstants.h"
 
 /**

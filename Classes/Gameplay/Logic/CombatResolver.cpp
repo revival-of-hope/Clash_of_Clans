@@ -4,10 +4,10 @@
 //
 // Implementation of CombatResolver.
 
-#include "CombatResolver.h"
-#include "Gameplay/Components/HealthComp.h" // [关键] 必须引用，用于检查逻辑死亡
-#include "Gameplay/Entities/Unit.h"     
-#include "Gameplay/Entities/Building.h" 
+#include "GamePlay/Public/CombatResolver.h"
+#include "GamePlay/Public/HealthComp.h" // [关键] 必须引用，用于检查逻辑死亡
+#include "GamePlay/Public/Unit.h"     
+#include "GamePlay/Public/Building.h" 
 #include <cmath>
 
 // 单例实现
@@ -210,7 +210,7 @@ void CombatResolver::SpawnProjectile(BaseEntity* attacker, BaseEntity* target, i
 
     if (proj.sprite) {
         proj.sprite->setPosition(attacker->GetCenterPosition());
-        proj.sprite->setLocalZOrder(40); // 确保在单位上方
+        proj.sprite->setLocalZOrder(static_cast<int>(Core::ZOrder::kProjectiles)); // 确保在单位上方
         battle_layer_->addChild(proj.sprite);
         projectiles_.push_back(proj);
     }
@@ -252,7 +252,7 @@ void CombatResolver::PlayImpactVFX(const cocos2d::Vec2& pos, Core::ProjectileTyp
 
     explosion->drawSolidCircle(cocos2d::Vec2::ZERO, radius, 0, 10, color);
     explosion->setPosition(pos);
-    explosion->setLocalZOrder(50);
+    explosion->setLocalZOrder(static_cast<int>(Core::ZOrder::kExplosions));
     battle_layer_->addChild(explosion);
 
     auto seq = cocos2d::Sequence::create(

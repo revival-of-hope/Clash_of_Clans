@@ -4,8 +4,8 @@
 //
 // Implementation of Unit logic.
 
-#include "Unit.h"
-#include "Gameplay/Components/HealthComp.h"
+#include "GamePlay/Public/Unit.h"
+#include "GamePlay/Public/HealthComp.h"
 #include "Gameplay/Components/AttackComp.h"
 #include "Gameplay/Components/PathAgent.h"
 
@@ -69,13 +69,22 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
     }
 
     // -------------------------------------------------------------------------
+    // [DEBUG] 可视化碰撞体积 (Collision Box Visualization)
+    // -------------------------------------------------------------------------
+    auto debug_collider = cocos2d::DrawNode::create();
+    debug_collider->drawCircle(cocos2d::Vec2::ZERO, 20.0f, 0, 30, false, cocos2d::Color4F::GREEN);
+    debug_collider->drawDot(cocos2d::Vec2::ZERO, 2.0f, cocos2d::Color4F::GREEN);
+    this->addChild(debug_collider, 100);
+
+
+    // -------------------------------------------------------------------------
     // 组件挂载 (Component Composition)
     // -------------------------------------------------------------------------
 
     // (A) HealthComp: 负责血条和死亡
     auto health_comp = HealthComp::create();
     health_comp->InitStats(stats_.max_hp_);
-    health_comp->setName("HealthComp"); // 设置名字，方便 getChildByName 查找
+    health_comp->setName("HealthComp");
 
     // 根据体型调整血条高度
     float height_offset = 40.0f;
@@ -92,13 +101,12 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
 
     // (C) PathAgent: 负责寻路 AI
     auto path_agent = PathAgent::create();
-    // 传入: 移动速度, 攻击射程, 偏好目标(如巨人打防御塔)
     path_agent->InitStats(stats_.move_speed_, this->GetRangeInPixels(), stats_.favorite_target_);
     path_agent->setName("PathAgent");
     this->addChild(path_agent);
 
     //设为默认状态
-    current_state_ = State::kIdle;
+    current_state_ = Core::UnitAnimationState::kIdle;
     return true;
 }
 
@@ -122,51 +130,62 @@ bool Unit::CanAttack(Core::GeneralType target_type) const {
 }
 
 // SetState 实现
-void Unit::SetState(State new_state) {
+void Unit::SetState(Core::UnitAnimationState new_state) {
     // 如果状态没变，或者已经死了，就不要再切状态了
-    if (current_state_ == new_state || current_state_ == State::kDead) return;
+    if (current_state_ == new_state || current_state_ == Core::UnitAnimationState::kDead) return;
 
     current_state_ = new_state;
 
     // [关键修改] 如果进入死亡状态，立刻让 PathAgent 停止工作并释放目标
-    // 这打破了 "A引用B，B引用A" 的死锁循环
-    if (current_state_ == State::kDead) {
+    if (current_state_ == Core::UnitAnimationState::kDead) {
         auto agent = dynamic_cast<PathAgent*>(this->getChildByName("PathAgent"));
         if (agent) {
             agent->Stop();
         }
     }
     // 简单的视觉反馈 (Visual Feedback)
-    // 实际应该替换为 AnimationController->Play("Attack")（暂时简化）
     if (visual_sprite_) {
         switch (current_state_) {
-        case State::kIdle:
-            // 恢复原色
+        case Core::UnitAnimationState::kIdle:
             visual_sprite_->setColor(cocos2d::Color3B::WHITE);
             break;
-        case State::kMove:
-            // 移动时也可以保持原色，或者播放脚步粒子
+        case Core::UnitAnimationState::kMove:
             visual_sprite_->setColor(cocos2d::Color3B::WHITE);
             break;
-        case State::kAttack:
-            // 攻击时闪烁一下红色 (模拟发力)
-            // 注意：这里最好只设一次，Update里不要重复设
-            //visual_sprite_->setColor(cocos2d::Color3B::RED); 
+        case Core::UnitAnimationState::kAttack:
+            // 攻击时闪烁一下红色 (模拟发力) - 逻辑交由 AttackComp 触发反馈，这里保持状态一致性
             break;
-        case State::kDead:
-            // update中已经处理了淡出，这里主要做逻辑标记
+        case Core::UnitAnimationState::kDead:
+            // update中已经处理了淡出
+            break;
+        default:
             break;
         }
     }
 }
+
+void Unit::SetFacing(Core::Facing facing) {
+    if (current_facing_ == facing) return;
+    current_facing_ = facing;
+
+    // 简单的 2D 翻转实现
+    if (facing == Core::Facing::kLeft) {
+        this->setScaleX(-1.0f);
+    }
+    else if (facing == Core::Facing::kRight) {
+        this->setScaleX(1.0f);
+    }
+    // Up/Down 暂不处理，或者留给 AnimationController
+}
+
 //帧逻辑
 void Unit::update(float dt) {
     // 先检查是否应该死亡
     auto hp_comp = dynamic_cast<HealthComp*>(this->getChildByName("HealthComp"));
-    if (hp_comp && hp_comp->IsDead() && current_state_ != State::kDead) {
+    if (hp_comp && hp_comp->IsDead() && current_state_ != Core::UnitAnimationState::kDead) {
 
         // 切换状态 (这里面会调用 PathAgent->Stop() 释放引用)
-        SetState(State::kDead);
+        SetState(Core::UnitAnimationState::kDead);
 
         // 确保不会被立即清理
         this->is_marked_for_destruction_ = false;
@@ -176,46 +195,37 @@ void Unit::update(float dt) {
     if (IsMarkedForDestruction()) return;
 
     switch (current_state_) {
-    case State::kIdle:
-        // 待机：正常颜色
+    case Core::UnitAnimationState::kIdle:
         if (visual_sprite_) visual_sprite_->setColor(cocos2d::Color3B::WHITE);
         break;
 
-    case State::kMove:
-        // 移动：正常颜色 (未来这里调用奔跑动画)
+    case Core::UnitAnimationState::kMove:
         if (visual_sprite_) visual_sprite_->setColor(cocos2d::Color3B::WHITE);
         break;
 
-    case State::kAttack:
-        // 攻击时会变得微红
+    case Core::UnitAnimationState::kAttack:
         if (visual_sprite_) visual_sprite_->setColor(cocos2d::Color3B(255, 220, 220));
         break;
 
-    case State::kDead:
+    case Core::UnitAnimationState::kDead:
         // 死亡：变灰 -> 慢慢透明 -> 销毁
         if (visual_sprite_) {
-            // 使用 Tag (例如 999) 检查死亡动画是否已经在播放中
-            // 防止 update 每一帧都重复创建动画
             if (visual_sprite_->getActionByTag(999) == nullptr) {
 
                 visual_sprite_->setColor(cocos2d::Color3B::GRAY);
-
-                // 淡出动画 (1.0秒内透明度变为0)
                 auto fade_out = cocos2d::FadeOut::create(1.0f);
 
-                // 回调函数：动画播放完毕后，才真正标记销毁
                 auto remove_callback = cocos2d::CallFunc::create([this]() {
                     this->MarkForDestruction();
                     });
 
-                // 创建序列：先淡出，再销毁
                 auto sequence = cocos2d::Sequence::create(fade_out, remove_callback, nullptr);
-                sequence->setTag(999); // 标记此动作
-
-                //  执行
+                sequence->setTag(999);
                 visual_sprite_->runAction(sequence);
             }
         }
+        break;
+    default:
         break;
     }
 }
@@ -227,7 +237,6 @@ std::string Unit::GetSpriteFilename(Core::TroopType type) {
     case Core::TroopType::kGiant:       return "Troops_Icon/Giant.png";
     case Core::TroopType::kWallBreaker: return "Troops_Icon/WallBreaker.png";
     case Core::TroopType::kBabyDragon:  return "Troops_Icon/BabyDragon.png";
-        // 默认兜底：防止传入了未知的枚举值导致程序崩溃
     default:                            return "Barbarian.png";
     }
 }

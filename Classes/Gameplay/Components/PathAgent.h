@@ -3,23 +3,27 @@
 // Author: Developer B
 //
 // AI Component for target selection and movement.
+// INTEGRATED PATHFINDING: Contains static map data and A* logic.
+// [FIXED] Added Separation Force to prevent unit overlapping/clipping.
 
 #ifndef GAMEPLAY_COMPONENTS_PATH_AGENT_H_
 #define GAMEPLAY_COMPONENTS_PATH_AGENT_H_
 
 #include "cocos2d.h"
 #include "Core/GameConstants.h"
+#include <vector>
+#include <unordered_set>
+#include <mutex>
 
-// 前向声明，减少头文件依赖
 class BaseEntity;
 class Unit;
 
 /**
  * @brief 寻路与 AI 代理组件
- * 作用:
- * 1. 索敌 (寻找最近的/偏好的目标)
- * 2. 移动控制 (控制 Unit 的坐标)
- * 3. 状态切换 (通知 Unit 什么时候该跑，什么时候该打)
+ * * 职责:
+ * 1. [静态] 管理全局障碍物网格 (无限制大小)。
+ * 2. [实例] 负责单个单位的索敌和移动控制。
+ * 3. [新增] 负责单位之间的动态避让 (Separation)。
  */
 class PathAgent : public cocos2d::Node {
 public:
@@ -30,37 +34,57 @@ public:
     virtual bool init() override;
     virtual void update(float dt) override;
 
-    //初始化代理属性
-    void InitStats(float move_speed, float attack_range, Core::BuildingType fav_target);
+    // --- 实例方法 (Instance Methods) ---
 
-    // 强制停止/重置
+    void InitStats(float move_speed, float attack_range, Core::BuildingType fav_target);
     void Stop();
+    void RequestPathRecalculation();
+
+    // --- 静态全地图管理接口 (Static Map Management) ---
+
+    /**
+     * @brief 更新全局地图的障碍物信息
+     * 由 Building 在初始化或销毁时调用
+     */
+    static void UpdateObstacle(const cocos2d::Rect& rect, bool is_blocked);
+
+    /**
+     * @brief 重置全局地图 (场景切换时调用)
+     */
+    static void ResetMap();
 
 private:
-    // --- 属性 ---
+    // --- 实例属性 ---
     float move_speed_;
-    float attack_range_sq_; // 范围平方
+    float attack_range_sq_;
     Core::BuildingType favorite_target_type_;
 
-    // 当前锁定的目标
     BaseEntity* current_target_;
-
-    // 缓存父节点指针，避免每帧 dynamic_cast
     Unit* owner_unit_;
 
-    // 性能优化: 索敌计时器
-    // 避免每一帧都遍历全图寻找目标 (CPU 杀手)
     float target_search_timer_;
-    const float kSearchInterval = 0.5f; // 每 0.5 秒搜索一次
+    const float kSearchInterval = 0.5f;
 
-    // 寻找新目标
+    // 路径数据
+    std::vector<cocos2d::Vec2> current_path_;
+    int current_path_index_;
+    float repath_timer_ = 0.0f;
+
+    // --- 内部逻辑 ---
     void FindNewTarget();
-
-    // 移动逻辑 (目前是直线移动，预留 A* 接口)
     void UpdateMovement(float dt);
-
-    // 检查目标是否依然活着且在场上
     bool IsTargetValid() const;
+
+    // 执行 A* 寻路
+    void CalculatePathTo(const cocos2d::Vec2& target_pos);
+
+    // [新增] 计算分离力：返回一个向量，代表应该往哪个方向躲避队友
+    cocos2d::Vec2 ComputeSeparationForce() const;
+
+    // --- 静态地图数据 (Shared Map Data) ---
+    // 使用哈希集合存储障碍物坐标 (key = x << 32 | y)，支持无限地图
+    static std::unordered_set<uint64_t> global_obstacle_set_;
+    static std::mutex global_grid_mutex_;
 };
 
 #endif // GAMEPLAY_COMPONENTS_PATH_AGENT_H_

@@ -4,12 +4,12 @@
 //
 // Implementation of BaseEntity.
 
-#include "BaseEntity.h"
+#include "GamePlay/Public/BaseEntity.h"
 
 // 构造函数
 BaseEntity::BaseEntity() : instance_id_(-1)
 , owner_id_(-1)//初始化无效ID
-, is_marked_for_destruction_(false) {
+, is_marked_for_destruction_(false){
 }
 
 // 析构函数
