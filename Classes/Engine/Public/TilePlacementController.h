@@ -2,7 +2,7 @@
 #define TILE_PLACEMENT_CONTROLLER_H
 
 #include "cocos2d.h"
-#include "Engine/Public Function/MapLayer.h"
+#include "Engine/Public/MapLayer.h"
 
 USING_NS_CC;
 

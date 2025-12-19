@@ -11,10 +11,10 @@
 #include "Core/GameConstants.h"
 
 // Engine 模组
-#include "Engine/Public Function/MapLayer.h"
-#include "Engine/Public Function/TilePlacementController.h"
-#include "Engine/Public Function/MouseController.h"
-#include "Engine/Public Function/TileHighlighter.h"
+#include "Engine/Public/MapLayer.h"
+#include "Engine/Public/TilePlacementController.h"
+#include "Engine/Public/MouseController.h"
+#include "Engine/Public/TileHighlighter.h"
 
 class EngineTestScene : public cocos2d::Scene
 {
