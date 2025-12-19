@@ -8,9 +8,6 @@
 * 鼠标拖拽与坐标转换（`MouseController`）
 * 瓦片放置控制（`TilePlacementController`）
   -（可选）瓦片高亮显示（`TileHighlighter`）
-
-适用于 **RTS / 塔防 / 策略类游戏** 的地图交互与单位放置逻辑。
-
 ---
 
 ## 1. MapLayer（地图层）
@@ -77,17 +74,6 @@ this->addChild(mapLayer);
 
 ### 2.2 接口说明
 
-#### 构造函数
-
-```cpp
-MouseController(cocos2d::Node* target);
-```
-
-**参数：**
-
-* `target`：被控制的节点（通常为 `MapLayer` 或 `TMXTiledMap`）
-
----
 
 #### 启用 / 禁用鼠标监听
 
@@ -140,12 +126,7 @@ mouseController->enable();
 
 ### 3.2 接口说明
 
-#### 构造 / 析构
 
-```cpp
-TilePlacementController(Node* owner);
-~TilePlacementController();
-```
 
 **参数：**
 
