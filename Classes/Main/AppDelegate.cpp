@@ -5,7 +5,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "TestScene.h"
+#include "Engine/Logic/EngineTestScene.h"
 
  // #define USE_AUDIO_ENGINE 1
 
@@ -78,7 +78,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
 	// create a scene here to run your program
-    auto scene = TEST::createScene();
+    auto scene = EngineTestScene::createScene();
     director->runWithScene(scene);
 
     return true;

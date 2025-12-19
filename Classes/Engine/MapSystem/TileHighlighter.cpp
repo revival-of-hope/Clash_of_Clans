@@ -1,4 +1,4 @@
-#include "TileHighlighter.h"
+#include "Engine/Public Function/TileHighlighter.h"
 #include "Core/GameConstants.h"
 USING_NS_CC;
 
@@ -9,7 +9,7 @@ TileHighlighter::TileHighlighter(TMXTiledMap* map)
     // 创建高亮用的 DrawNode（纯色矩形）
     _highlightNode = DrawNode::create();
     _highlightNode->setVisible(false);  // 还没鼠标时隐藏
-    _map->addChild(_highlightNode, static_cast<int>(Core::ZOrder::kShadows));  // 放在最上层
+    _map->addChild(_highlightNode, static_cast<int>(Core::ZOrder::kShadows)); 
 }
 
 void TileHighlighter::enable()
@@ -77,8 +77,6 @@ void TileHighlighter::updateHighlight(const Vec2& mousePos)
 Vec2 TileHighlighter::screenToTilePos(const Vec2& screenPos)
 {
     if (!_map) return Vec2(-1, -1);
-
-    // 已经是 map 的本地坐标（包含 scale）
     Vec2 local = _map->convertToNodeSpace(screenPos);
 
     Size tileSize = _map->getTileSize();

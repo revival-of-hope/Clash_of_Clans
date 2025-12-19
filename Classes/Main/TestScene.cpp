@@ -3,9 +3,6 @@
 #include "Gameplay/Entities/Building.h"
 #include "Gameplay/Logic/CombatResolver.h"
 #include "Core/GameConstants.h"
-#include "Engine/MapSystem/MapLayer.h"
-#include "Engine/RenderSystem/TilePlacementController.h"
-#include "Engine/Input/MouseController.h"
 
 #include <cmath> 
 #include <vector>
@@ -28,30 +25,7 @@ bool TEST::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Vec2 centerPos = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
 
-    //创建地图
-    auto map = MapLayer::create("maps/test2.tmx");
-    this->addChild(map);
-
-    // 菜单图标 —— 你自己创建、布局、管理
-    auto menuIcon = Sprite::create("HelloWorld.png");
-    menuIcon->setScale(0.4f);
-    menuIcon->setPosition(Vec2(80, 80));
-    this->addChild(menuIcon, 10);
-
-    // 放置控制器
-    auto placement = new TilePlacementController(this);
-    // 绑定菜单 → 放置功能
-    placement->bindMenuIcon(
-        menuIcon,
-        map,
-        "HelloWorld.png"
-    );
-
-    //启用拖拽地图功能
-    auto mouseCtrl = new MouseController(map);
-    mouseCtrl->enable();
-
-
+    
     bool enablebattle = 0;
     if(enablebattle){
             // 2. 初始化战斗系统

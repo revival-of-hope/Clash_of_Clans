@@ -11,14 +11,15 @@ public:
 
     void enable();    
     void disable();  
+    void updateHighlight(const cocos2d::Vec2& mousePos);
+    cocos2d::Vec2 screenToTilePos(const cocos2d::Vec2& screenPos);
 
 private:
     cocos2d::TMXTiledMap* _map = nullptr;
     cocos2d::EventListenerMouse* _listener = nullptr;
     cocos2d::DrawNode* _highlightNode = nullptr;
 
-    void updateHighlight(const cocos2d::Vec2& mousePos);
-    cocos2d::Vec2 screenToTilePos(const cocos2d::Vec2& screenPos);
+    
 };
 
 #endif // __TILE_HIGHLIGHTER_H__

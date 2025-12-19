@@ -2,7 +2,7 @@
 #define TILE_PLACEMENT_CONTROLLER_H
 
 #include "cocos2d.h"
-#include "Engine/MapSystem/MapLayer.h"
+#include "Engine/Public Function/MapLayer.h"
 
 USING_NS_CC;
 
@@ -18,7 +18,8 @@ public:
     );
 
     void startPlacement(MapLayer* map,
-        const std::string& unitSpriteFile);
+        const std::string& unitSpriteFile,
+        const Vec2& worldPos);
 
     void cancelPlacement();
     bool isPlacing() const;

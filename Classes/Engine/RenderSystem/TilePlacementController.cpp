@@ -1,5 +1,5 @@
-#include "TilePlacementController.h"
-
+#include "Engine/Public/TilePlacementController.h"
+#include "Core/GameConstants.h"
 TilePlacementController::TilePlacementController(Node* owner)
     : _owner(owner)
 {
@@ -21,7 +21,8 @@ TilePlacementController::~TilePlacementController()
 
 void TilePlacementController::startPlacement(
     MapLayer* map,
-    const std::string& unitSpriteFile)
+    const std::string& unitSpriteFile,
+    const Vec2& worldPos)
 {
     CCASSERT(map, "MapLayer is null");
 
@@ -33,11 +34,13 @@ void TilePlacementController::startPlacement(
     // 创建“新单位”的拖拽预览精灵
     _dragSprite = Sprite::create(unitSpriteFile);
     CCASSERT(_dragSprite, "Failed to create unit sprite");
-
     _dragSprite->setOpacity(180);
-    _gameMap->addChild(_dragSprite, 10);
-
+    _gameMap->addChild(_dragSprite, static_cast<int>(Core::ZOrder::kUnits));
     _placing = true;
+
+    // 精灵直接出现在鼠标位置
+    Vec2 localPos = _gameMap->convertToNodeSpace(worldPos);
+    _dragSprite->setPosition(localPos);
 }
 
 void TilePlacementController::cancelPlacement()
@@ -69,14 +72,13 @@ void TilePlacementController::initMouseListener()
             if (!_placing || !_dragSprite || !_map) return;
 
             auto e = static_cast<EventMouse*>(event);
-            Vec2 worldPos = Director::getInstance()
-                ->convertToGL(e->getLocationInView());
+            Vec2 worldPos(e->getCursorX(), e->getCursorY());
 
-            Vec2 tileCenter;
-            if (worldPosToTileCenter(worldPos, tileCenter))
-            {
-                _dragSprite->setPosition(tileCenter);
-            }
+            // 转成地图节点坐标
+            Vec2 localPos = _gameMap->convertToNodeSpace(worldPos);
+
+            // 精灵永远用“父节点坐标”
+            _dragSprite->setPosition(localPos);
         };
 
     _mouseListener->onMouseUp = [this](Event* event)
@@ -84,8 +86,7 @@ void TilePlacementController::initMouseListener()
             if (!_placing || !_dragSprite || !_gameMap) return;
 
             auto e = static_cast<EventMouse*>(event);
-            Vec2 worldPos = Director::getInstance()
-                ->convertToGL(e->getLocationInView());
+            Vec2 worldPos(e->getCursorX(), e->getCursorY());
 
             placeToTile(worldPos);
         };
@@ -113,27 +114,38 @@ void TilePlacementController::placeToTile(const Vec2& worldPos)
 
 
 bool TilePlacementController::worldPosToTileCenter(
-    const Vec2& worldPos, Vec2& outTileCenter)
+    const Vec2& worldPos,
+    Vec2& outTileCenter)
 {
-    Vec2 mapPos = _map->convertToNodeSpace(worldPos);
+    // ① 世界坐标 → 地图本地坐标
+    Vec2 local = _map->convertToNodeSpace(worldPos);
 
     Size tileSize = _map->getTileSize();
-    Size mapSize  = _map->getMapSize();
+    Size mapSize = _map->getMapSize();
 
-    float mapPixelHeight = mapSize.height * tileSize.height;
+    int tileX = local.x / tileSize.width;
+    int tileY = local.y / tileSize.height;
 
-    int col = mapPos.x / tileSize.width;
-    int row = (mapPixelHeight - mapPos.y) / tileSize.height;
+    // 转成 Tiled 左上角坐标
+    tileY = mapSize.height - 1 - tileY;
 
-    if (col < 0 || row < 0 ||
-        col >= mapSize.width || row >= mapSize.height)
+    if (tileX < 0 || tileX >= mapSize.width ||
+        tileY < 0 || tileY >= mapSize.height)
         return false;
 
-    outTileCenter.x = col * tileSize.width + tileSize.width / 2;
-    outTileCenter.y = mapPixelHeight
-                    - row * tileSize.height
-                    - tileSize.height / 2;
+    // ② 再从“瓦片坐标”算中心点
+    float centerX = tileX * tileSize.width + tileSize.width * 0.5f;
+    float centerY =
+        (mapSize.height - 1 - tileY) * tileSize.height
+        + tileSize.height * 0.5f;
+    Vec2 mapLocalCenter(centerX, centerY);
 
+    // 把 map 本地坐标 → world
+    Vec2 worldCenter = _map->convertToWorldSpace(mapLocalCenter);
+
+    // 再 world → gameMap 本地
+    outTileCenter = _gameMap->convertToNodeSpace(worldCenter);
+    
     return true;
 }
 
@@ -151,7 +163,7 @@ void TilePlacementController::bindMenuIcon(
     listener->onTouchBegan = [=](Touch* t, Event*) {
         if (menuIcon->getBoundingBox().containsPoint(t->getLocation()))
         {
-            startPlacement(map, unitSpriteFile);
+            startPlacement(map, unitSpriteFile, t->getLocation());
             return true;
         }
         return false;

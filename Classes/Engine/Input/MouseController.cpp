@@ -1,5 +1,4 @@
-#include "MouseController.h"
-#include "cocos2d.h"
+#include "Engine/Public/MouseController.h"
 
 USING_NS_CC;
 

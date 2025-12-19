@@ -1,5 +1,5 @@
-#include "MapLayer.h"
-#include "TileHighlighter.h"
+#include "Engine/Public/MapLayer.h"
+#include "Engine/Public/TileHighlighter.h"
 
 
 MapLayer* MapLayer::create(const std::string& tmxFile)
