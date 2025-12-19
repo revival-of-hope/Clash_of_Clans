@@ -135,138 +135,139 @@
 ### **4.1 头文件 (GameplayIntegrationScene.h)**
 
 ```cpp
-\#ifndef INTEGRATION\_TEST\_SCENE\_H\_  
-\#define INTEGRATION\_TEST\_SCENE\_H\_
+#ifndef INTEGRATION_TEST_SCENE_H_
+#define INTEGRATION_TEST_SCENE_H_
 
-\#include "cocos2d.h"
+#include "cocos2d.h"
 
-// \[契约 1\] 仅引用 Public 头文件  
-\#include "Gameplay/Public/Unit.h"  
-\#include "Gameplay/Public/Building.h"  
-\#include "Gameplay/Public/EconomySystem.h"  
-\#include "Gameplay/Public/CombatResolver.h"
+// [契约 1] 仅引用 Public 头文件
+#include "Public/Gameplay/Entities/Unit.h"
+#include "Public/Gameplay/Entities/Building.h"
+#include "Public/Gameplay/Logic/EconomySystem.h"
+#include "Public/Gameplay/Logic/CombatResolver.h"
 
-class GameplayIntegrationScene : public cocos2d::Scene {  
-public:  
-    static cocos2d::Scene\* createScene();  
-    virtual bool init() override;  
-    virtual void update(float dt) override;  
-      
-    // 模拟用户操作  
-    void OnPlaceTownHall();  
-    void OnBuildCannon();  
+class GameplayIntegrationScene : public cocos2d::Scene {
+public:
+    static cocos2d::Scene* createScene();
+    virtual bool init() override;
+    virtual void update(float dt) override;
+    
+    // 模拟用户操作
+    void OnPlaceTownHall();
+    void OnBuildCannon();
     void OnSpawnBarbarian();
 
-    CREATE\_FUNC(GameplayIntegrationScene);
+    CREATE_FUNC(GameplayIntegrationScene);
 
-private:  
-    cocos2d::Node\* game\_layer\_ \= nullptr; // 游戏层 (ZOrder 0\)  
-    cocos2d::Label\* resource\_label\_ \= nullptr; // UI 层 (ZOrder 100\)  
-      
-    // 简单的辅助函数：网格转像素  
-    cocos2d::Vec2 GridToPixel(int x, int y) {  
-        return cocos2d::Vec2(x \* 64 \+ 32, y \* 64 \+ 32);  
-    }  
+private:
+    cocos2d::Node* game_layer_ = nullptr; // 游戏层 (ZOrder 0)
+    cocos2d::Label* resource_label_ = nullptr; // UI 层 (ZOrder 100)
+    
+    // 简单的辅助函数：网格转像素
+    cocos2d::Vec2 GridToPixel(int x, int y) {
+        return cocos2d::Vec2(x * 64 + 32, y * 64 + 32);
+    }
 };
 
-\#endif // INTEGRATION\_TEST\_SCENE\_H\_
+#endif // INTEGRATION_TEST_SCENE_H_
+
 ```
 
 ### **4.2 实现文件 (GameplayIntegrationScene.cpp)**
 ```cpp
 #include "GameplayIntegrationScene.h"
 
-USING\_NS\_CC;
+USING_NS_CC;
 
-Scene\* GameplayIntegrationScene::createScene() {  
-    return GameplayIntegrationScene::create();  
+Scene* GameplayIntegrationScene::createScene() {
+    return GameplayIntegrationScene::create();
 }
 
-bool GameplayIntegrationScene::init() {  
-    if (\!Scene::init()) return false;
+bool GameplayIntegrationScene::init() {
+    if (!Scene::init()) return false;
 
-    // 1\. 分层架构：逻辑层与UI层分离  
-    game\_layer\_ \= Node::create();  
-    this-\>addChild(game\_layer\_, 0);
+    // 1. 分层架构：逻辑层与UI层分离
+    game_layer_ = Node::create();
+    this->addChild(game_layer_, 0);
 
-    auto ui\_layer \= Node::create();  
-    this-\>addChild(ui\_layer, 100);
+    auto ui_layer = Node::create();
+    this->addChild(ui_layer, 100);
 
-    // 2\. \[契约 2.3\] 初始化核心系统  
-    // 必须传入 game\_layer\_ 用于承载投射物  
-    CombatResolver::GetInstance()-\>Initialize(game\_layer\_);  
-    // 重置经济  
-    EconomySystem::GetInstance()-\>Reset(); 
+    // 2. [契约 2.3] 初始化核心系统
+    // 必须传入 game_layer_ 用于承载投射物
+    CombatResolver::GetInstance()->Initialize(game_layer_);
+    // 重置经济
+    EconomySystem::GetInstance()->Reset(); 
 
-    // 3\. 搭建简单 UI  
-    resource\_label\_ \= Label::createWithSystemFont("Gold: 0/0 | Pop: 0/0", "Arial", 24);  
-    resource\_label\_-\>setPosition(Vec2(400, 500));  
-    ui\_layer-\>addChild(resource\_label\_);
+    // 3. 搭建简单 UI
+    resource_label_ = Label::createWithSystemFont("Gold: 0/0 | Pop: 0/0", "Arial", 24);
+    resource_label_->setPosition(Vec2(400, 500));
+    ui_layer->addChild(resource_label_);
 
-    // 4\. 执行模拟流程  
-    OnPlaceTownHall();    // 放置大本营  
-    OnBuildCannon();      // 建造加农炮  
+    // 4. 执行模拟流程
+    OnPlaceTownHall();    // 放置大本营
+    OnBuildCannon();      // 建造加农炮
     OnSpawnBarbarian();   // 投放野蛮人
 
-    this-\>scheduleUpdate();  
-    return true;  
+    this->scheduleUpdate();
+    return true;
 }
 
-void GameplayIntegrationScene::OnPlaceTownHall() {  
-    // \[契约 2.2\] 创建建筑 (大本营, Lv1, 玩家所有)  
-    auto townhall \= Building::create(Core::BuildingType::kTownHall, 1, 0);
+void GameplayIntegrationScene::OnPlaceTownHall() {
+    // [契约 2.2] 创建建筑 (大本营, Lv1, 玩家所有)
+    auto townhall = Building::create(Core::BuildingType::kTownHall, 1, 0);
 
-    // \[契约 2.1\] 坐标设置 (逻辑网格 10,10)  
-    townhall-\>setPosition(GridToPixel(10, 10));
+    // [契约 2.1] 坐标设置 (逻辑网格 10,10)
+    townhall->setPosition(GridToPixel(10, 10));
 
-    // \[契约 2.2\] 立即加入场景  
-    game\_layer\_-\>addChild(townhall);  
-      
-    // \[契约 2.3\] 通知经济系统重算上限 (大本营提供资源容量)  
-    cocos2d::Vector\<Building\*\> buildings;  
-    buildings.pushBack(townhall);  
-    EconomySystem::GetInstance()-\>RecalculateLimits(buildings);  
+    // [契约 2.2] 立即加入场景
+    game_layer_->addChild(townhall);
+    
+    // [契约 2.3] 通知经济系统重算上限 (大本营提供资源容量)
+    cocos2d::Vector<Building*> buildings;
+    buildings.pushBack(townhall);
+    EconomySystem::GetInstance()->RecalculateLimits(buildings);
 }
 
-void GameplayIntegrationScene::OnBuildCannon() {  
-    // 假设花费 200 金币 (为了测试先强行加钱)  
-    EconomySystem::GetInstance()-\>AddGold(1000); 
+void GameplayIntegrationScene::OnBuildCannon() {
+    // 假设花费 200 金币 (为了测试先强行加钱)
+    EconomySystem::GetInstance()->AddGold(1000); 
 
-    int cost \= 200;  
-    if (EconomySystem::GetInstance()-\>SpendGold(cost)) {  
-        auto cannon \= Building::create(Core::BuildingType::kCannon, 1, 0);  
-        cannon-\>setPosition(GridToPixel(15, 10)); // 放在大本营右边  
-          
-        // 开始建造：5秒内无法攻击  
-        cannon-\>StartConstruction(5.0f);  
-          
-        game\_layer\_-\>addChild(cannon);  
-        cocos2d::log("Test: Cannon construction started.");  
-    }  
+    int cost = 200;
+    if (EconomySystem::GetInstance()->SpendGold(cost)) {
+        auto cannon = Building::create(Core::BuildingType::kCannon, 1, 0);
+        cannon->setPosition(GridToPixel(15, 10)); // 放在大本营右边
+        
+        // 开始建造：5秒内无法攻击
+        cannon->StartConstruction(5.0f);
+        
+        game_layer_->addChild(cannon);
+        cocos2d::log("Test: Cannon construction started.");
+    }
 }
 
-void GameplayIntegrationScene::OnSpawnBarbarian() {  
-    // 假设野蛮人占 1 人口  
-    if (EconomySystem::GetInstance()-\>AddTroopPopulation(1)) {  
-        // 创建野蛮人 (Lv1, 玩家所有)  
-        auto barb \= Unit::create(Core::TroopType::kBarbarian, 1, 0);  
-          
-        // 放在稍远的地方 (像素坐标)  
-        barb-\>setPosition(Vec2(200, 200));  
-          
-        game\_layer\_-\>addChild(barb);  
-        cocos2d::log("Test: Barbarian spawned.");  
-    } else {  
-        cocos2d::log("Test: Not enough population\!");  
-    }  
+void GameplayIntegrationScene::OnSpawnBarbarian() {
+    // 假设野蛮人占 1 人口
+    if (EconomySystem::GetInstance()->AddTroopPopulation(1)) {
+        // 创建野蛮人 (Lv1, 玩家所有)
+        auto barb = Unit::create(Core::TroopType::kBarbarian, 1, 0);
+        
+        // 放在稍远的地方 (像素坐标)
+        barb->setPosition(Vec2(200, 200));
+        
+        game_layer_->addChild(barb);
+        cocos2d::log("Test: Barbarian spawned.");
+    } else {
+        cocos2d::log("Test: Not enough population!");
+    }
 }
 
-void GameplayIntegrationScene::update(float dt) {  
-    // 5\. \[契约 2.4\] UI 轮询数据  
-    auto eco \= EconomySystem::GetInstance();  
-    resource\_label\_-\>setString(StringUtils::format(  
-        "Gold: %d/%d | Pop: %d/%d",   
-        eco-\>GetCurrentGold(), eco-\>GetMaxGold(),  
-        eco-\>GetCurrentPopulation(), eco-\>GetMaxPopulation()  
-    ));  
-}  
+void GameplayIntegrationScene::update(float dt) {
+    // 5. [契约 2.4] UI 轮询数据
+    auto eco = EconomySystem::GetInstance();
+    resource_label_->setString(StringUtils::format(
+        "Gold: %d/%d | Pop: %d/%d", 
+        eco->GetCurrentGold(), eco->GetMaxGold(),
+        eco->GetCurrentPopulation(), eco->GetMaxPopulation()
+    ));
+}
