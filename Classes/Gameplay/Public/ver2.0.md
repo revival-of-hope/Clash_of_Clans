@@ -12,19 +12,13 @@
 **引用路径规范：**
 
 // ✅ 正确：引用公共接口  
-\#include "Public/Gameplay/Entities/Unit.h"  
-\#include "Public/Gameplay/Logic/EconomySystem.h"
+\#include "Gameplay/Public/Unit.h"  
+\#include "Gameplay/Public/EconomySystem.h"
 
 // ❌ 错误：直接引用私有实现 (严禁跨模块引用 cpp，会导致链接错误)  
 \#include "../../Gameplay/Entities/Unit.cpp" 
 
-**文件目录索引：**
 
-| 子模块 | 路径 | 主要类 | 用途 |
-| :---- | :---- | :---- | :---- |
-| **Entities** | Public/Gameplay/Entities/ | Unit, Building | 游戏中的具体对象（兵种、建筑）。继承自 cocos2d::Node。 |
-| **Logic** | Public/Gameplay/Logic/ | EconomySystem, CombatResolver | 全局单例系统。负责资源管理和战斗仲裁。 |
-| **Components** | Public/Gameplay/Components/ | HealthComp | 功能组件。UI 需通过此组件获取血量信息。 |
 
 ## **2\. 行为契约 (Behavior Contracts)**
 
@@ -82,7 +76,7 @@
 
 ### **3.1 EconomySystem (经济系统单例)**
 
-**头文件:** Public/Gameplay/Logic/EconomySystem.h
+**头文件:** Gameplay/Public/EconomySystem.h
 
 | 接口方法 | 参数 | 说明 | 契约约束 |
 | :---- | :---- | :---- | :---- |
@@ -96,7 +90,7 @@
 
 ### **3.2 CombatResolver (战斗仲裁单例)**
 
-**头文件:** Public/Gameplay/Logic/CombatResolver.h
+**头文件:** Gameplay/Public/CombatResolver.h
 
 | 接口方法 | 参数 | 说明 | 契约约束 |
 | :---- | :---- | :---- | :---- |
@@ -106,7 +100,7 @@
 
 ### **3.3 Unit (兵种实体)**
 
-**头文件:** Public/Gameplay/Entities/Unit.h
+**头文件:** Gameplay/Public/Unit.h
 
 | 接口方法 | 参数 | 说明 |
 | :---- | :---- | :---- |
@@ -117,7 +111,7 @@
 
 ### **3.4 Building (建筑实体)**
 
-**头文件:** Public/Gameplay/Entities/Building.h
+**头文件:** Gameplay/Public/Building.h
 
 | 接口方法 | 参数 | 说明 |
 | :---- | :---- | :---- |
@@ -140,16 +134,17 @@
 
 ### **4.1 头文件 (GameplayIntegrationScene.h)**
 
+```cpp
 \#ifndef INTEGRATION\_TEST\_SCENE\_H\_  
 \#define INTEGRATION\_TEST\_SCENE\_H\_
 
 \#include "cocos2d.h"
 
 // \[契约 1\] 仅引用 Public 头文件  
-\#include "Public/Gameplay/Entities/Unit.h"  
-\#include "Public/Gameplay/Entities/Building.h"  
-\#include "Public/Gameplay/Logic/EconomySystem.h"  
-\#include "Public/Gameplay/Logic/CombatResolver.h"
+\#include "Gameplay/Public/Unit.h"  
+\#include "Gameplay/Public/Building.h"  
+\#include "Gameplay/Public/EconomySystem.h"  
+\#include "Gameplay/Public/CombatResolver.h"
 
 class GameplayIntegrationScene : public cocos2d::Scene {  
 public:  
@@ -175,10 +170,11 @@ private:
 };
 
 \#endif // INTEGRATION\_TEST\_SCENE\_H\_
+```
 
 ### **4.2 实现文件 (GameplayIntegrationScene.cpp)**
-
-\#include "GameplayIntegrationScene.h"
+```cpp
+#include "GameplayIntegrationScene.h"
 
 USING\_NS\_CC;
 
