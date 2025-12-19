@@ -79,8 +79,10 @@ bool MapLayer::initWithTMX(const std::string& tmxFile)
 
     this->addChild(_map);
     fitPixelPerfect();
-    auto highlighter = new TileHighlighter(_map);
-    highlighter->enable();
+    //可以考虑把高亮封装到地图里面
+    
+    //auto highlighter = new TileHighlighter(_map);
+    //highlighter->enable();
 
     return true;
 }
