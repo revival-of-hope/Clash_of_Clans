@@ -1,5 +1,3 @@
-
-
 # Engine Tile Map & Interaction Module
 
 本模块基于 **Cocos2d-x**，提供了以下功能组件：
@@ -7,9 +5,8 @@
 * TMX 地图加载与像素级适配（`MapLayer`）
 * 鼠标拖拽与坐标转换（`MouseController`）
 * 瓦片放置控制（`TilePlacementController`）
-  -（可选）瓦片高亮显示（`TileHighlighter`）
+* 瓦片高亮显示（`TileHighlighter`）
 ---
-
 ## 1. MapLayer（地图层）
 
 ### 1.1 功能说明
@@ -41,16 +38,6 @@ static MapLayer* create(const std::string& tmxFile);
 
 ---
 
-#### 获取 TMX 地图对象
-
-```cpp
-TMXTiledMap* getMap() const;
-```
-
-用于传递给其他系统（如高亮、放置、鼠标控制）。
-
----
-
 ### 1.3 使用示例
 
 ```cpp
@@ -66,45 +53,25 @@ this->addChild(mapLayer);
 
 `MouseController` 用于处理鼠标交互，主要功能包括：
 
-* 鼠标拖拽地图
-* 获取鼠标对应的瓦片坐标
-* 提供鼠标移动回调接口
-
+* 鼠标拖放和放缩
 ---
 
 ### 2.2 接口说明
 
 
-#### 启用 / 禁用鼠标监听
+#### 启用 / 禁用鼠标拖放和放缩
 
 ```cpp
 void enable();
 void disable();
 ```
 
----
 
-#### 获取鼠标对应的瓦片坐标
-
-```cpp
-cocos2d::Vec2 getTilePosAtScreenPos(const cocos2d::Vec2& screenPos);
-```
-
-> ⚠️ 仅当 `target` 为 `TMXTiledMap` 时有效
-
----
-
-#### 鼠标移动回调
-
-```cpp
-std::function<void(const cocos2d::Vec2&)> onMouseMoveCallback;
-```
-
----
 
 ### 2.3 使用示例
 
 ```cpp
+mapLayer = MapLayer::create("maps/test2.tmx");
 auto mouseController = new MouseController(mapLayer);
 mouseController->enable();
 ```
@@ -127,13 +94,6 @@ mouseController->enable();
 ### 3.2 接口说明
 
 
-
-**参数：**
-
-* `owner`：通常为 Scene 或 UI 根节点
-
----
-
 #### 绑定菜单图标（推荐方式）
 
 ```cpp
@@ -145,59 +105,37 @@ void bindMenuIcon(
 ```
 
 **功能：**
-
 * 点击菜单图标后进入放置模式
-
----
-
-#### 手动开始放置
-
-```cpp
-void startPlacement(
-    MapLayer* map,
-    const std::string& unitSpriteFile,
-    const Vec2& worldPos
-);
-```
-
----
-
-#### 取消放置
-
-```cpp
-void cancelPlacement();
-```
-
----
-
-#### 是否正在放置
-
-```cpp
-bool isPlacing() const;
-```
-
 ---
 
 ### 3.3 使用示例
 
 ```cpp
+//创建对象
 tilePlacement = new TilePlacementController(this);
-
+//创建菜单
 auto menuIcon = Sprite::create("HelloWorld.png");
 menuIcon->setScale(0.4f);
 menuIcon->setPosition(Vec2(80, 80));
 this->addChild(menuIcon, 10);
-
+//直接使用
 tilePlacement->bindMenuIcon(
     menuIcon,
     mapLayer,
     "Troops_Icon/Archer.png"
 );
 ```
+## 4. TileHighlighter.h(只在瓦片地图里高亮)
 
----
-
-## 4. 测试场景（EngineTestScene）
+### 使用方法
+```cpp
+    // Tile 高亮（可视化鼠标所指瓦片）
+    mapLayer = MapLayer::create("maps/test2.tmx");
+    tileHighlighter = new TileHighlighter(mapLayer->getMap());
+    tileHighlighter->enable();
+    tileHighlighter->disable();//去除高亮
+``` 
+## 5. 测试场景（EngineTestScene）
 
 本项目提供了一个完整测试场景，用于验证所有模块功能。
 
@@ -252,3 +190,41 @@ bool EngineTestScene::init()
     return true;
 }
 ```
+
+## 7. 行为规范约束（Behavior Contracts）
+
+本模块遵循以下 **行为契约（Behavior Contract）**，用于约束生命周期、所有权、坐标系统与状态行为，防止模块被误用。
+
+---
+
+### 7.1 生命周期规范
+
+| 对象 | 生命周期 | 说明 |
+|----|----|----|
+| `MapLayer` | Scene 子节点 | 由 Cocos2d-x 自动管理 |
+| `MouseController` | Scene 生命周期 | 必须手动 `enable / disable` |
+| `TilePlacementController` | Scene 生命周期 | 逻辑对象，不参与渲染 |
+| `TileHighlighter` | Scene 生命周期 | 可随时 `enable / disable` |
+
+---
+
+### 7.2 enable / disable 规范（强制）
+
+| 模块 | 规则 |
+|----|----|
+| `MouseController` | 仅在 `enable()` 后才响应输入 |
+| `TileHighlighter` | `disable()` 必须完全移除高亮 |
+| `TilePlacementController` | `cancelPlacement()` 必须清理全部状态 |
+
+---
+
+### 7.3 所有权规范（Ownership Rules）
+
+#### Scene 拥有所有 Controller
+
+```text
+Scene
+ ├── MapLayer (Node)
+ ├── MouseController (逻辑对象)
+ ├── TilePlacementController (逻辑对象)
+ └── TileHighlighter (逻辑对象)

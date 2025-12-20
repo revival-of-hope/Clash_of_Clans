@@ -49,7 +49,7 @@ void TileHighlighter::updateHighlight(const Vec2& mousePos)
         return;
     }
 
-    log("当前瓦片坐标: (%d, %d)", (int)tile.x, (int)tile.y);
+    //log("当前瓦片坐标: (%d, %d)", (int)tile.x, (int)tile.y);
 
     Size tileSize = _map->getTileSize();
     Size mapSize  = _map->getMapSize();
