@@ -4,8 +4,8 @@
 //
 // Implementation of Unit logic.
 
-#include "GamePlay/Public/Unit.h"
-#include "GamePlay/Public/HealthComp.h"
+#include "Gameplay/Public/Unit.h"
+#include "Gameplay/Public/HealthComp.h"
 #include "Gameplay/Components/AttackComp.h"
 #include "Gameplay/Components/PathAgent.h"
 
@@ -39,14 +39,10 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
     this->type_ = type;
     //去GameConfig中调用
     this->stats_ = Core::GameConfig::GetInstance()->GetTroopStats(type, level);
-    //设置阵营
+
+    // [修复] 不再依赖 Core::CampType，直接存储 owner_id
     this->set_owner_id(owner_id);
-    if (owner_id == 0) {
-        this->set_camp(Core::CampType::kPlayer);
-    }
-    else {
-        this->set_camp(Core::CampType::kEnemy);
-    }
+
     //根据兵种获取对应的图片
     std::string filename = GetSpriteFilename(type);
     //创建精灵

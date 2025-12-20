@@ -15,11 +15,11 @@
 //    Now A* allows pathing INTO the target node by using IsGridWalkableForUnit with the target exemption.
 // [REFACTOR] Adapted to Core::GameConstants changes (UnitAnimationState & Facing).
 
-#include "PathAgent.h"
-#include "GamePlay/Public/Unit.h"
-#include "GamePlay/Public/Building.h"
+#include "Gameplay/Components/PathAgent.h"
+#include "Gameplay/Public/Unit.h"
+#include "Gameplay/Public/Building.h"
 #include "Gameplay/Components/AttackComp.h"
-#include "GamePlay/Public/HealthComp.h"
+#include "Gameplay/Public/HealthComp.h"
 #include <cmath>
 #include <queue>
 #include <unordered_map>
@@ -270,12 +270,13 @@ cocos2d::Vec2 PathAgent::ComputeSeparationForce() const {
     const float kSeparationRadiusSq = kSeparationRadius * kSeparationRadius;
     const float kOptimizationDistanceSq = 50.0f * 50.0f;
 
-    auto parent = owner_unit_->getParent();
-    if (!parent) return cocos2d::Vec2::ZERO;
+    // [修复] 使用全局注册表进行分离力计算
+    // 效率更高，且不再依赖 parent->getChildren()
+    auto& all_entities = BaseEntity::GetAllEntities();
 
     cocos2d::Vec2 my_pos = owner_unit_->getPosition();
 
-    for (auto node : parent->getChildren()) {
+    for (auto node : all_entities) {
         if (node == owner_unit_) continue;
 
         if (my_pos.getDistanceSq(node->getPosition()) > kOptimizationDistanceSq) {
@@ -535,10 +536,9 @@ void PathAgent::FindNewTarget() {
         current_target_->release();
         current_target_ = nullptr;
     }
-    auto scene = owner_unit_->getParent();
-    if (!scene) return;
-
-    const auto& all_nodes = scene->getChildren();
+    // [修复] 不再依赖 owner_unit_->getParent() 获取目标列表
+    // 使用全局注册表，确保任何时刻都能获取到正确的实体列表
+    auto& all_entities = BaseEntity::GetAllEntities();
 
     BaseEntity* best_target = nullptr;
     float min_dist_sq = FLT_MAX;
@@ -558,7 +558,7 @@ void PathAgent::FindNewTarget() {
         return owner_unit_->CanAttack(target_type);
         };
 
-    for (auto node : all_nodes) {
+    for (auto node : all_entities) {
         float dist_sq = my_pos.getDistanceSq(node->getPosition());
         if (dist_sq > kVisionRangeSq) continue;
 
@@ -566,7 +566,10 @@ void PathAgent::FindNewTarget() {
         if (!entity) continue;
 
         if (entity == owner_unit_) continue;
-        if (entity->get_camp() == owner_unit_->get_camp()) continue;
+
+        // [修复] 使用 IsAlly 判断，不再依赖 camp
+        if (entity->IsAlly(owner_unit_)) continue;
+
         if (!IsEntityAlive(entity)) continue;
         if (!checkCanAttack(entity)) continue;
 

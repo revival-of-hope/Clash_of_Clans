@@ -24,6 +24,10 @@ public:
     // 核心初始化
     virtual bool init() override;
 
+    // [新增] 生命周期管理，用于维护全局注册表
+    virtual void onEnter() override;
+    virtual void onExit() override;
+
     /**
      * @brief 每一帧的逻辑更新
      * override 表示：我要覆盖 cocos2d::Node 里的 update(float dt)
@@ -39,11 +43,15 @@ public:
     int get_owner_id() const { return owner_id_; }
 
     /**
-     * @brief 设置阵营 (用于区分敌我)
-     * @param camp 阵营枚举 (kPlayer, kEnemy)
+     * @brief 判断目标是否为盟友
+     * 基于 owner_id 是否相同来判断。
+     * @param other 另一个实体
+     * @return true 如果是同一阵营 (ID相同)
      */
-    void set_camp(Core::CampType camp) { camp_ = camp; }
-    Core::CampType get_camp() const { return camp_; }
+    bool IsAlly(const BaseEntity* other) const {
+        if (!other) return false;
+        return this->owner_id_ == other->get_owner_id();
+    }
 
     /**
      * @brief 标记为待销毁
@@ -62,11 +70,19 @@ public:
      */
     cocos2d::Vec2 GetCenterPosition() const;
 
+    // [新增] 获取当前场景中所有活跃的 BaseEntity
+    // 解决了 "UI需要列表" 或 "逻辑需要遍历目标" 的所有权问题
+    static cocos2d::Vector<BaseEntity*>& GetAllEntities() { return global_entities_; }
+
 protected:
     int instance_id_;                 ///< 唯一 ID
-    Core::CampType camp_;             ///< 阵营
     bool is_marked_for_destruction_;  ///< 销毁标记
     int owner_id_;                    ///< 所有者 ID
+
+private:
+    // [核心] 权威的实体注册表
+    // 只有 BaseEntity 自己能增删，外部只能读取
+    static cocos2d::Vector<BaseEntity*> global_entities_;
 };
 
 #endif // GAMEPLAY_ENTITIES_BASE_ENTITY_H_

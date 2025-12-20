@@ -4,8 +4,8 @@
 //
 // Implementation of EconomySystem.
 
-#include "GamePlay/Public/EconomySystem.h"
-#include "GamePlay/Public/Building.h"
+#include "Gameplay/Public/EconomySystem.h"
+#include "Gameplay/Public/Building.h"
 #include <algorithm> // for std::min
 
 EconomySystem::EconomySystem() {
@@ -147,22 +147,26 @@ void EconomySystem::FreeTroopPopulation(int housing_space) {
 // 上限动态计算
 // -----------------------------------------------------------------------------
 
-void EconomySystem::RecalculateLimits(const cocos2d::Vector<Building*>& buildings) {
+void EconomySystem::RecalculateLimits(const cocos2d::Vector<Building*>& /*ignored_arg*/) {
     // 1. 重置为大本营基础值
     // (假设大本营自带 1000 存储)
     int total_gold_cap = 1000;
     int total_elixir_cap = 1000;
     int total_pop_cap = 0;
 
+    // [修复] 使用 BaseEntity::GetAllEntities() 代替传入的参数
+    // 解决了所有权边界问题：不再依赖 UI/Engine 传递列表，而是 GamePlay 拥有权威列表。
+    auto& all_entities = BaseEntity::GetAllEntities();
+
     // 2. 遍历所有建筑，累加 Capacity
-    for (auto node : buildings) {
+    for (auto node : all_entities) {
         Building* b = dynamic_cast<Building*>(node);
         if (!b) continue;
 
         // 必须是玩家自己的建筑才算容量
         if (b->get_owner_id() != 0) continue;
 
-        // [修复 1] 正在建造/升级的建筑不提供功能 (不增加容量/人口)
+        // 正在建造/升级的建筑不提供功能 (不增加容量/人口)
         if (b->IsConstructing()) continue;
 
         //  正确获取建筑等级

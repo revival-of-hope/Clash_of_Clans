@@ -6,11 +6,11 @@
 // [FIXED] Moved UpdateObstacle to onEnter/onExit to fix the (0,0) coordinate bug.
 // [REFACTOR] Adopted Core::BuildingAnimationState for state management.
 
-#include "GamePlay/Public/Building.h"
-#include "GamePlay/Public/Unit.h" 
-#include "GamePlay/Public/HealthComp.h" 
-#include "GamePlay/Public/EconomySystem.h" // 引入经济系统
-#include "GamePlay/Public/CombatResolver.h"
+#include "Gameplay/Public/Building.h"
+#include "Gameplay/Public/Unit.h" 
+#include "Gameplay/Public/HealthComp.h" 
+#include "Gameplay/Public/EconomySystem.h" // 引入经济系统
+#include "Gameplay/Public/CombatResolver.h"
 #include "Gameplay/Components/AttackComp.h"
 #include "Gameplay/Components/PathAgent.h"
 
@@ -44,14 +44,8 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
     // 血量、攻击力、攻击范围、产出效率
     this->stats_ = Core::GameConfig::GetInstance()->GetBuildingStats(type, level);
 
-    //设置阵营
+    // [修复] 不再依赖 Core::CampType，直接存储 owner_id
     this->set_owner_id(owner_id);
-    if (owner_id == 0) {
-        this->set_camp(Core::CampType::kPlayer);
-    }
-    else {
-        this->set_camp(Core::CampType::kEnemy);
-    }
 
     // 默认状态
     this->current_state_ = Core::BuildingAnimationState::kIdle;
@@ -109,7 +103,7 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
 }
 
 void Building::onEnter() {
-    BaseEntity::onEnter();
+    BaseEntity::onEnter(); // [关键] 必须调用父类以注册到 global_entities_
 
     if (type_ != Core::BuildingType::kNone && !obstacle_registered_) {
         cocos2d::Rect rect = this->GetOccupiedRect();
@@ -127,7 +121,7 @@ void Building::onExit() {
         PathAgent::UpdateObstacle(rect, false); // 注销：设为通行
         obstacle_registered_ = false;
     }
-    BaseEntity::onExit();
+    BaseEntity::onExit(); // [关键] 必须调用父类以注销
 }
 
 void Building::SetState(Core::BuildingAnimationState new_state) {
@@ -207,19 +201,9 @@ void Building::update(float dt) {
             if (visual_sprite_) visual_sprite_->setColor(cocos2d::Color3B::WHITE);
 
             // 通知 EconomySystem 重新计算上限 (Capacity/Population)
-            auto parent_node = this->getParent();
-            if (parent_node) {
-                cocos2d::Vector<Building*> all_buildings;
-                auto children = parent_node->getChildren();
-
-                for (auto node : children) {
-                    auto b = dynamic_cast<Building*>(node);
-                    if (b) {
-                        all_buildings.pushBack(b);
-                    }
-                }
-                EconomySystem::GetInstance()->RecalculateLimits(all_buildings);
-            }
+            // [修复] 使用新接口，传入空列表即可，EconomySystem 会自己去查 GlobalEntities
+            cocos2d::Vector<Building*> dummy;
+            EconomySystem::GetInstance()->RecalculateLimits(dummy);
         }
         else {
             // 还在建造中
@@ -296,11 +280,10 @@ void Building::UpdateCombatLogic(float dt) {
         return;
     }
 
-    auto parent_node = this->getParent();
-    if (!parent_node) return;
+    // [修复] 使用全局注册表进行索敌 (Global Registry)
+    // 不再依赖 parent->getChildren()，安全且符合所有权边界
+    auto& all_entities = BaseEntity::GetAllEntities();
 
-    // 3. 索敌 (这部分逻辑依然需要 Building 自己做，因为它没有 PathAgent)
-    const auto& all_nodes = parent_node->getChildren();
     BaseEntity* best_target = nullptr;
     float min_dist_sq = FLT_MAX;
 
@@ -309,12 +292,15 @@ void Building::UpdateCombatLogic(float dt) {
     float range_pixels = GetRangeInPixels();
     float range_sq = range_pixels * range_pixels;
 
-    for (auto node : all_nodes) {
+    for (auto node : all_entities) {
         if (node == this) continue;
 
         auto target_entity = dynamic_cast<BaseEntity*>(node);
         if (!target_entity) continue;
-        if (target_entity->get_camp() == this->get_camp()) continue; // 排除友军
+
+        // [修复] 使用 IsAlly 判断，不再依赖 camp
+        if (target_entity->IsAlly(this)) continue;
+
         if (target_entity->IsMarkedForDestruction()) continue; // 排除将死之人
 
         auto hp_comp = dynamic_cast<HealthComp*>(target_entity->getChildByName("HealthComp"));

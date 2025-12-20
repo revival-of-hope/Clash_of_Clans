@@ -31,10 +31,12 @@ void CombatResolver::Initialize(cocos2d::Node* battle_layer) {
         // 先取消可能存在的旧调度（防止重复初始化导致加速）
         battle_layer_->unschedule("CombatResolver_Update_Key");
 
-        // 开启新的调度，每一帧调用一次 lambda
+        // [修复] 权威的步进策略 (Authoritative Step Policy)
+        // [BUG FIX] 之前传入 10 被引擎解释为 interval (10秒执行一次)，导致投射物不动。
+        // 现在改为 0.0f，表示每帧执行。
         battle_layer_->schedule([this](float dt) {
             this->Update(dt);
-            }, "CombatResolver_Update_Key");
+            }, 0.0f, "CombatResolver_Update_Key");
 
         cocos2d::log("CombatResolver: Engine Started. Update loop is active.");
     }

@@ -9,7 +9,7 @@
 
 #include "cocos2d.h"
 #include "Core/GameConstants.h"
-#include "GamePlay/Public/BaseEntity.h"
+#include "Gameplay/Public/BaseEntity.h"
 #include <vector>
 
 /**
