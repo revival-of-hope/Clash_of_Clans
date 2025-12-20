@@ -1,7 +1,7 @@
 #include "TestScene.h"
-#include "Gameplay/Entities/Unit.h"
-#include "Gameplay/Entities/Building.h"
-#include "Gameplay/Logic/CombatResolver.h"
+#include "Gameplay/Public/Unit.h"
+#include "Gameplay/Public/Building.h"
+#include "Gameplay/Public/CombatResolver.h"
 #include "Core/GameConstants.h"
 
 #include <cmath> 
@@ -25,10 +25,11 @@ bool TEST::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Vec2 centerPos = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
 
-    
-    bool enablebattle = 0;
-    if(enablebattle){
-            // 2. 初始化战斗系统
+    // [修改] 开启战斗逻辑开关
+    bool enablebattle = true;
+
+    if (enablebattle) {
+        // 2. 初始化战斗系统
         CombatResolver::GetInstance()->Initialize(this);
 
         // 3. UI 提示
@@ -47,7 +48,7 @@ bool TEST::init()
         //  防守方 (Defender - ID 1)
         //  布局：坚固的城墙 + 内部火力网 + 空中支援
         // =========================================================================
-        //cocos2d::log("--- Spawning Defenders ---");
+        cocos2d::log("--- Spawning Defenders ---");
 
         // [核心] 大本营
         auto townHall = Building::create(Core::BuildingType::kTownHall, 1, 1);
@@ -108,7 +109,7 @@ bool TEST::init()
         // 进攻方 (Attacker - ID 0)
         // 多兵种协同作战
         // =========================================================================
-        //cocos2d::log("--- Spawning Attackers ---");
+        cocos2d::log("--- Spawning Attackers ---");
 
         Vec2 spawnBase = centerPos + Vec2(-600, -500); // 左下角集结
 

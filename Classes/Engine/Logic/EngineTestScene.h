@@ -4,9 +4,9 @@
 #include "cocos2d.h"
 
 // Gameplay
-#include "Gameplay/Entities/Unit.h"
-#include "Gameplay/Entities/Building.h"
-#include "Gameplay/Logic/CombatResolver.h"
+#include "Gameplay/Public/Unit.h"
+#include "Gameplay/Public/Building.h"
+#include "Gameplay/Public/CombatResolver.h"
 
 #include "Core/GameConstants.h"
 
