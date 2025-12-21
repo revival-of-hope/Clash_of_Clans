@@ -261,8 +261,8 @@ Classes/
 │   └── ResourceStructs.h       (从 JSON 加载的部队/建筑属性)
 ├── Engine/                     <-- 开发人员 A (仅限渲染与物理)
 │   ├── RenderSystem/
-│   │   ├── 
-│   │   └── AnimationController.cpp
+│   │   ├── TilePlacementController.cpp (放置单位)
+│   │   └── //
 │   ├── MapSystem/
 │   │   ├── TileHighlighter.cpp (高亮瓦片)
 │   │   └── MapLayer.cpp        (绘制瓦片)
