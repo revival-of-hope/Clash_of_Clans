@@ -114,7 +114,7 @@ virtual void update(float dt) override;
 ```
 
 **说明：**
-
+* 仅用于内部刷新
 * 统一的建筑逻辑更新入口
 * 内部可能处理：
 
