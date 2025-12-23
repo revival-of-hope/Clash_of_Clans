@@ -104,15 +104,15 @@ namespace Core {
             // Passive Buildings
             // ---------------------------------------------------------
         case BuildingType::kTownHall:
-            stats.width_ = 4;
-            stats.height_ = 4;
+            stats.width_ = 3;
+            stats.height_ = 3;
             stats.max_hp_ = 3000 + (level * 1000);
             stats.resource_capacity_ = 1000 + (level * 1000);
             break;
 
         case BuildingType::kWall:
-            stats.width_ = 1;
-            stats.height_ = 1;
+            stats.width_ = 3;
+            stats.height_ = 3;
             stats.max_hp_ = 600 + (level * 300);
             break;
 
@@ -171,8 +171,8 @@ namespace Core {
             break;
 
         case BuildingType::kArmyCamp:
-            stats.width_ = 5;
-            stats.height_ = 5;
+            stats.width_ = 3;
+            stats.height_ = 3;
             stats.max_hp_ = 600 + (level * 60);
             stats.troop_capacity_ = 20 + (level * 10);
             break;
