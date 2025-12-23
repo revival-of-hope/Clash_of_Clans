@@ -2,7 +2,7 @@
 #define GAME_TILE_MAP_H
 
 #include "cocos2d.h"
-#include "Engine/Public/TileHighlighter.h"
+#include "Engine/MapSystem/TileHighlighter.h"
 USING_NS_CC;
 
 class MapLayer : public Node

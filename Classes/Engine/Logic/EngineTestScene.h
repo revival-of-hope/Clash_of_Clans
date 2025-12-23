@@ -14,7 +14,7 @@
 #include "Engine/Public/MapLayer.h"
 #include "Engine/Public/TilePlacementController.h"
 #include "Engine/Public/MouseController.h"
-#include "Engine/Public/TileHighlighter.h"
+
 
 class EngineTestScene : public cocos2d::Scene
 {
