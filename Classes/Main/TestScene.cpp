@@ -1,7 +1,7 @@
 #include "TestScene.h"
-#include "Gameplay/Public/Unit.h"
-#include "Gameplay/Public/Building.h"
-#include "Gameplay/Public/CombatResolver.h"
+#include "Contract/Gameplay/Unit.h"
+#include "Contract/Gameplay/Building.h"
+#include "Contract/Gameplay/CombatResolver.h"
 #include "Core/GameConstants.h"
 
 #include <cmath> 

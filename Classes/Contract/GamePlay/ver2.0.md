@@ -12,8 +12,8 @@
 **引用路径规范：**
 
 // ✅ 正确：引用公共接口  
-\#include "Gameplay/Public/Unit.h"  
-\#include "Gameplay/Public/EconomySystem.h"
+\#include "Contract/Gameplay/Unit.h"  
+\#include "Contract/Gameplay/EconomySystem.h"
 
 // ❌ 错误：直接引用私有实现 (严禁跨模块引用 cpp，会导致链接错误)  
 \#include "../../Gameplay/Entities/Unit.cpp" 
@@ -76,7 +76,7 @@
 
 ### **3.1 EconomySystem (经济系统单例)**
 
-**头文件:** Gameplay/Public/EconomySystem.h
+**头文件:** Contract/Gameplay/EconomySystem.h
 
 | 接口方法 | 参数 | 说明 | 契约约束 |
 | :---- | :---- | :---- | :---- |
@@ -90,7 +90,7 @@
 
 ### **3.2 CombatResolver (战斗仲裁单例)**
 
-**头文件:** Gameplay/Public/CombatResolver.h
+**头文件:** Contract/Gameplay/CombatResolver.h
 
 | 接口方法 | 参数 | 说明 | 契约约束 |
 | :---- | :---- | :---- | :---- |
@@ -100,7 +100,7 @@
 
 ### **3.3 Unit (兵种实体)**
 
-**头文件:** Gameplay/Public/Unit.h
+**头文件:** Contract/Gameplay/Unit.h
 
 | 接口方法 | 参数 | 说明 |
 | :---- | :---- | :---- |
@@ -111,7 +111,7 @@
 
 ### **3.4 Building (建筑实体)**
 
-**头文件:** Gameplay/Public/Building.h
+**头文件:** Contract/Gameplay/Building.h
 
 | 接口方法 | 参数 | 说明 |
 | :---- | :---- | :---- |

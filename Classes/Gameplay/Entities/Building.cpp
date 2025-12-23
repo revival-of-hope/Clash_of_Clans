@@ -6,11 +6,11 @@
 // [FIXED] Moved UpdateObstacle to onEnter/onExit to fix the (0,0) coordinate bug.
 // [REFACTOR] Adopted Core::BuildingAnimationState for state management.
 
-#include "Gameplay/Public/Building.h"
-#include "Gameplay/Public/Unit.h" 
-#include "Gameplay/Public/HealthComp.h" 
-#include "Gameplay/Public/EconomySystem.h" // 引入经济系统
-#include "Gameplay/Public/CombatResolver.h"
+#include "Contract/Gameplay/Building.h"
+#include "Contract/Gameplay/Unit.h" 
+#include "Contract/Gameplay/HealthComp.h" 
+#include "Contract/Gameplay/EconomySystem.h" // 引入经济系统
+#include "Contract/Gameplay/CombatResolver.h"
 #include "Gameplay/Components/AttackComp.h"
 #include "Gameplay/Components/PathAgent.h"
 

@@ -5,24 +5,24 @@
 // Implementation of AttackComp.
 
 #include "AttackComp.h"
-#include "Gameplay/Public/HealthComp.h"
-#include "Gameplay/Public/Building.h"
+#include "Contract/Gameplay/HealthComp.h"
+#include "Contract/Gameplay/Building.h"
 #include "Core/GameConstants.h"
-#include "Gameplay/Public/CombatResolver.h"
+#include "Contract/Gameplay/CombatResolver.h"
 
 bool AttackComp::init() {
     if (!cocos2d::Node::init()) {
         return false;
     }
 
-    // ¿ªÆô Update ÒÔ±ã×Ô¶¯¼õÉÙÀäÈ´Ê±¼ä
+    // ï¿½ï¿½ï¿½ï¿½ Update ï¿½Ô±ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´Ê±ï¿½ï¿½
     this->scheduleUpdate();
 
     damage_ = 0;
     range_sq_ = 0.0f;
     attack_speed_ = 1.0f;
     attack_timer_ = 0.0f;
-    projectile_type_ = Core::ProjectileType::kNone; // Ä¬ÈÏ½üÕ½
+    projectile_type_ = Core::ProjectileType::kNone; // Ä¬ï¿½Ï½ï¿½Õ½
 
     return true;
 }
@@ -38,7 +38,7 @@ void AttackComp::InitStats(int damage, float range_pixels, float attack_speed, C
 
 
 void AttackComp::update(float dt) {
-    // ÀäÈ´µ¹¼ÆÊ±
+    // ï¿½ï¿½È´ï¿½ï¿½ï¿½ï¿½Ê±
     if (attack_timer_ > 0.0f) {
         attack_timer_ -= dt;
         if (attack_timer_ < 0.0f) {
@@ -50,24 +50,24 @@ void AttackComp::update(float dt) {
 bool AttackComp::IsTargetInRange(BaseEntity* target) const {
     if (!target) return false;
 
-    // 1. »ñÈ¡ÎïÀí¾àÀë
-    // getParent() ÊÇ¹ÒÔØÕâ¸ö×é¼þµÄ¹¥»÷Õß (Unit)
+    // 1. ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // getParent() ï¿½Ç¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½ï¿½ (Unit)
     auto attacker = this->getParent();
     if (!attacker) return false;
 
     cocos2d::Vec2 my_pos = attacker->getPosition();
     cocos2d::Vec2 target_pos = target->getPosition();
 
-    // ³¢ÊÔ½«Ä¿±ê×ª»»Îª½¨Öþ
+    // ï¿½ï¿½ï¿½Ô½ï¿½Ä¿ï¿½ï¿½×ªï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
     auto target_building = dynamic_cast<Building*>(target);
     if (target_building) {
-        // --- Õë¶Ô½¨ÖþµÄ±ßÔµ¼ì²â (Edge-to-Edge) ---
-        // ½â¾ö´ó½¨ÖþÖÐÐÄµã¾àÀë¹ýÔ¶µÄÎÊÌâ
+        // --- ï¿½ï¿½Ô½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½Ôµï¿½ï¿½ï¿½ (Edge-to-Edge) ---
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         cocos2d::Rect rect = target_building->GetOccupiedRect();
         float dx = 0.0f;
         float dy = 0.0f;
 
-        // ¼ÆËã Unit ÖÐÐÄµã¾àÀë¾ØÐÎËÄ±ßµÄ¾àÀë
+        // ï¿½ï¿½ï¿½ï¿½ Unit ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ßµÄ¾ï¿½ï¿½ï¿½
         if (my_pos.x < rect.getMinX()) dx = rect.getMinX() - my_pos.x;
         else if (my_pos.x > rect.getMaxX()) dx = my_pos.x - rect.getMaxX();
 
@@ -79,11 +79,11 @@ bool AttackComp::IsTargetInRange(BaseEntity* target) const {
         return dist_to_edge_sq <= range_sq_;
     }
     else {
-        // --- Õë¶Ôµ¥Î»µÄÖÐÐÄ/°ë¾¶¼ì²â ---
+        // --- ï¿½ï¿½Ôµï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/ï¿½ë¾¶ï¿½ï¿½ï¿½ ---
         float target_radius = 20.0f;
         float dist_sq = my_pos.getDistanceSq(target_pos);
 
-        // ÓÐÐ§Éä³Ì = (¹¥»÷¾àÀë + Ä¿±ê°ë¾¶)^2
+        // ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ = (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ + Ä¿ï¿½ï¿½ë¾¶)^2
         float range_val = std::sqrt(range_sq_);
         float effective_range = range_val + target_radius;
 
@@ -92,50 +92,50 @@ bool AttackComp::IsTargetInRange(BaseEntity* target) const {
 }
 
 bool AttackComp::TryAttack(BaseEntity* target) {
-    // 1. »ù´¡Ð£Ñé
+    // 1. ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½
     if (!target) return false;
-    if (target->IsMarkedForDestruction()) return false; // Ä¿±êÒÑ¾­ËÀÁË
+    if (target->IsMarkedForDestruction()) return false; // Ä¿ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    // 2. ÀäÈ´¼ì²é
+    // 2. ï¿½ï¿½È´ï¿½ï¿½ï¿½
     if (attack_timer_ > 0.0f) {
-        return false; // ¼¼ÄÜ»¹ÔÚÀäÈ´ÖÐ
+        return false; // ï¿½ï¿½ï¿½Ü»ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½
     }
 
-    // 3. ·¶Î§¼ì²é
+    // 3. ï¿½ï¿½Î§ï¿½ï¿½ï¿½
     if (!IsTargetInRange(target)) {
-        return false; // ¹»²»×Å
+        return false; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
 
-    // ÖØÖÃÀäÈ´
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´
     attack_timer_ = attack_speed_;
 
-    // Ôì³ÉÉËº¦
+    // ï¿½ï¿½ï¿½ï¿½Ëºï¿½
     DealDamage(target);
 
-    // ·µ»Ø true£¬Í¨ÖªÍâ²¿(Unit)²¥·Å¹¥»÷¶¯×÷
+    // ï¿½ï¿½ï¿½ï¿½ trueï¿½ï¿½Í¨Öªï¿½â²¿(Unit)ï¿½ï¿½ï¿½Å¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     return true;
 }
 
 void AttackComp::DealDamage(BaseEntity* target) {
     if (!target) return;
 
-    // »ñÈ¡¹¥»÷·¢ÆðÕß (¹ÒÔØÕâ¸ö×é¼þµÄ Unit)
+    // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Unit)
     auto attacker = dynamic_cast<BaseEntity*>(this->getParent());
     if (!attacker) return;
 
-    // [ºËÐÄ×ª½ÓÂß¼­]
-    // ¸ù¾Ý projectile_type_ ¾ö¶¨×ßÄÄÌõÂ·
+    // [ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ß¼ï¿½]
+    // ï¿½ï¿½ï¿½ï¿½ projectile_type_ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·
 
     if (projectile_type_ == Core::ProjectileType::kNone) {
-        // ·ÖÖ§ A: ½üÕ½ / Ë²¼äÉËº¦
-        // ÊÊÓÃÓÚ: Ò°ÂùÈË (kNone), ¾ÞÈË (kNone), Õ¨µ¯ÈË (kNone)
-        // ×¢Òâ: Õ¨µ¯ÈËµÄ×Ô±¬Âß¼­ÊÇÔÚ ResolveMeleeAttack Àï´¦ÀíµÄ£¬ËùÒÔ±ØÐë×ßÕâÀï
+        // ï¿½ï¿½Ö§ A: ï¿½ï¿½Õ½ / Ë²ï¿½ï¿½ï¿½Ëºï¿½
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Ò°ï¿½ï¿½ï¿½ï¿½ (kNone), ï¿½ï¿½ï¿½ï¿½ (kNone), Õ¨ï¿½ï¿½ï¿½ï¿½ (kNone)
+        // ×¢ï¿½ï¿½: Õ¨ï¿½ï¿½ï¿½Ëµï¿½ï¿½Ô±ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½ ResolveMeleeAttack ï¿½ï´¦ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         CombatResolver::GetInstance()->ResolveMeleeAttack(attacker, target, damage_);
     }
     else {
-        // ·ÖÖ§ B: Ô¶³Ì / Í¶ÉäÎï
-        // ÊÊÓÃÓÚ: ¹­¼ýÊÖ (kArrow), ·ÉÁú (kFireBall)
-        // Õâ»áÉú³ÉÒ»¸ö·ÉÐÐµÄ Sprite£¬µÈËü·Éµ½Ä¿±êÉíÉÏÊ±£¬CombatResolver »á×Ô¶¯µ÷ÓÃ ApplyDamage
+        // ï¿½ï¿½Ö§ B: Ô¶ï¿½ï¿½ / Í¶ï¿½ï¿½ï¿½ï¿½
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (kArrow), ï¿½ï¿½ï¿½ï¿½ (kFireBall)
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ Spriteï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½CombatResolver ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ ApplyDamage
         CombatResolver::GetInstance()->SpawnProjectile(attacker, target, damage_, projectile_type_);
     }
 }

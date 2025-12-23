@@ -16,10 +16,10 @@
 // [REFACTOR] Adapted to Core::GameConstants changes (UnitAnimationState & Facing).
 
 #include "Gameplay/Components/PathAgent.h"
-#include "Gameplay/Public/Unit.h"
-#include "Gameplay/Public/Building.h"
+#include "Contract/Gameplay/Unit.h"
+#include "Contract/Gameplay/Building.h"
 #include "Gameplay/Components/AttackComp.h"
-#include "Gameplay/Public/HealthComp.h"
+#include "Contract/Gameplay/HealthComp.h"
 #include <cmath>
 #include <queue>
 #include <unordered_map>

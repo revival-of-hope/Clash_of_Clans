@@ -4,4 +4,4 @@ build/
 *.lib
 *.pdb
 *.obj
-*.exe
+*.exe.DS_Store

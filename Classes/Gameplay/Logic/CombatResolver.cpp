@@ -4,10 +4,10 @@
 //
 // Implementation of CombatResolver.
 
-#include "GamePlay/Public/CombatResolver.h"
-#include "GamePlay/Public/HealthComp.h" // [关键] 必须引用，用于检查逻辑死亡
-#include "GamePlay/Public/Unit.h"     
-#include "GamePlay/Public/Building.h" 
+#include "Contract/Gameplay/CombatResolver.h"
+#include "Contract/Gameplay/HealthComp.h" // [关键] 必须引用，用于检查逻辑死亡
+#include "Contract/Gameplay/Unit.h"     
+#include "Contract/Gameplay/Building.h" 
 #include <cmath>
 
 // 单例实现

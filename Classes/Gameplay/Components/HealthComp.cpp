@@ -4,8 +4,8 @@
 //
 // Implementation of HealthComp.
 
-#include "Gameplay/Public/HealthComp.h"
-#include "Gameplay/Public/BaseEntity.h" // 引用 BaseEntity 以调用 MarkForDestruction
+#include "Contract/Gameplay/HealthComp.h"
+#include "Contract/Gameplay/BaseEntity.h" // 引用 BaseEntity 以调用 MarkForDestruction
 
 bool HealthComp::init() {
     if (!cocos2d::Node::init()) {

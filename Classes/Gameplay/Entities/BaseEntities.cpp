@@ -4,7 +4,7 @@
 //
 // Implementation of BaseEntity.
 
-#include "Gameplay/Public/BaseEntity.h"
+#include "Contract/Gameplay/BaseEntity.h"
 
 // 静态成员初始化
 cocos2d::Vector<BaseEntity*> BaseEntity::global_entities_;

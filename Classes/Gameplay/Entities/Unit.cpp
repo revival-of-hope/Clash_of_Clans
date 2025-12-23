@@ -4,8 +4,8 @@
 //
 // Implementation of Unit logic.
 
-#include "Gameplay/Public/Unit.h"
-#include "Gameplay/Public/HealthComp.h"
+#include "Contract/Gameplay/Unit.h"
+#include "Contract/Gameplay/HealthComp.h"
 #include "Gameplay/Components/AttackComp.h"
 #include "Gameplay/Components/PathAgent.h"
 

@@ -4,8 +4,8 @@
 //
 // Implementation of EconomySystem.
 
-#include "Gameplay/Public/EconomySystem.h"
-#include "Gameplay/Public/Building.h"
+#include "Contract/Gameplay/EconomySystem.h"
+#include "Contract/Gameplay/Building.h"
 #include <algorithm> // for std::min
 
 EconomySystem::EconomySystem() {

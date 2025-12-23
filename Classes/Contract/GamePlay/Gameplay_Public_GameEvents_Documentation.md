@@ -2,7 +2,7 @@
 
 版本: 1.1 (新增事件列表速查)  
 作者: Developer B (Gameplay)  
-模块: Gameplay/Public/GameEvents.h
+模块: Contract/Gameplay/GameEvents.h
 
 ## **1\. 概述 (Overview)**
 
@@ -116,7 +116,7 @@ UI 层无需每帧轮询逻辑数据的变化，而是通过注册监听器，�
 **示例代码 (HUDLayer.h):**
 
 ```cpp
-#include "Gameplay/Public/GameEvents.h"
+#include "Contract/Gameplay/GameEvents.h"
 
 class HUDLayer : public cocos2d::Layer, public Gameplay::IGameEventListener {
 public:
