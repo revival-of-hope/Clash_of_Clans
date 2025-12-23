@@ -1,7 +1,3 @@
-// Copyright 2025 Clash of Clans Project. All rights reserved.
-//
-// Author: Developer B
-//
 // Component to manage Health and display a Health Bar.
 
 #ifndef GAMEPLAY_COMPONENTS_HEALTH_COMP_H_

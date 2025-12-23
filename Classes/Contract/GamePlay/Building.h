@@ -1,9 +1,4 @@
-// Copyright 2025 Clash of Clans Project. All rights reserved.
-//
-// Author: Developer B
-//
 // Building class. Handles construction, resources, and defensive logic.
-// [FIXED] Added onEnter/onExit to handle Obstacle Registration at the correct position.
 // [REFACTOR] Adopted Core::BuildingAnimationState for state management.
 
 #ifndef GAMEPLAY_ENTITIES_BUILDING_H_

@@ -1,7 +1,3 @@
-// Copyright 2025 Clash of Clans Project. All rights reserved.
-//
-// Author: Developer B
-//
 // Singleton for managing global resources (Gold, Elixir, Population).
 
 #ifndef GAMEPLAY_LOGIC_ECONOMY_SYSTEM_H_

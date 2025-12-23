@@ -1,7 +1,3 @@
-// Copyright 2025 Clash of Clans Project. All rights reserved.
-//
-// Author: Developer B
-//
 // Unit class representing movable troops.
 // Manages State Machine (Idle, Move, Attack) and Components.
 

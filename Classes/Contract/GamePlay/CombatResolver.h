@@ -1,9 +1,4 @@
-// Copyright 2025 Clash of Clans Project. All rights reserved.
-//
-// Author: Developer B
-//
 // Singleton for managing projectiles and resolving damage calculation.
-
 #ifndef GAMEPLAY_LOGIC_COMBAT_RESOLVER_H_
 #define GAMEPLAY_LOGIC_COMBAT_RESOLVER_H_
 
