@@ -5,7 +5,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
- // [修改] 引入你的测试场景头文件
+#include "Engine/Logic/EngineTestScene.h"
 #include "TestScene.h"
 
  // #define USE_AUDIO_ENGINE 1
@@ -78,10 +78,17 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    // create a scene here to run your program
-    // [修改] 启动 TEST 场景
-    auto scene = TEST::createScene();
-    director->runWithScene(scene);
+    int unittest = 0;
+    if (unittest) {
+        auto scene = TEST::createScene();
+        Director::getInstance()->runWithScene(scene);
+	}
+    int maptest = 1;
+    if (maptest) {
+        auto scene = EngineTestScene::createScene();
+        Director::getInstance()->runWithScene(scene);
+    }
+    
 
     return true;
 }
