@@ -1,0 +1,6 @@
+#ifndef MOCKS_COCOSSHIM_COCOS2D_H_
+#define MOCKS_COCOSSHIM_COCOS2D_H_
+
+#include "CocosShim.h"
+
+#endif  // MOCKS_COCOSSHIM_COCOS2D_H_

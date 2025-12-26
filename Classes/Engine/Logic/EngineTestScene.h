@@ -4,17 +4,17 @@
 #include "cocos2d.h"
 
 // Gameplay
-#include "Gameplay/Public/Unit.h"
-#include "Gameplay/Public/Building.h"
-#include "Gameplay/Public/CombatResolver.h"
+#include "Contract/Gameplay/Unit.h"
+#include "Contract/Gameplay/Building.h"
+#include "Contract/Gameplay/CombatResolver.h"
 
 #include "Core/GameConstants.h"
 
 // Engine 模组
-#include "Engine/Public/MapLayer.h"
-#include "Engine/Public/TilePlacementController.h"
-#include "Engine/Public/MouseController.h"
-#include "Engine/Public/TileHighlighter.h"
+#include "Contract/Engine/MapLayer.h"
+#include "Contract/Engine/TilePlacementController.h"
+#include "Contract/Engine/MouseController.h"
+
 
 class EngineTestScene : public cocos2d::Scene
 {

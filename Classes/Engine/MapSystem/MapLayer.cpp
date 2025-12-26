@@ -1,6 +1,10 @@
-#include "Engine/Public/MapLayer.h"
-#include "Engine/Public/TileHighlighter.h"
+#include "Contract/Engine/MapLayer.h"
 
+
+MapLayer::~MapLayer()
+{
+    CC_SAFE_DELETE(_highlighter);
+}
 
 MapLayer* MapLayer::create(const std::string& tmxFile)
 {
@@ -79,10 +83,18 @@ bool MapLayer::initWithTMX(const std::string& tmxFile)
 
     this->addChild(_map);
     fitPixelPerfect();
-    //可以考虑把高亮封装到地图里面
     
-    //auto highlighter = new TileHighlighter(_map);
-    //highlighter->enable();
+    _highlighter = new TileHighlighter(_map);
+    _highlighter->enable();
 
     return true;
+}
+void MapLayer::setHighlightEnabled(bool enabled)
+{
+    if (!_highlighter) return;
+
+    if (enabled)
+        _highlighter->enable();
+    else
+        _highlighter->disable();
 }
