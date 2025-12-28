@@ -1,6 +1,11 @@
-#include "Contracts/Engine/MapLayer.h"
+#include "Classes/Contract/Engine/MapLayer.h"
 
 #include <cmath>
+
+namespace {
+int g_world_to_tile_call_count_for_testing = 0;
+int g_tile_to_world_center_call_count_for_testing = 0;
+}
 
 MapLayer::MapLayer(const std::string& tmx_file) : tmx_file_(tmx_file) {}
 
@@ -13,6 +18,7 @@ cocos2d::TMXTiledMap* MapLayer::getMap() const {
 }
 
 cocos2d::Vec2 MapLayer::WorldToTile(const cocos2d::Vec2& world_pos) const {
+    ++g_world_to_tile_call_count_for_testing;
     if (tile_size_ <= 0.0f) {
         return cocos2d::Vec2(0.0f, 0.0f);
     }
@@ -22,6 +28,7 @@ cocos2d::Vec2 MapLayer::WorldToTile(const cocos2d::Vec2& world_pos) const {
 }
 
 cocos2d::Vec2 MapLayer::TileToWorldCenter(const cocos2d::Vec2& tile_coord) const {
+    ++g_tile_to_world_center_call_count_for_testing;
     float center_x = tile_coord.x * tile_size_ + tile_size_ / 2.0f;
     float center_y = tile_coord.y * tile_size_ + tile_size_ / 2.0f;
     return cocos2d::Vec2(center_x, center_y);
@@ -42,4 +49,17 @@ void MapLayer::SetBlockedTilesForTesting(const std::vector<cocos2d::Vec2>& block
 
 void MapLayer::SetTileSizeForTesting(float tile_size) {
     tile_size_ = tile_size;
+}
+
+int GetWorldToTileCallCountForTesting() {
+    return g_world_to_tile_call_count_for_testing;
+}
+
+int GetTileToWorldCenterCallCountForTesting() {
+    return g_tile_to_world_center_call_count_for_testing;
+}
+
+void ResetMapLayerCallCountsForTesting() {
+    g_world_to_tile_call_count_for_testing = 0;
+    g_tile_to_world_center_call_count_for_testing = 0;
 }

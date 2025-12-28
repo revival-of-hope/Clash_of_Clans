@@ -1,4 +1,4 @@
-#include "Contracts/Gameplay/Building.h"
+#include "Classes/Contract/Gameplay/Building.h"
 
 #include <unordered_map>
 

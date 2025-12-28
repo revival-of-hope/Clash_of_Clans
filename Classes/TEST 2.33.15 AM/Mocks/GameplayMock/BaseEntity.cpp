@@ -1,4 +1,4 @@
-#include "Contracts/Gameplay/BaseEntity.h"
+#include "Classes/Contract/Gameplay/BaseEntity.h"
 
 namespace {
 

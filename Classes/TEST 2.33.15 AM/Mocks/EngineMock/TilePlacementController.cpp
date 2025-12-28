@@ -1,5 +1,5 @@
-#include "Contracts/Engine/TilePlacementController.h"
-#include "Contracts/Engine/MapLayer.h"
+#include "Classes/Contract/Engine/TilePlacementController.h"
+#include "Classes/Contract/Engine/MapLayer.h"
 
 TilePlacementController::TilePlacementController(cocos2d::Scene* scene) : scene_(scene) {}
 

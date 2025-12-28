@@ -1,4 +1,4 @@
-#include "Contracts/Gameplay/HealthComp.h"
+#include "Classes/Contract/Gameplay/HealthComp.h"
 
 #include <unordered_map>
 

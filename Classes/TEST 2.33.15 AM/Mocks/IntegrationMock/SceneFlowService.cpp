@@ -1,44 +1,56 @@
-#include "Contracts/Integration/SceneFlowService.h"
+#include "Classes/Mocks/IntegrationMock/SceneFlowService.h"
+
+#include <memory>
+
+#include "Classes/Integration/SceneFlowServiceImpl.h"
+
+#include "Classes/Scenes/BootScene.h"
+#include "Classes/Scenes/GameStageScene.h"
+#include "Classes/Scenes/MenuScene.h"
+#include "Classes/Scenes/ResultsScene.h"
 
 namespace Integration {
 namespace {
 class MockSceneFlowService : public SceneFlowService {
-public:
-    cocos2d::Scene* CreateBootScene() override {
-        stage_ = SceneStage::kBoot;
-        return new cocos2d::Scene();
-    }
+ public:
+  explicit MockSceneFlowService(SceneFlowService* delegate)
+      : delegate_(delegate) {}
 
-    cocos2d::Scene* ShowMenuScene() override {
-        stage_ = SceneStage::kMenu;
-        return new cocos2d::Scene();
-    }
+  cocos2d::Scene* CreateBootScene() override {
+    return delegate_->CreateBootScene();
+  }
 
-    cocos2d::Scene* StartGame(const BattleLaunchParams& params) override {
-        last_launch_params_ = params;
-        stage_ = SceneStage::kGame;
-        return new cocos2d::Scene();
-    }
+  cocos2d::Scene* ShowMenuScene() override {
+    return delegate_->ShowMenuScene();
+  }
 
-    cocos2d::Scene* ShowResults(const ResultsScreenData& results) override {
-        last_results_ = results;
-        stage_ = SceneStage::kResults;
-        return new cocos2d::Scene();
-    }
+  cocos2d::Scene* StartGame(const BattleLaunchParams& params) override {
+    return delegate_->StartGame(params);
+  }
 
-    SceneStage GetCurrentStage() const override { return stage_; }
+  cocos2d::Scene* ShowResults(const ResultsScreenData& results) override {
+    return delegate_->ShowResults(results);
+  }
 
-    BattleLaunchParams GetLastLaunchParams() const override { return last_launch_params_; }
+  SceneStage GetCurrentStage() const override {
+    return delegate_->GetCurrentStage();
+  }
 
-    ResultsScreenData GetLastResults() const override { return last_results_; }
+  BattleLaunchParams GetLastLaunchParams() const override {
+    return delegate_->GetLastLaunchParams();
+  }
 
-private:
-    SceneStage stage_ = SceneStage::kBoot;
-    BattleLaunchParams last_launch_params_{};
-    ResultsScreenData last_results_{};
+  ResultsScreenData GetLastResults() const override {
+    return delegate_->GetLastResults();
+  }
+
+ private:
+  std::unique_ptr<SceneFlowService> delegate_;
 };
 }  // namespace
 
-SceneFlowService* CreateSceneFlowService() { return new MockSceneFlowService(); }
+SceneFlowService* CreateMockSceneFlowService(SceneFlowService* delegate) {
+  return new MockSceneFlowService(delegate);
+}
 
 }  // namespace Integration

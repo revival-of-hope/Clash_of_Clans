@@ -4,6 +4,7 @@
 #include <cstdarg>
 #include <cstddef>
 #include <cstdio>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -97,6 +98,41 @@ public:
 
 private:
     std::vector<T> data_;
+};
+
+}  // namespace cocos2d
+
+namespace cocos2d {
+
+class GLView {};
+
+class Director {
+ public:
+  static Director* getInstance() {
+    static Director instance;
+    return &instance;
+  }
+
+  GLView* getOpenGLView() const { return gl_view_.get(); }
+  void setOpenGLView(std::unique_ptr<GLView> view) { gl_view_ = std::move(view); }
+  void setAnimationInterval(double /*interval*/) {}
+  void runWithScene(Scene* /*scene*/) {}
+  void replaceScene(Scene* /*scene*/) {}
+  void stopAnimation() {}
+  void startAnimation() {}
+
+ private:
+  std::unique_ptr<GLView> gl_view_ = std::make_unique<GLView>();
+};
+
+class Application {
+ public:
+  Application() = default;
+  virtual ~Application() = default;
+
+  virtual bool applicationDidFinishLaunching() { return true; }
+  virtual void applicationDidEnterBackground() {}
+  virtual void applicationWillEnterForeground() {}
 };
 
 }  // namespace cocos2d

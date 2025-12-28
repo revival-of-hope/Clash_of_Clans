@@ -1,5 +1,5 @@
-#include "Contracts/Gameplay/EconomySystem.h"
-#include "Contracts/Gameplay/Building.h"
+#include "Classes/Contract/Gameplay/EconomySystem.h"
+#include "Classes/Contract/Gameplay/Building.h"
 
 EconomySystem* EconomySystem::GetInstance() {
     static EconomySystem instance;

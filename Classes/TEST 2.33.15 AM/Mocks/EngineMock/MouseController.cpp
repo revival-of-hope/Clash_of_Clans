@@ -1,5 +1,5 @@
-#include "Contracts/Engine/MouseController.h"
-#include "Contracts/Engine/MapLayer.h"
+#include "Classes/Contract/Engine/MouseController.h"
+#include "Classes/Contract/Engine/MapLayer.h"
 
 MouseController::MouseController(MapLayer* map_layer) : map_layer_(map_layer) {}
 

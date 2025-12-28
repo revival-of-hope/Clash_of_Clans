@@ -1,4 +1,4 @@
-#include "Classes/Contracts/Gameplay/CostQuery.h"
+#include "Classes/Contract/Gameplay/CostQuery.h"
 
 namespace {
 

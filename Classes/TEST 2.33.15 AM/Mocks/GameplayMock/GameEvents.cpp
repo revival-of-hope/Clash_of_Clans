@@ -1,4 +1,4 @@
-#include "Contracts/Gameplay/GameEvents.h"
+#include "Classes/Contract/Gameplay/GameEvents.h"
 
 #include <algorithm>
 
@@ -27,6 +27,18 @@ void GameEventManager::RemoveListener(IGameEventListener* listener) {
 void GameEventManager::BroadcastResourceChange(const ResourceUpdateEvent& evt) {
     for (auto* listener : listeners_) {
         listener->OnResourceChanged(evt);
+    }
+}
+
+void GameEventManager::BroadcastTroopCountUpdated(const TroopCountUpdateEvent& evt) {
+    for (auto* listener : listeners_) {
+        listener->OnTroopCountUpdated(evt);
+    }
+}
+
+void GameEventManager::BroadcastDeploymentSelectionChanged(const DeploymentSelectionEvent& evt) {
+    for (auto* listener : listeners_) {
+        listener->OnDeploymentSelectionChanged(evt);
     }
 }
 

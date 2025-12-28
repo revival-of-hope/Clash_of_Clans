@@ -1,4 +1,4 @@
-#include "Contracts/Gameplay/CombatResolver.h"
+#include "Classes/Contract/Gameplay/CombatResolver.h"
 
 CombatResolver* CombatResolver::GetInstance() {
     static CombatResolver instance;
