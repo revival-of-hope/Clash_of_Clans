@@ -16,6 +16,18 @@ struct ResourceUpdateEvent {
     int change_amount = 0;
 };
 
+struct TroopCountUpdateEvent {
+    int owner_id = 0;
+    Core::TroopType troop_type = Core::TroopType::kBarbarian;
+    int remaining_count = 0;
+};
+
+struct DeploymentSelectionEvent {
+    int owner_id = 0;
+    bool has_selection = false;
+    Core::TroopType troop_type = Core::TroopType::kBarbarian;
+};
+
 struct EntitySpawnEvent {
     int instance_id = 0;
     int owner_id = 0;
@@ -96,6 +108,8 @@ public:
     virtual ~IGameEventListener() = default;
 
     virtual void OnResourceChanged(const ResourceUpdateEvent& evt) {}
+    virtual void OnTroopCountUpdated(const TroopCountUpdateEvent& evt) {}
+    virtual void OnDeploymentSelectionChanged(const DeploymentSelectionEvent& evt) {}
     virtual void OnEntitySpawned(const EntitySpawnEvent& evt) {}
     virtual void OnEntityDestroyed(const EntityDestroyEvent& evt) {}
     virtual void OnBuildingStateChanged(const BuildingStateEvent& evt) {}
@@ -114,6 +128,8 @@ public:
     void RemoveListener(IGameEventListener* listener);
 
     void BroadcastResourceChange(const ResourceUpdateEvent& evt);
+    void BroadcastTroopCountUpdated(const TroopCountUpdateEvent& evt);
+    void BroadcastDeploymentSelectionChanged(const DeploymentSelectionEvent& evt);
     void BroadcastEntitySpawned(const EntitySpawnEvent& evt);
     void BroadcastEntityDestroyed(const EntityDestroyEvent& evt);
     void BroadcastBuildingStateChanged(const BuildingStateEvent& evt);

@@ -3,14 +3,19 @@
 // Author: Developer B
 //
 // Implementation of Unit.
+// [UPDATE] Added GameEvents broadcasting for spawn/destroy
 //
 // Path: Classes/Gameplay/Entities/Unit.cpp
 
 #include "Contract/GamePlay/Unit.h"
 #include "Contract/GamePlay/HealthComp.h"
+#include "Contract/GamePlay/GameEvents.h"  // [NEW] 事件系统
 #include "Gameplay/Components/AttackComp.h"
 #include "Gameplay/Components/PathAgent.h"
 #include "Gameplay/Components/EntityAnimationController.h"
+
+// 静态 ID 生成器
+static int s_next_unit_id = 10000;
 
 Unit* Unit::create(Core::TroopType type, int level, int owner_id) {
     Unit* pRet = new(std::nothrow) Unit();
@@ -24,6 +29,9 @@ Unit* Unit::create(Core::TroopType type, int level, int owner_id) {
 
 bool Unit::init(Core::TroopType type, int level, int owner_id) {
     if (!BaseEntity::init()) return false;
+
+    // 分配唯一 ID
+    this->set_instance_id(s_next_unit_id++);
 
     this->setLocalZOrder(static_cast<int>(Core::ZOrder::kUnits));
     this->type_ = type;
@@ -51,6 +59,22 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
     std::string sprite_sheet = GetSpriteSheetFilename(type);
     int frame_w, frame_h;
     GetFrameSize(type, frame_w, frame_h);
+
+    // [DEBUG] 打印精灵图尺寸信息
+    auto texture = cocos2d::Director::getInstance()
+        ->getTextureCache()
+        ->addImage(sprite_sheet);
+    if (texture) {
+        cocos2d::Size size = texture->getContentSize();
+        cocos2d::log("=== Sprite Sheet Debug: %s ===", sprite_sheet.c_str());
+        cocos2d::log("  Actual Size: %.0f x %.0f", size.width, size.height);
+        cocos2d::log("  Using Frame Size: %d x %d", frame_w, frame_h);
+        cocos2d::log("  Expected (4x4): %.0f x %.0f", size.width / 4, size.height / 4);
+
+        if (std::abs(size.width / 4 - frame_w) > 1 || std::abs(size.height / 4 - frame_h) > 1) {
+            cocos2d::log("  [WARNING] Frame size mismatch! Adjust GetFrameSize()");
+        }
+    }
 
     visual_sprite_ = cocos2d::Sprite::create();
     if (visual_sprite_) {
@@ -108,6 +132,30 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
     current_facing_ = Core::Facing::kRight;
 
     return true;
+}
+
+void Unit::onEnter() {
+    BaseEntity::onEnter();
+
+    // [EVENT] 广播实体生成事件
+    cocos2d::Vec2 pos = this->getPosition();
+
+    Gameplay::EntitySpawnEvent evt;
+    evt.instance_id = this->get_instance_id();
+    evt.owner_id = this->get_owner_id();
+    evt.x = pos.x;
+    evt.y = pos.y;
+    evt.level = level_;
+    evt.current_hp = stats_.max_hp_;
+    evt.max_hp = stats_.max_hp_;
+    evt.is_building = false;
+    evt.troop_type = type_;
+    evt.building_type = Core::BuildingType::kNone;
+
+    Gameplay::GameEventManager::GetInstance()->BroadcastEntitySpawned(evt);
+
+    cocos2d::log("Unit Spawned: ID=%d, Type=%d, Owner=%d, Pos=(%.0f, %.0f)",
+        evt.instance_id, static_cast<int>(type_), evt.owner_id, pos.x, pos.y);
 }
 
 bool Unit::CanAttack(Core::GeneralType target_type) const {
@@ -184,6 +232,15 @@ void Unit::update(float dt) {
     if (hp_comp && hp_comp->IsDead() && current_state_ != Core::UnitAnimationState::kDead) {
         SetState(Core::UnitAnimationState::kDead);
         this->is_marked_for_destruction_ = false;
+
+        // [EVENT] 广播实体销毁事件
+        Gameplay::EntityDestroyEvent evt;
+        evt.instance_id = this->get_instance_id();
+        evt.is_building = false;
+        Gameplay::GameEventManager::GetInstance()->BroadcastEntityDestroyed(evt);
+
+        cocos2d::log("Unit Destroyed: ID=%d, Type=%d",
+            this->get_instance_id(), static_cast<int>(type_));
     }
 
     BaseEntity::update(dt);

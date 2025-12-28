@@ -3,6 +3,7 @@
 // Author: Developer B
 //
 // Implementation of Building.
+// [UPDATE] Added GameEvents broadcasting for spawn/destroy/state changes
 //
 // Path: Classes/Gameplay/Entities/Building.cpp
 
@@ -11,9 +12,13 @@
 #include "Contract/GamePlay/HealthComp.h" 
 #include "Contract/GamePlay/EconomySystem.h"
 #include "Contract/GamePlay/CombatResolver.h"
+#include "Contract/GamePlay/GameEvents.h"  // [NEW] 事件系统
 #include "Gameplay/Components/AttackComp.h"
 #include "Gameplay/Components/PathAgent.h"
 #include "Gameplay/Components/EntityAnimationController.h"
+
+// 静态 ID 生成器
+static int s_next_building_id = 1000;
 
 Building* Building::create(Core::BuildingType type, int level, int owner_id) {
     Building* pRet = new(std::nothrow) Building();
@@ -27,6 +32,9 @@ Building* Building::create(Core::BuildingType type, int level, int owner_id) {
 
 bool Building::init(Core::BuildingType type, int level, int owner_id) {
     if (!BaseEntity::init()) return false;
+
+    // 分配唯一 ID
+    this->set_instance_id(s_next_building_id++);
 
     this->setLocalZOrder(static_cast<int>(Core::ZOrder::kBuildingBase));
     this->type_ = type;
@@ -102,11 +110,32 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
 void Building::onEnter() {
     BaseEntity::onEnter();
 
+    // 注册障碍物
     if (type_ != Core::BuildingType::kNone && !obstacle_registered_) {
         cocos2d::Rect rect = this->GetOccupiedRect();
         PathAgent::UpdateObstacle(rect, true);
         obstacle_registered_ = true;
     }
+
+    // [EVENT] 广播实体生成事件
+    cocos2d::Vec2 pos = this->getPosition();
+
+    Gameplay::EntitySpawnEvent evt;
+    evt.instance_id = this->get_instance_id();
+    evt.owner_id = this->get_owner_id();
+    evt.x = pos.x;
+    evt.y = pos.y;
+    evt.level = level_;
+    evt.current_hp = stats_.max_hp_;
+    evt.max_hp = stats_.max_hp_;
+    evt.is_building = true;
+    evt.troop_type = Core::TroopType::kBarbarian;  // 无效值
+    evt.building_type = type_;
+
+    Gameplay::GameEventManager::GetInstance()->BroadcastEntitySpawned(evt);
+
+    cocos2d::log("Building Spawned: ID=%d, Type=%d, Owner=%d, Pos=(%.0f, %.0f)",
+        evt.instance_id, static_cast<int>(type_), evt.owner_id, pos.x, pos.y);
 }
 
 void Building::onExit() {
@@ -120,18 +149,55 @@ void Building::onExit() {
 
 void Building::SetState(Core::BuildingAnimationState new_state) {
     if (current_state_ == new_state) return;
+
+    Core::BuildingAnimationState old_state = current_state_;
     current_state_ = new_state;
 
     if (animation_controller_) {
         animation_controller_->SetBuildingAnimationState(new_state);
     }
 
+    // [EVENT] 广播建筑状态变化
+    Gameplay::BuildingStateEvent state_evt;
+    state_evt.instance_id = this->get_instance_id();
+    state_evt.type = type_;
+    state_evt.time_remaining = construction_timer_;
+    state_evt.total_build_time = construction_duration_;
+
+    switch (new_state) {
+    case Core::BuildingAnimationState::kConstructing:
+        state_evt.new_state = Gameplay::BuildingState::kConstructing;
+        break;
+    case Core::BuildingAnimationState::kIdle:
+        state_evt.new_state = Gameplay::BuildingState::kIdle;
+        break;
+    case Core::BuildingAnimationState::kDestroyed:
+        state_evt.new_state = Gameplay::BuildingState::kDestroyed;
+        break;
+    default:
+        state_evt.new_state = Gameplay::BuildingState::kIdle;
+        break;
+    }
+
+    Gameplay::GameEventManager::GetInstance()->BroadcastBuildingStateChanged(state_evt);
+
+    // 销毁处理
     if (current_state_ == Core::BuildingAnimationState::kDestroyed) {
+        // 移除障碍物
         if (obstacle_registered_) {
             cocos2d::Rect rect = this->GetOccupiedRect();
             PathAgent::UpdateObstacle(rect, false);
             obstacle_registered_ = false;
         }
+
+        // [EVENT] 广播实体销毁事件
+        Gameplay::EntityDestroyEvent destroy_evt;
+        destroy_evt.instance_id = this->get_instance_id();
+        destroy_evt.is_building = true;
+        Gameplay::GameEventManager::GetInstance()->BroadcastEntityDestroyed(destroy_evt);
+
+        cocos2d::log("Building Destroyed: ID=%d, Type=%d",
+            this->get_instance_id(), static_cast<int>(type_));
 
         this->is_marked_for_destruction_ = false;
 
@@ -157,6 +223,13 @@ void Building::SetState(Core::BuildingAnimationState new_state) {
             this->MarkForDestruction();
         }
     }
+}
+
+void Building::StartConstruction(float duration) {
+    if (duration <= 0) return;
+    construction_timer_ = duration;
+    construction_duration_ = duration;
+    SetState(Core::BuildingAnimationState::kConstructing);
 }
 
 float Building::GetConstructionProgress() const {
@@ -219,8 +292,8 @@ void Building::update(float dt) {
     if (current_state_ == Core::BuildingAnimationState::kConstructing) {
         construction_timer_ -= dt;
         if (construction_timer_ <= 0.0f) {
-            SetState(Core::BuildingAnimationState::kIdle);
             construction_timer_ = 0.0f;
+            SetState(Core::BuildingAnimationState::kIdle);
             if (visual_sprite_) visual_sprite_->setColor(cocos2d::Color3B::WHITE);
             cocos2d::Vector<Building*> dummy;
             EconomySystem::GetInstance()->RecalculateLimits(dummy);
@@ -240,13 +313,6 @@ void Building::update(float dt) {
     if (stats_.damage_ > 0) {
         UpdateCombatLogic(dt);
     }
-}
-
-void Building::StartConstruction(float duration) {
-    if (duration <= 0) return;
-    SetState(Core::BuildingAnimationState::kConstructing);
-    construction_timer_ = duration;
-    construction_duration_ = duration;
 }
 
 void Building::ProduceResource(float dt) {

@@ -3,13 +3,15 @@
 // Author: Developer B
 //
 // Implementation of CombatResolver.
+// [UPDATE] Added GameEvents broadcasting for projectiles
 //
 // Path: Classes/Gameplay/Logic/CombatResolver.cpp
 
 #include "Contract/GamePlay/CombatResolver.h"
 #include "Contract/GamePlay/HealthComp.h"
 #include "Contract/GamePlay/Unit.h"     
-#include "Contract/GamePlay/Building.h" 
+#include "Contract/GamePlay/Building.h"
+#include "Contract/GamePlay/GameEvents.h"  // [NEW] 事件系统
 #include <cmath>
 
 CombatResolver* CombatResolver::GetInstance() {
@@ -78,21 +80,32 @@ void CombatResolver::Update(float dt) {
         float hit_threshold = 15.0f;
 
         if (dist_sq <= hit_threshold * hit_threshold) {
+            // 命中
             if (!proj.target_lost && proj.target) {
                 ApplyDamage(proj.target, proj.damage);
-                PlayImpactVFX(target_current_pos, proj.type);
+            }
 
+            // 播放命中特效
+            PlayImpactVFX(target_current_pos, proj.type);
+
+            // [EVENT] 广播投射物命中事件
+            Gameplay::ProjectileHitEvent hit_evt;
+            hit_evt.x = target_current_pos.x;
+            hit_evt.y = target_current_pos.y;
+            hit_evt.projectile_type = proj.type;
+            Gameplay::GameEventManager::GetInstance()->BroadcastProjectileHit(hit_evt);
+
+            // 释放目标引用
+            if (proj.target) {
                 proj.target->release();
                 proj.target = nullptr;
-            }
-            else {
-                PlayImpactVFX(target_current_pos, proj.type);
             }
 
             proj.sprite->removeFromParent();
             it = projectiles_.erase(it);
         }
         else {
+            // 继续飞行
             dir.normalize();
             cocos2d::Vec2 new_pos = current_pos + (dir * proj.speed * dt);
             proj.sprite->setPosition(new_pos);
@@ -127,6 +140,14 @@ void CombatResolver::ResolveMeleeAttack(BaseEntity* attacker, BaseEntity* target
         ApplyDamage(target, final_damage);
         PlayImpactVFX(target->GetCenterPosition(), Core::ProjectileType::kFireBall);
 
+        // [EVENT] 广播投射物命中 (自爆算作特殊命中)
+        Gameplay::ProjectileHitEvent hit_evt;
+        hit_evt.x = target->GetCenterPosition().x;
+        hit_evt.y = target->GetCenterPosition().y;
+        hit_evt.projectile_type = Core::ProjectileType::kFireBall;
+        Gameplay::GameEventManager::GetInstance()->BroadcastProjectileHit(hit_evt);
+
+        // 自杀
         auto my_hp = dynamic_cast<HealthComp*>(attacker->getChildByName("HealthComp"));
         if (my_hp) {
             my_hp->TakeDamage(99999);
@@ -168,6 +189,18 @@ void CombatResolver::SpawnProjectile(BaseEntity* attacker, BaseEntity* target, i
         proj.sprite->setLocalZOrder(static_cast<int>(Core::ZOrder::kProjectiles));
         battle_layer_->addChild(proj.sprite);
         projectiles_.push_back(proj);
+
+        // [EVENT] 广播投射物发射事件
+        Gameplay::ProjectileEvent fire_evt;
+        fire_evt.source_id = attacker->get_instance_id();
+        fire_evt.target_x = proj.last_known_pos.x;
+        fire_evt.target_y = proj.last_known_pos.y;
+        fire_evt.projectile_type = type;
+        Gameplay::GameEventManager::GetInstance()->BroadcastProjectileFired(fire_evt);
+
+        cocos2d::log("Projectile Fired: Source=%d, Type=%d, Target=(%.0f, %.0f)",
+            fire_evt.source_id, static_cast<int>(type),
+            fire_evt.target_x, fire_evt.target_y);
     }
     else {
         proj.target->release();
@@ -178,7 +211,7 @@ void CombatResolver::ApplyDamage(BaseEntity* target, int damage) {
     if (!target) return;
     auto hp = dynamic_cast<HealthComp*>(target->getChildByName("HealthComp"));
     if (hp) {
-        hp->TakeDamage(damage);
+        hp->TakeDamage(damage);  // HealthComp 会广播 DamageEvent
     }
 }
 
@@ -199,6 +232,11 @@ void CombatResolver::PlayImpactVFX(const cocos2d::Vec2& pos, Core::ProjectileTyp
     else if (type == Core::ProjectileType::kCannonBall) {
         color = cocos2d::Color4F(0.2f, 0.2f, 0.2f, 1.0f);
         radius = 15.0f;
+    }
+    else if (type == Core::ProjectileType::kRocket) {
+        color = cocos2d::Color4F(1.0f, 0.5f, 0.0f, 1.0f);  // 橙红色
+        radius = 20.0f;
+        duration = 0.5f;
     }
 
     explosion->drawSolidCircle(cocos2d::Vec2::ZERO, radius, 0, 10, color);

@@ -1,5 +1,8 @@
+// Copyright 2025 Clash of Clans Project. All rights reserved.
+//
+// Author: Developer B
+//
 // Component to manage Health and display a Health Bar.
-// Contract header for external modules.
 //
 // Path: Classes/Contract/GamePlay/HealthComp.h
 
@@ -33,6 +36,7 @@ public:
 
     /**
      * @brief 治疗
+     * @param amount 治疗量
      */
     void Heal(int amount);
 
@@ -44,6 +48,7 @@ public:
 
     /**
      * @brief 设置血条位置
+     * @param offset 相对于父节点中心的偏移量
      */
     void SetHealthBarOffset(cocos2d::Vec2 offset);
 
@@ -51,11 +56,11 @@ protected:
     void UpdateHealthBar();
 
 private:
-    float current_hp_;
-    float max_hp_;
-    bool is_dead_;
+    float current_hp_ = 100.0f;
+    float max_hp_ = 100.0f;
+    bool is_dead_ = false;
 
-    cocos2d::DrawNode* health_bar_node_;
+    cocos2d::DrawNode* health_bar_node_ = nullptr;
     cocos2d::Vec2 bar_offset_;
 };
 
