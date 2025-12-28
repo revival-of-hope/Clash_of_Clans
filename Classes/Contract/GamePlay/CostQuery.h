@@ -2,66 +2,100 @@
 //
 // Author: Developer B
 //
-// CostQuery - Read-only cost query API for UI integration.
-// Contract header for external modules.
+// CostQuery - Query costs and TownHall level restrictions.
+// [UPDATE] Added TownHall level restriction system
 //
 // Path: Classes/Contract/GamePlay/CostQuery.h
 
-#ifndef CONTRACT_GAMEPLAY_COST_QUERY_H_
-#define CONTRACT_GAMEPLAY_COST_QUERY_H_
+#ifndef CONTRACT_GAMEPLAY_COSTQUERY_H_
+#define CONTRACT_GAMEPLAY_COSTQUERY_H_
 
 #include "Core/GameConstants.h"
+#include <vector>
 
 /**
- * @brief 资源成本结构体
+ * @brief 资源消耗结构
  */
 struct ResourceCost {
     int gold = 0;
     int elixir = 0;
     int population = 0;
-    float time_seconds = 0;
 };
 
 /**
- * @brief 成本查询服务 (单例)
+ * @brief 费用与限制查询系统 (单例)
  *
  * 职责:
- * 1. 提供建筑放置成本查询
- * 2. 提供建筑升级成本查询
- * 3. 提供兵种训练成本查询
- * 4. 提供建造/训练时间查询
- *
- * 注意: 最大等级统一为 3 级
+ * 1. 查询建造/训练费用
+ * 2. 查询大本营等级限制 (可建造建筑类型、建筑等级上限)
  */
 class CostQuery {
 public:
     static CostQuery* GetInstance();
 
-    // =========================================================================
-    // 建筑成本查询
-    // =========================================================================
+    // ==========================================================================
+    // 费用查询
+    // ==========================================================================
 
-    ResourceCost GetBuildingPlacementCost(Core::BuildingType type, int level = 1) const;
+    /**
+     * @brief 获取建筑建造费用
+     */
+    ResourceCost GetBuildingPlacementCost(Core::BuildingType type, int level) const;
+
+    /**
+     * @brief 获取建筑升级费用
+     */
     ResourceCost GetBuildingUpgradeCost(Core::BuildingType type, int current_level) const;
-    float GetBuildingConstructionTime(Core::BuildingType type, int level) const;
-    int GetBuildingMaxLevel(Core::BuildingType type) const;
 
-    // =========================================================================
-    // 兵种成本查询
-    // =========================================================================
+    /**
+     * @brief 获取兵种训练费用
+     */
+    ResourceCost GetTroopTrainingCost(Core::TroopType type, int level) const;
 
-    ResourceCost GetTroopTrainingCost(Core::TroopType type, int level = 1) const;
-    float GetTroopTrainingTime(Core::TroopType type, int level) const;
-    int GetTroopHousingSpace(Core::TroopType type, int level) const;
-    int GetTroopMaxLevel(Core::TroopType type) const;
+    // ==========================================================================
+    // 大本营等级限制查询
+    // ==========================================================================
+
+    /**
+     * @brief 检查在当前大本营等级下是否可以建造某类型建筑
+     * @param townhall_level 大本营等级
+     * @param building_type 要建造的建筑类型
+     * @return true 可以建造
+     */
+    bool CanUnlockBuilding(int townhall_level, Core::BuildingType building_type) const;
+
+    /**
+     * @brief 获取某建筑在当前大本营等级下的最大允许等级
+     * @param townhall_level 大本营等级
+     * @param building_type 建筑类型
+     * @return 最大等级 (0表示不能建造)
+     */
+    int GetMaxBuildingLevel(int townhall_level, Core::BuildingType building_type) const;
+
+    /**
+     * @brief 获取某建筑在当前大本营等级下的最大数量
+     * @param townhall_level 大本营等级
+     * @param building_type 建筑类型
+     * @return 最大数量 (0表示不能建造)
+     */
+    int GetMaxBuildingCount(int townhall_level, Core::BuildingType building_type) const;
+
+    /**
+     * @brief 获取当前大本营等级下可建造的所有建筑类型
+     * @param townhall_level 大本营等级
+     * @return 可建造的建筑类型列表
+     */
+    std::vector<Core::BuildingType> GetUnlockedBuildings(int townhall_level) const;
+
+    /**
+     * @brief 获取解锁某建筑所需的大本营等级
+     * @param building_type 建筑类型
+     * @return 所需大本营等级
+     */
+    int GetRequiredTownHallLevel(Core::BuildingType building_type) const;
 
 private:
     CostQuery() = default;
-
-    int GetBaseBuildingCost(Core::BuildingType type) const;
-    float GetBaseBuildingTime(Core::BuildingType type) const;
-    int GetBaseTroopCost(Core::TroopType type) const;
-    float GetBaseTroopTime(Core::TroopType type) const;
 };
 
-#endif // CONTRACT_GAMEPLAY_COST_QUERY_H_
+#endif  // CONTRACT_GAMEPLAY_COSTQUERY_H_

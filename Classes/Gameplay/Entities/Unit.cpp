@@ -9,7 +9,7 @@
 
 #include "Contract/GamePlay/Unit.h"
 #include "Contract/GamePlay/HealthComp.h"
-#include "Contract/GamePlay/GameEvents.h"  // [NEW] 事件系统
+#include "Contract/GamePlay/GameEvents.h"
 #include "Gameplay/Components/AttackComp.h"
 #include "Gameplay/Components/PathAgent.h"
 #include "Gameplay/Components/EntityAnimationController.h"
