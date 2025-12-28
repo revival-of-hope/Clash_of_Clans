@@ -1,5 +1,5 @@
-#ifndef CONTRACTS_ENGINE_MAPLAYER_H_
-#define CONTRACTS_ENGINE_MAPLAYER_H_
+#ifndef Contract_ENGINE_MAPLAYER_H_
+#define Contract_ENGINE_MAPLAYER_H_
 
 #include <string>
 #include <vector>
@@ -30,4 +30,4 @@ private:
     std::vector<cocos2d::Vec2> blocked_tiles_;
 };
 
-#endif  // CONTRACTS_ENGINE_MAPLAYER_H_
+#endif  // Contract_ENGINE_MAPLAYER_H_

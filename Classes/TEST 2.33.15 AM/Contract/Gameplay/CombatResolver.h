@@ -1,5 +1,5 @@
-#ifndef CONTRACTS_GAMEPLAY_COMBATRESOLVER_H_
-#define CONTRACTS_GAMEPLAY_COMBATRESOLVER_H_
+#ifndef Contract_GAMEPLAY_COMBATRESOLVER_H_
+#define Contract_GAMEPLAY_COMBATRESOLVER_H_
 
 #include "Core/GameConstants.h"
 
@@ -26,4 +26,4 @@ private:
     cocos2d::Node* layer_ = nullptr;
 };
 
-#endif  // CONTRACTS_GAMEPLAY_COMBATRESOLVER_H_
+#endif  // Contract_GAMEPLAY_COMBATRESOLVER_H_

@@ -1,6 +1,6 @@
 // Source: Classes/Integration/Docs/Gameplay Module API Reference.md.md (HealthComp)
-#ifndef CONTRACTS_GAMEPLAY_HEALTHCOMP_H_
-#define CONTRACTS_GAMEPLAY_HEALTHCOMP_H_
+#ifndef Contract_GAMEPLAY_HEALTHCOMP_H_
+#define Contract_GAMEPLAY_HEALTHCOMP_H_
 
 #include "cocos2d.h"
 
@@ -21,4 +21,4 @@ public:
     void InitStats(int max_hp);
 };
 
-#endif  // CONTRACTS_GAMEPLAY_HEALTHCOMP_H_
+#endif  // Contract_GAMEPLAY_HEALTHCOMP_H_

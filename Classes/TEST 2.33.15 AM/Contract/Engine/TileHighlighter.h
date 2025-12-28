@@ -1,5 +1,5 @@
-#ifndef CONTRACTS_ENGINE_TILEHIGHLIGHTER_H_
-#define CONTRACTS_ENGINE_TILEHIGHLIGHTER_H_
+#ifndef Contract_ENGINE_TILEHIGHLIGHTER_H_
+#define Contract_ENGINE_TILEHIGHLIGHTER_H_
 
 namespace cocos2d {
 class TMXTiledMap;
@@ -17,4 +17,4 @@ private:
     bool is_enabled_ = false;
 };
 
-#endif  // CONTRACTS_ENGINE_TILEHIGHLIGHTER_H_
+#endif  // Contract_ENGINE_TILEHIGHLIGHTER_H_

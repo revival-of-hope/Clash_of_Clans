@@ -1,6 +1,6 @@
 // Source: Classes/Integration/Docs/Gameplay Module API Reference.md.md (EconomySystem)
-#ifndef CONTRACTS_GAMEPLAY_ECONOMYSYSTEM_H_
-#define CONTRACTS_GAMEPLAY_ECONOMYSYSTEM_H_
+#ifndef Contract_GAMEPLAY_ECONOMYSYSTEM_H_
+#define Contract_GAMEPLAY_ECONOMYSYSTEM_H_
 
 namespace cocos2d {
 template <class T>
@@ -47,4 +47,4 @@ private:
     int max_population_ = 0;
 };
 
-#endif  // CONTRACTS_GAMEPLAY_ECONOMYSYSTEM_H_
+#endif  // Contract_GAMEPLAY_ECONOMYSYSTEM_H_

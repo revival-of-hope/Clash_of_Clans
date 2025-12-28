@@ -1,6 +1,6 @@
 // Source: Classes/Integration/Docs/Input Routing Policy.md (InputRouter)
-#ifndef CONTRACTS_ENGINE_INPUTROUTER_H_
-#define CONTRACTS_ENGINE_INPUTROUTER_H_
+#ifndef Contract_ENGINE_INPUTROUTER_H_
+#define Contract_ENGINE_INPUTROUTER_H_
 
 #include "cocos2d.h"
 
@@ -34,4 +34,4 @@ private:
     InputRouteState last_state_{};
 };
 
-#endif  // CONTRACTS_ENGINE_INPUTROUTER_H_
+#endif  // Contract_ENGINE_INPUTROUTER_H_

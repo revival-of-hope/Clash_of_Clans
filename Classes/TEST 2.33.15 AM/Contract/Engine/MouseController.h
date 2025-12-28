@@ -1,5 +1,5 @@
-#ifndef CONTRACTS_ENGINE_MOUSECONTROLLER_H_
-#define CONTRACTS_ENGINE_MOUSECONTROLLER_H_
+#ifndef Contract_ENGINE_MOUSECONTROLLER_H_
+#define Contract_ENGINE_MOUSECONTROLLER_H_
 
 class MapLayer;
 
@@ -15,4 +15,4 @@ private:
     bool is_enabled_ = false;
 };
 
-#endif  // CONTRACTS_ENGINE_MOUSECONTROLLER_H_
+#endif  // Contract_ENGINE_MOUSECONTROLLER_H_

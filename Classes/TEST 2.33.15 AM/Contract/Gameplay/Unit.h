@@ -1,9 +1,9 @@
 // Source: Classes/Integration/Docs/Gameplay Module API Reference.md.md (Unit)
-#ifndef CONTRACTS_GAMEPLAY_UNIT_H_
-#define CONTRACTS_GAMEPLAY_UNIT_H_
+#ifndef Contract_GAMEPLAY_UNIT_H_
+#define Contract_GAMEPLAY_UNIT_H_
 
 #include "Core/GameConstants.h"
-#include "Contracts/Gameplay/BaseEntity.h"
+#include "Classes/Contract/Gameplay/BaseEntity.h"
 
 class Unit : public BaseEntity {
 public:
@@ -34,4 +34,4 @@ private:
     Core::Facing facing_ = Core::Facing::kDown;
 };
 
-#endif  // CONTRACTS_GAMEPLAY_UNIT_H_
+#endif  // Contract_GAMEPLAY_UNIT_H_

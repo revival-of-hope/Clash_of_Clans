@@ -1,7 +1,7 @@
 // Source: Classes/Integration/Docs/Engine Module API Reference.md (TilePlacementController)
 //         Classes/Integration/Docs/Placement Validation and TMX Conventions.md
-#ifndef CONTRACTS_ENGINE_TILEPLACEMENTCONTROLLER_H_
-#define CONTRACTS_ENGINE_TILEPLACEMENTCONTROLLER_H_
+#ifndef Contract_ENGINE_TILEPLACEMENTCONTROLLER_H_
+#define Contract_ENGINE_TILEPLACEMENTCONTROLLER_H_
 
 #include <string>
 
@@ -36,4 +36,4 @@ private:
     bool is_placement_active_ = false;
 };
 
-#endif  // CONTRACTS_ENGINE_TILEPLACEMENTCONTROLLER_H_
+#endif  // Contract_ENGINE_TILEPLACEMENTCONTROLLER_H_

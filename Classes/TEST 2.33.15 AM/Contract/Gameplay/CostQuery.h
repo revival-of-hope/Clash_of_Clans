@@ -1,6 +1,6 @@
 // Source: Classes/Integration/Docs/Gameplay Cost Query API.md (CostQuery)
-#ifndef CONTRACTS_GAMEPLAY_COSTQUERY_H_
-#define CONTRACTS_GAMEPLAY_COSTQUERY_H_
+#ifndef Contract_GAMEPLAY_COSTQUERY_H_
+#define Contract_GAMEPLAY_COSTQUERY_H_
 
 #include "Core/GameConstants.h"
 
@@ -18,4 +18,4 @@ public:
     ResourceCost GetTroopTrainingCost(Core::TroopType type, int level) const;
 };
 
-#endif  // CONTRACTS_GAMEPLAY_COSTQUERY_H_
+#endif  // Contract_GAMEPLAY_COSTQUERY_H_

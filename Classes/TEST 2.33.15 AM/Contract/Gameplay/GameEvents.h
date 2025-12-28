@@ -1,6 +1,6 @@
 // Source: Classes/Integration/Docs/Gameplay_Public_GameEvents_Documentation.md (GameEvents)
-#ifndef CONTRACTS_GAMEPLAY_GAMEEVENTS_H_
-#define CONTRACTS_GAMEPLAY_GAMEEVENTS_H_
+#ifndef Contract_GAMEPLAY_GAMEEVENTS_H_
+#define Contract_GAMEPLAY_GAMEEVENTS_H_
 
 #include <string>
 #include <vector>
@@ -150,4 +150,4 @@ private:
 
 }  // namespace Gameplay
 
-#endif  // CONTRACTS_GAMEPLAY_GAMEEVENTS_H_
+#endif  // Contract_GAMEPLAY_GAMEEVENTS_H_

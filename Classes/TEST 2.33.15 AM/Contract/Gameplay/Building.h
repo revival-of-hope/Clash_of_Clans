@@ -1,9 +1,9 @@
 // Source: Classes/Integration/Docs/Gameplay Module API Reference.md.md (Building)
-#ifndef CONTRACTS_GAMEPLAY_BUILDING_H_
-#define CONTRACTS_GAMEPLAY_BUILDING_H_
+#ifndef Contract_GAMEPLAY_BUILDING_H_
+#define Contract_GAMEPLAY_BUILDING_H_
 
 #include "Core/GameConstants.h"
-#include "Contracts/Gameplay/BaseEntity.h"
+#include "Classes/Contract/Gameplay/BaseEntity.h"
 
 class Building : public BaseEntity {
 public:
@@ -33,4 +33,4 @@ private:
     float construction_time_remaining_ = 0.0f;
 };
 
-#endif  // CONTRACTS_GAMEPLAY_BUILDING_H_
+#endif  // Contract_GAMEPLAY_BUILDING_H_

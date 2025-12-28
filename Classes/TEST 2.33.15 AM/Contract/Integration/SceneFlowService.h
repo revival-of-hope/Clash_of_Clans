@@ -1,10 +1,10 @@
 // Source: Classes/Integration/Docs/Scene Flow and Entrypoint.md
-#ifndef CONTRACTS_INTEGRATION_SCENEFLOWSERVICE_H_
-#define CONTRACTS_INTEGRATION_SCENEFLOWSERVICE_H_
+#ifndef Contract_INTEGRATION_SCENEFLOWSERVICE_H_
+#define Contract_INTEGRATION_SCENEFLOWSERVICE_H_
 
 #include <string>
 
-#include "Contracts/Gameplay/GameEvents.h"
+#include "Classes/Contract/Gameplay/GameEvents.h"
 #include "cocos2d.h"
 
 namespace Integration {
@@ -45,4 +45,4 @@ SceneFlowService* CreateSceneFlowService();
 
 }  // namespace Integration
 
-#endif  // CONTRACTS_INTEGRATION_SCENEFLOWSERVICE_H_
+#endif  // Contract_INTEGRATION_SCENEFLOWSERVICE_H_

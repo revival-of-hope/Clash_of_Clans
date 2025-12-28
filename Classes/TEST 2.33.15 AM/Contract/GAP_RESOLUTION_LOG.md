@@ -3,16 +3,16 @@
 This log tracks resolved and unresolved contract gaps for Dev C integration.
 
 ## GAP-001 — Gameplay include path standard
-**Decision summary:** Use Contracts include paths (`Classes/Contracts/Gameplay/...`) as the canonical public API for Dev C.  
+**Decision summary:** Use Contract include paths (`Classes/Contract/Gameplay/...`) as the canonical public API for Dev C.  
 **Options considered:**  
 - Keep `Gameplay/Public/...` (legacy path in doc)  
 - Use `Public/Gameplay/...` (integration example path)  
-- Use `Classes/Contracts/Gameplay/...` (**chosen**)  
+- Use `Classes/Contract/Gameplay/...` (**chosen**)  
 **SOT docs updated:**  
 - `Classes/Integration/Docs/Gameplay Module API Reference.md.md` (Physical Architecture & Public Headers; Integration Example includes)  
-**Contracts headers changed:** None (documentation-only change).  
+**Contract headers changed:** None (documentation-only change).  
 **Mock changes:** None.  
-**Migration notes:** Replace `Gameplay/Public/...` and `Public/Gameplay/...` includes with `Classes/Contracts/Gameplay/...`.  
+**Migration notes:** Replace `Gameplay/Public/...` and `Public/Gameplay/...` includes with `Classes/Contract/Gameplay/...`.  
 **Verification:** (see end of log)
 
 ## GAP-002 — Unit level/bounds + HealthComp HP accessors (also GAP-DEV-C-004)
@@ -24,9 +24,9 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **SOT docs updated:**
 - `Classes/Integration/Docs/Gameplay Module API Reference.md.md` (Unit + HealthComp sections)
 **Dev C mapping:** Resolves `GAP-DEV-C-004` from the Dev C spec.
-**Contracts headers changed:**  
-- `Classes/Contracts/Gameplay/Unit.h`  
-- `Classes/Contracts/Gameplay/HealthComp.h`  
+**Contract headers changed:**  
+- `Classes/Contract/Gameplay/Unit.h`  
+- `Classes/Contract/Gameplay/HealthComp.h`  
 **Mock changes:**  
 - `Classes/Mocks/GameplayMock/Unit.cpp`  
 - `Classes/Mocks/GameplayMock/HealthComp.cpp`  
@@ -43,8 +43,8 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **SOT docs updated:**
 - `Classes/Integration/Docs/Gameplay_Public_GameEvents_Documentation.md` (EntitySpawnEvent payload)
 **Dev C mapping:** Resolves `GAP-DEV-C-005` from the Dev C spec.
-**Contracts headers changed:**  
-- `Classes/Contracts/Gameplay/GameEvents.h`  
+**Contract headers changed:**  
+- `Classes/Contract/Gameplay/GameEvents.h`  
 **Mock changes:** None (event is broadcast-only).  
 **Migration notes:** None.  
 **Verification:** (see end of log)
@@ -53,12 +53,12 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **Decision summary:** Document `BaseEntity` as the common entity base class for `Unit` and `Building`, including lifecycle and ID APIs.  
 **Options considered:**  
 - Document `BaseEntity` in SOT (**chosen**)  
-- Remove `BaseEntity` from Contracts and use `cocos2d::Node` directly  
+- Remove `BaseEntity` from Contract and use `cocos2d::Node` directly  
 - Keep `BaseEntity` as an undocumented internal header  
 **SOT docs updated:**  
 - `Classes/Integration/Docs/Gameplay Module API Reference.md.md` (BaseEntity section; Unit/Building inheritance)  
-**Contracts headers changed:**  
-- `Classes/Contracts/Gameplay/BaseEntity.h` (traceability comment)  
+**Contract headers changed:**  
+- `Classes/Contract/Gameplay/BaseEntity.h` (traceability comment)  
 **Mock changes:** None (mock already exists).  
 **Migration notes:** None.  
 **Verification:** (see end of log)
@@ -67,8 +67,8 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **Decision summary:** Introduce `CostQuery` with read-only cost queries for building placement and troop training.  
 **SOT docs updated:**  
 - `Classes/Integration/Docs/Gameplay Cost Query API.md` (CostQuery)  
-**Contracts headers changed:**  
-- `Classes/Contracts/Gameplay/CostQuery.h`  
+**Contract headers changed:**  
+- `Classes/Contract/Gameplay/CostQuery.h`  
 **Mock changes:**  
 - `Classes/Mocks/GameplayMock/CostQuery.cpp`  
 - `Classes/Mocks/README.md` (default cost formulas)  
@@ -79,8 +79,8 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **Decision summary:** Add `SaveLoadService` with opaque snapshot save/load APIs.  
 **SOT docs updated:**  
 - `Classes/Integration/Docs/SaveLoad and Determinism API.md` (SaveLoadService)  
-**Contracts headers changed:**  
-- `Classes/Contracts/Integration/SaveLoadService.h`  
+**Contract headers changed:**  
+- `Classes/Contract/Integration/SaveLoadService.h`  
 **Mock changes:**  
 - `Classes/Mocks/IntegrationMock/SaveLoadService.cpp`  
 - `Classes/Mocks/README.md` (snapshot defaults)  
@@ -91,8 +91,8 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **Decision summary:** Declare snapshot blobs as opaque bytes/strings; JSON is **not required**.
 **SOT docs updated:**
 - `Classes/Integration/Docs/SaveLoad and Determinism API.md` (Semantics)
-**Contracts headers referenced:**
-- `Classes/Contracts/Integration/SaveLoadService.h` (policy enforced; no change required)
+**Contract headers referenced:**
+- `Classes/Contract/Integration/SaveLoadService.h` (policy enforced; no change required)
 **Mock changes:** None.
 **Migration notes:** None.
 **Verification:** (see end of log)
@@ -101,8 +101,8 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **Decision summary:** Add `GetDeterminismTick()` and `GetStateHash()` to `SaveLoadService` for read-only verification.
 **SOT docs updated:**
 - `Classes/Integration/Docs/SaveLoad and Determinism API.md` (SaveLoadService)
-**Contracts headers changed:**
-- `Classes/Contracts/Integration/SaveLoadService.h`
+**Contract headers changed:**
+- `Classes/Contract/Integration/SaveLoadService.h`
 **Mock changes:**
 - `Classes/Mocks/IntegrationMock/SaveLoadService.cpp`
 **Migration notes:** None.
@@ -113,8 +113,8 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **SOT docs updated:**
 - `Classes/Integration/Docs/Scene Flow and Entrypoint.md`
 - `Classes/Integration/Docs/DevC_Spec.md` (canonical scene flow)
-**Contracts headers changed:**
-- `Classes/Contracts/Integration/SceneFlowService.h`
+**Contract headers changed:**
+- `Classes/Contract/Integration/SceneFlowService.h`
 **Mock changes:**
 - `Classes/Mocks/IntegrationMock/SceneFlowService.cpp`
 **Migration notes:** AppDelegate/test harness should construct the service via `CreateSceneFlowService()` and drive transitions explicitly.
@@ -125,9 +125,9 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **SOT docs updated:**
 - `Classes/Integration/Docs/Placement Validation and TMX Conventions.md`
 - `Classes/Integration/Docs/Engine Module API Reference.md` (placement validation section)
-**Contracts headers changed:**
-- `Classes/Contracts/Engine/MapLayer.h`
-- `Classes/Contracts/Engine/TilePlacementController.h`
+**Contract headers changed:**
+- `Classes/Contract/Engine/MapLayer.h`
+- `Classes/Contract/Engine/TilePlacementController.h`
 **Mock changes:**
 - `Classes/Mocks/EngineMock/MapLayer.cpp`
 - `Classes/Mocks/EngineMock/TilePlacementController.cpp`
@@ -139,8 +139,8 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **Decision summary:** Add `InputRouter` to enforce UI-first pointer handling with optional map/highlighter routing and deterministic last-route state.
 **SOT docs updated:**
 - `Classes/Integration/Docs/Input Routing Policy.md`
-**Contracts headers changed:**
-- `Classes/Contracts/Engine/InputRouter.h`
+**Contract headers changed:**
+- `Classes/Contract/Engine/InputRouter.h`
 **Mock changes:**
 - `Classes/Mocks/EngineMock/InputRouter.cpp`
 **Migration notes:** Scenes attach the active `MapLayer`/`TileHighlighter`, toggle UI capture with `SetUiConsumesInput`, and use boolean returns to decide if the map handled the event.
@@ -150,8 +150,8 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 **Decision summary:** Extend `BattleEndEvent` with duration, troop counts, and spells used; cache the latest event via `GameEventManager::GetLastBattleEnded` for results scene consumption.
 **SOT docs updated:**
 - `Classes/Integration/Docs/Gameplay_Public_GameEvents_Documentation.md` (BattleEndEvent)
-**Contracts headers changed:**
-- `Classes/Contracts/Gameplay/GameEvents.h`
+**Contract headers changed:**
+- `Classes/Contract/Gameplay/GameEvents.h`
 **Mock changes:**
 - `Classes/Mocks/GameplayMock/GameEvents.cpp`
 **Migration notes:** Results UI should read from the broadcasted event or fetch the cached event if a listener was not registered in time.
@@ -164,7 +164,7 @@ This log tracks resolved and unresolved contract gaps for Dev C integration.
 | Gap ID | In Log? | In CONTRACT_GAPS? | In DevC_Spec (SOT)? | Verified? | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | GAP-001 | Yes | No | No | Yes | Gameplay Module API Reference.md.md — Include Path Standard |
-| GAP-002 | Yes | No | No | Yes | Gameplay Module API Reference.md.md — Unit/HealthComp; Contracts Unit.h/HealthComp.h |
+| GAP-002 | Yes | No | No | Yes | Gameplay Module API Reference.md.md — Unit/HealthComp; Contract Unit.h/HealthComp.h |
 | GAP-003 | Yes | No | No | Yes | Gameplay_Public_GameEvents_Documentation.md — EntitySpawnEvent; GameEvents.h |
 | GAP-004 | Yes | No | No | Yes | Gameplay Module API Reference.md.md — BaseEntity section; BaseEntity.h |
 | GAP-DEV-C-001 | Yes | No | No | Yes | Scene Flow and Entrypoint.md; SceneFlowService.h; IntegrationMock/SceneFlowService.cpp |
