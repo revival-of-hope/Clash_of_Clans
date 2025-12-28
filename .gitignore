@@ -5,3 +5,7 @@ build/
 *.pdb
 *.obj
 *.exe.DS_Store
+# macOS system files
+.DS_Store
+**/.DS_Store
+
