@@ -52,6 +52,10 @@ class GameStageScene : public cocos2d::Scene {
   cocos2d::Rect GetAttackPanelBounds() const;
   cocos2d::Rect GetSaveBaseButtonBounds() const;
   cocos2d::Rect GetLoadBaseButtonBounds() const;
+  cocos2d::Rect GetDemoBuildButtonBounds() const;
+  cocos2d::Rect GetDemoAttackButtonBounds() const;
+  cocos2d::Rect GetDemoResultsButtonBounds() const;
+  void TryShowResultsFromEvent();
   void RecordAction(const std::string& action);
 
   Integration::SceneFlowService* scene_flow_ = nullptr;

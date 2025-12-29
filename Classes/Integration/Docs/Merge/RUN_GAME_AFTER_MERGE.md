@@ -47,7 +47,27 @@ If your host project uses a different app entrypoint, mirror this wiring so the 
 
 ---
 
-## 4) Assets & Resources requirements
+## 4) Demo mode toggle + operator flow
+
+**Toggle location:** `Classes/Main/AppDelegate.cpp`
+- `kDemoModeEnabled` (compile-time constant)
+
+**Enable demo mode:** set `kDemoModeEnabled = true` and rebuild the app target.
+
+**Demo operator steps (Menu → Build → Attack → Results):**
+1. Launch the app (it will enter the Menu scene after Boot in demo mode).
+2. Tap **Map A** or **Map B** to change map selection (uses `LevelManager`).
+3. Tap **Start** to enter the Game scene (`BattleLaunchParams{selected_map_path, seed}`).
+4. Use **Demo Controls** in the Game scene:
+   - **Build** toggles build HUD state.
+   - **Attack** toggles attack HUD state.
+   - **Results** shows the Results scene using the last `BattleEndEvent` cached in `GameEventManager`.
+
+**Note:** The **Results** button does not fabricate gameplay outcomes; it uses the existing cached event payload. If gameplay has not produced a `BattleEndEvent`, the results screen will show default (zeroed) values.
+
+---
+
+## 5) Assets & Resources requirements
 
 **Resources root must be available at runtime** (working directory should contain `Resources/`).
 - Per `UiAssetCatalog`, UI expects assets like:
@@ -61,7 +81,7 @@ Ensure these assets exist in the merged project’s `Resources/` folder and are 
 
 ---
 
-## 5) Visual tests / smoke run checklist
+## 6) Visual tests / smoke run checklist
 
 1. **Boot Scene → Menu Scene**
    - The app should start on the boot scene and transition to a simple menu (per the scene flow contract).
@@ -75,4 +95,3 @@ Ensure these assets exist in the merged project’s `Resources/` folder and are 
    - Triggering results should show the results scene, fed by the `BattleEndEvent` payload.
 
 If any step fails, check that the scene flow entrypoint and resource paths are correct, and confirm you built with `-DUSE_COCOS_ENGINE=ON` for real builds.
-

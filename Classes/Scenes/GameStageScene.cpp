@@ -34,6 +34,21 @@ bool GameStageScene::init() {
     return false;
   }
 
+#if defined(USE_COCOS_ENGINE) && USE_COCOS_ENGINE
+  auto* listener = cocos2d::EventListenerTouchOneByOne::create();
+  if (listener) {
+    listener->setSwallowTouches(true);
+    listener->onTouchBegan = [this](cocos2d::Touch* touch, cocos2d::Event*) {
+      if (!touch) {
+        return false;
+      }
+      return HandleTap(touch->getLocation());
+    };
+    cocos2d::Director::getInstance()->getEventDispatcher()
+        ->addEventListenerWithSceneGraphPriority(listener, this);
+  }
+#endif
+
   ui_root_ = cocos2d::Node::create();
   addChild(ui_root_, static_cast<int>(Core::ZOrder::kUiHud));
 
@@ -121,6 +136,32 @@ void GameStageScene::BuildStaticUi() {
     attack_panel_label_->setPosition(cocos2d::Vec2(680.0f, 320.0f));
     ui_root_->addChild(attack_panel_label_);
   }
+
+  auto* demo_label =
+      cocos2d::Label::createWithSystemFont("Demo Controls", "Arial", 16);
+  if (demo_label) {
+    demo_label->setPosition(cocos2d::Vec2(640.0f, 520.0f));
+    ui_root_->addChild(demo_label);
+  }
+
+  auto* demo_build = cocos2d::Label::createWithSystemFont("Build", "Arial", 14);
+  if (demo_build) {
+    demo_build->setPosition(cocos2d::Vec2(600.0f, 490.0f));
+    ui_root_->addChild(demo_build);
+  }
+
+  auto* demo_attack = cocos2d::Label::createWithSystemFont("Attack", "Arial", 14);
+  if (demo_attack) {
+    demo_attack->setPosition(cocos2d::Vec2(680.0f, 490.0f));
+    ui_root_->addChild(demo_attack);
+  }
+
+  auto* demo_results =
+      cocos2d::Label::createWithSystemFont("Results", "Arial", 14);
+  if (demo_results) {
+    demo_results->setPosition(cocos2d::Vec2(640.0f, 460.0f));
+    ui_root_->addChild(demo_results);
+  }
 }
 
 void GameStageScene::RefreshUi() {
@@ -183,6 +224,26 @@ void GameStageScene::UpdatePanelsVisibility() {
 void GameStageScene::ForceRenderForTest() { RefreshUi(); }
 
 bool GameStageScene::HandleTap(const cocos2d::Vec2& screen_pos) {
+  if (HitTest(GetDemoBuildButtonBounds(), screen_pos)) {
+    ui_state_store_.SetMode(UiMode::kBuild);
+    RecordAction("demo_build");
+    RefreshUi();
+    return true;
+  }
+
+  if (HitTest(GetDemoAttackButtonBounds(), screen_pos)) {
+    ui_state_store_.SetMode(UiMode::kAttack);
+    RecordAction("demo_attack");
+    RefreshUi();
+    return true;
+  }
+
+  if (HitTest(GetDemoResultsButtonBounds(), screen_pos)) {
+    RecordAction("demo_results");
+    TryShowResultsFromEvent();
+    return true;
+  }
+
   UiStateSnapshot snapshot = ui_state_store_.GetSnapshot();
   UiMode mode = snapshot.mode;
   if (snapshot.battle.in_battle) {
@@ -242,4 +303,37 @@ cocos2d::Rect GameStageScene::GetSaveBaseButtonBounds() const {
 
 cocos2d::Rect GameStageScene::GetLoadBaseButtonBounds() const {
   return MakePanelRect(cocos2d::Vec2(120.0f, 250.0f), 160.0f, 40.0f);
+}
+
+cocos2d::Rect GameStageScene::GetDemoBuildButtonBounds() const {
+  return MakePanelRect(cocos2d::Vec2(600.0f, 490.0f), 100.0f, 32.0f);
+}
+
+cocos2d::Rect GameStageScene::GetDemoAttackButtonBounds() const {
+  return MakePanelRect(cocos2d::Vec2(680.0f, 490.0f), 100.0f, 32.0f);
+}
+
+cocos2d::Rect GameStageScene::GetDemoResultsButtonBounds() const {
+  return MakePanelRect(cocos2d::Vec2(640.0f, 460.0f), 140.0f, 32.0f);
+}
+
+void GameStageScene::TryShowResultsFromEvent() {
+  if (!scene_flow_) {
+    return;
+  }
+  Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+  if (!manager) {
+    return;
+  }
+  Gameplay::BattleEndEvent cached = manager->GetLastBattleEnded();
+  Integration::ResultsScreenData results;
+  results.summary = cached;
+  results.elapsed_seconds = cached.battle_duration_seconds;
+  results.troops_deployed = cached.troops_deployed;
+  results.troops_remaining = cached.troops_remaining;
+
+  cocos2d::Scene* results_scene = scene_flow_->ShowResults(results);
+  if (results_scene) {
+    cocos2d::Director::getInstance()->replaceScene(results_scene);
+  }
 }

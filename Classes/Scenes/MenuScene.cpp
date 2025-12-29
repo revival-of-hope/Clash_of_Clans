@@ -30,6 +30,21 @@ bool MenuScene::init() {
     return false;
   }
 
+#if defined(USE_COCOS_ENGINE) && USE_COCOS_ENGINE
+  auto* listener = cocos2d::EventListenerTouchOneByOne::create();
+  if (listener) {
+    listener->setSwallowTouches(true);
+    listener->onTouchBegan = [this](cocos2d::Touch* touch, cocos2d::Event*) {
+      if (!touch) {
+        return false;
+      }
+      return HandleTap(touch->getLocation());
+    };
+    cocos2d::Director::getInstance()->getEventDispatcher()
+        ->addEventListenerWithSceneGraphPriority(listener, this);
+  }
+#endif
+
   auto* background = cocos2d::Node::create();
   if (background) {
     background->setPosition(cocos2d::Vec2(400.0f, 320.0f));
