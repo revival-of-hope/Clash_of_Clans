@@ -16,16 +16,16 @@ CostQuery* CostQuery::GetInstance() {
 }
 
 // =============================================================================
-// ·ÑÓÃ²éÑ¯
+// è´¹ç”¨æŸ¥è¯¢
 // =============================================================================
 
 ResourceCost CostQuery::GetBuildingPlacementCost(Core::BuildingType type, int level) const {
     ResourceCost cost;
 
-    // »ù´¡·ÑÓÃ±í (level 1)
+    // åŸºç¡€è´¹ç”¨è¡¨ (level 1)
     switch (type) {
     case Core::BuildingType::kTownHall:
-        cost.gold = 0;  // ³õÊ¼Ãâ·Ñ
+        cost.gold = 0;  // åˆå§‹å…è´¹
         break;
     case Core::BuildingType::kCannon:
         cost.gold = 250;
@@ -55,7 +55,7 @@ ResourceCost CostQuery::GetBuildingPlacementCost(Core::BuildingType type, int le
         cost.elixir = 250;
         break;
     case Core::BuildingType::kAirDefense:
-        cost.gold = 22500;
+        cost.gold = 1500;
         break;
     default:
         cost.gold = 100;
@@ -68,7 +68,7 @@ ResourceCost CostQuery::GetBuildingPlacementCost(Core::BuildingType type, int le
 ResourceCost CostQuery::GetBuildingUpgradeCost(Core::BuildingType type, int current_level) const {
     ResourceCost cost = GetBuildingPlacementCost(type, 1);
 
-    // Éı¼¶·ÑÓÃ = »ù´¡·ÑÓÃ * µÈ¼¶±¶ÂÊ
+    // å‡çº§è´¹ç”¨ = åŸºç¡€è´¹ç”¨ * ç­‰çº§å€ç‡
     float multiplier = 1.0f + (current_level * 0.8f);
     cost.gold = static_cast<int>(cost.gold * multiplier);
     cost.elixir = static_cast<int>(cost.elixir * multiplier);
@@ -106,18 +106,18 @@ ResourceCost CostQuery::GetTroopTrainingCost(Core::TroopType type, int level) co
         break;
     }
 
-    // µÈ¼¶¼Ó³É
+    // ç­‰çº§åŠ æˆ
     cost.elixir = static_cast<int>(cost.elixir * (1.0f + (level - 1) * 0.1f));
 
     return cost;
 }
 
 // =============================================================================
-// ´ó±¾ÓªµÈ¼¶ÏŞÖÆ
+// å¤§æœ¬è¥ç­‰çº§é™åˆ¶
 // =============================================================================
 
 /**
- * ´ó±¾Óª½âËø±í (×î¸ß3¼¶):
+ * å¤§æœ¬è¥è§£é”è¡¨ (æœ€é«˜3çº§):
  *
  * TH1: TownHall, GoldMine, ElixirCollector, GoldStorage, ElixirStorage, Barracks, ArmyCamp, Cannon
  * TH2: +ArcherTower, +Wall
@@ -126,7 +126,7 @@ ResourceCost CostQuery::GetTroopTrainingCost(Core::TroopType type, int level) co
 
 int CostQuery::GetRequiredTownHallLevel(Core::BuildingType building_type) const {
     switch (building_type) {
-        // TH1 ½âËø
+        // TH1 è§£é”
     case Core::BuildingType::kTownHall:
     case Core::BuildingType::kGoldMine:
     case Core::BuildingType::kElixirCollector:
@@ -137,12 +137,12 @@ int CostQuery::GetRequiredTownHallLevel(Core::BuildingType building_type) const 
     case Core::BuildingType::kCannon:
         return 1;
 
-        // TH2 ½âËø
+        // TH2 è§£é”
     case Core::BuildingType::kArcherTower:
     case Core::BuildingType::kWall:
         return 2;
 
-        // TH3 ½âËø
+        // TH3 è§£é”
     case Core::BuildingType::kAirDefense:
         return 3;
 
@@ -157,42 +157,42 @@ bool CostQuery::CanUnlockBuilding(int townhall_level, Core::BuildingType buildin
 }
 
 int CostQuery::GetMaxBuildingLevel(int townhall_level, Core::BuildingType building_type) const {
-    // ´ó±¾Óª×ÔÉíµÈ¼¶ÏŞÖÆ (×î¸ß3¼¶)
+    // å¤§æœ¬è¥è‡ªèº«ç­‰çº§é™åˆ¶ (æœ€é«˜3çº§)
     if (building_type == Core::BuildingType::kTownHall) {
         return 3;
     }
 
-    // Èç¹û¸Ã½¨ÖşÎ´½âËø£¬·µ»Ø0
+    // å¦‚æœè¯¥å»ºç­‘æœªè§£é”ï¼Œè¿”å›0
     if (!CanUnlockBuilding(townhall_level, building_type)) {
         return 0;
     }
 
-    // ËùÓĞ½¨Öş×î¸ß3¼¶
-    // ½¨Öş×î´óµÈ¼¶ = min(´ó±¾ÓªµÈ¼¶, 3)
+    // æ‰€æœ‰å»ºç­‘æœ€é«˜3çº§
+    // å»ºç­‘æœ€å¤§ç­‰çº§ = min(å¤§æœ¬è¥ç­‰çº§, 3)
     switch (building_type) {
     case Core::BuildingType::kCannon:
     case Core::BuildingType::kArcherTower:
     case Core::BuildingType::kAirDefense:
-        // ·ÀÓù½¨Öş: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
+        // é˜²å¾¡å»ºç­‘: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
         return std::min(townhall_level, 3);
 
     case Core::BuildingType::kWall:
-        // ³ÇÇ½: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
+        // åŸå¢™: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
         return std::min(townhall_level, 3);
 
     case Core::BuildingType::kGoldMine:
     case Core::BuildingType::kElixirCollector:
-        // ×ÊÔ´½¨Öş: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
+        // èµ„æºå»ºç­‘: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
         return std::min(townhall_level, 3);
 
     case Core::BuildingType::kGoldStorage:
     case Core::BuildingType::kElixirStorage:
-        // ´æ´¢½¨Öş: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
+        // å­˜å‚¨å»ºç­‘: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
         return std::min(townhall_level, 3);
 
     case Core::BuildingType::kBarracks:
     case Core::BuildingType::kArmyCamp:
-        // ¾üÊÂ½¨Öş: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
+        // å†›äº‹å»ºç­‘: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
         return std::min(townhall_level, 3);
 
     default:
@@ -201,15 +201,15 @@ int CostQuery::GetMaxBuildingLevel(int townhall_level, Core::BuildingType buildi
 }
 
 int CostQuery::GetMaxBuildingCount(int townhall_level, Core::BuildingType building_type) const {
-    // Èç¹û¸Ã½¨ÖşÎ´½âËø£¬·µ»Ø0
+    // å¦‚æœè¯¥å»ºç­‘æœªè§£é”ï¼Œè¿”å›0
     if (!CanUnlockBuilding(townhall_level, building_type)) {
         return 0;
     }
 
-    // ´ó±¾Óª×î¸ß3¼¶£¬µ÷ÕûÊıÁ¿ÏŞÖÆ
+    // å¤§æœ¬è¥æœ€é«˜3çº§ï¼Œè°ƒæ•´æ•°é‡é™åˆ¶
     switch (building_type) {
     case Core::BuildingType::kTownHall:
-        return 1;  // Ö»ÄÜÓĞÒ»¸ö´ó±¾Óª
+        return 1;  // åªèƒ½æœ‰ä¸€ä¸ªå¤§æœ¬è¥
 
     case Core::BuildingType::kCannon:
         // TH1:2, TH2:3, TH3:4
@@ -242,7 +242,7 @@ int CostQuery::GetMaxBuildingCount(int townhall_level, Core::BuildingType buildi
         return std::min(townhall_level, 2);
 
     case Core::BuildingType::kAirDefense:
-        // TH3 ½âËøºóÖ»ÓĞ1¸ö (µ÷ÕûÎªTH3½âËø)
+        // TH3 è§£é”ååªæœ‰1ä¸ª (è°ƒæ•´ä¸ºTH3è§£é”)
         return 1;
 
     default:
@@ -253,7 +253,7 @@ int CostQuery::GetMaxBuildingCount(int townhall_level, Core::BuildingType buildi
 std::vector<Core::BuildingType> CostQuery::GetUnlockedBuildings(int townhall_level) const {
     std::vector<Core::BuildingType> result;
 
-    // ±éÀúËùÓĞ½¨ÖşÀàĞÍ
+    // éå†æ‰€æœ‰å»ºç­‘ç±»å‹
     const Core::BuildingType all_types[] = {
         Core::BuildingType::kTownHall,
         Core::BuildingType::kCannon,
