@@ -21,7 +21,7 @@ namespace Gameplay {
 
         for (auto* existing : listeners_) {
             if (existing == listener) {
-                return;  // ÒÑ´æÔÚ£¬²»ÖØ¸´Ìí¼Ó
+                return;  // å·²å­˜åœ¨ï¼Œä¸é‡å¤æ·»åŠ 
             }
         }
         listeners_.push_back(listener);
@@ -102,6 +102,12 @@ namespace Gameplay {
 
     BattleEndEvent GameEventManager::GetLastBattleEnded() const {
         return last_battle_end_;
+    }
+
+    void GameEventManager::BroadcastTownHallLevelChanged(const TownHallLevelChangedEvent& evt) {
+        for (auto* listener : listeners_) {
+            if (listener) listener->OnTownHallLevelChanged(evt);
+        }
     }
 
 }  // namespace Gameplay
