@@ -29,13 +29,17 @@ set(APP_NAME Clash_of_Clans)
 
 project(${APP_NAME})
 
+option(USE_COCOS_ENGINE "Build with real cocos2d engine" OFF)
+option(BUILD_APP "Build game application target" ${USE_COCOS_ENGINE})
+option(BUILD_TESTS "Build mock tests" ON)
+
 if(XCODE)
     if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
         SET (CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 8.0)
     endif()
 endif()
 
-if(NOT DEFINED BUILD_ENGINE_DONE) # to test Clash_of_Clans into root project
+if(USE_COCOS_ENGINE AND NOT DEFINED BUILD_ENGINE_DONE) # to test Clash_of_Clans into root project
     set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
     set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 
@@ -50,12 +54,11 @@ set(GAME_HEADER)
 set(GAME_RES_FOLDER
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
     )
-if(APPLE OR WINDOWS)
+if(USE_COCOS_ENGINE AND (APPLE OR WINDOWS) AND COMMAND cocos_mark_multi_resources)
     cocos_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
-# 通用 C++ 文件
-# 自动收集 Classes 目录下所有 cpp 和 h 文件（包含子目录）
+# Automatic collector
 file(GLOB_RECURSE GAME_SOURCE "Classes/*.cpp")
 file(GLOB_RECURSE GAME_HEADER "Classes/*.h")
 
@@ -116,45 +119,111 @@ set(all_code_files
     ${GAME_HEADER}
     ${GAME_SOURCE}
     )
-if(NOT ANDROID)
-    add_executable(${APP_NAME} ${all_code_files})
-else()
-    add_library(${APP_NAME} SHARED ${all_code_files})
-    add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
-    target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
-endif()
-
-target_link_libraries(${APP_NAME} cocos2d)
-target_include_directories(${APP_NAME}
-        PRIVATE Classes
-        PRIVATE Classes/Core
-        PRIVATE Classes/Entities
-        PRIVATE Classes/Map
-        PRIVATE Classes/Managers
-        PRIVATE Classes/UI
-        PRIVATE Classes/Scenes
-        PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
-)
-
-# mark app resources
-setup_cocos_app_config(${APP_NAME})
-if(APPLE)
-    set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
-
-    if(MACOSX)
-        set_xcode_property(${APP_NAME} INFOPLIST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist")
-    elseif(IOS)
-        set_xcode_property(${APP_NAME} INFOPLIST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/Info.plist")
-        set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+if(BUILD_APP)
+    if(NOT ANDROID)
+        add_executable(${APP_NAME} ${all_code_files})
+    else()
+        add_library(${APP_NAME} SHARED ${all_code_files})
+        add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
+        target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
+    endif()
+    if(USE_COCOS_ENGINE)
+        target_compile_definitions(${APP_NAME} PRIVATE USE_COCOS_ENGINE=1)
+    else()
+        target_compile_definitions(${APP_NAME} PRIVATE USE_COCOS_ENGINE=0)
     endif()
 
-    # For code-signing, set the DEVELOPMENT_TEAM:
-    #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
-elseif(WINDOWS)
-    cocos_copy_target_dll(${APP_NAME})
+    if(USE_COCOS_ENGINE)
+        target_link_libraries(${APP_NAME} cocos2d)
+        target_include_directories(${APP_NAME}
+                PRIVATE Classes
+                PRIVATE Classes/Core
+                PRIVATE Classes/Entities
+                PRIVATE Classes/Map
+                PRIVATE Classes/Managers
+                PRIVATE Classes/UI
+                PRIVATE Classes/Scenes
+                PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
+        )
+
+        # mark app resources
+        setup_cocos_app_config(${APP_NAME})
+        if(APPLE)
+            set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
+
+            if(MACOSX)
+                set_xcode_property(${APP_NAME} INFOPLIST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist")
+            elseif(IOS)
+                set_xcode_property(${APP_NAME} INFOPLIST_FILE "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/Info.plist")
+                set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+            endif()
+
+            # For code-signing, set the DEVELOPMENT_TEAM:
+            #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
+        elseif(WINDOWS)
+            cocos_copy_target_dll(${APP_NAME})
+        endif()
+
+        if(LINUX OR WINDOWS)
+            cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
+            cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+        endif()
+    endif()
 endif()
 
-if(LINUX OR WINDOWS)
-    cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
-    cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+if(BUILD_TESTS)
+    enable_testing()
+    add_library(cocos_stub INTERFACE)
+    target_include_directories(cocos_stub INTERFACE
+            ${CMAKE_CURRENT_SOURCE_DIR}/Classes/Mocks/CocosShim
+    )
+
+    add_executable(mock_tests
+            Classes/Mocks/EngineMock/MapLayer.cpp
+            Classes/Mocks/EngineMock/MouseController.cpp
+            Classes/Mocks/EngineMock/TileHighlighter.cpp
+            Classes/Mocks/EngineMock/TilePlacementController.cpp
+            Classes/Mocks/GameplayMock/Building.cpp
+            Classes/Mocks/GameplayMock/BaseEntity.cpp
+            Classes/Mocks/GameplayMock/CombatResolver.cpp
+            Classes/Mocks/GameplayMock/CostQuery.cpp
+            Classes/Mocks/GameplayMock/EconomySystem.cpp
+            Classes/Mocks/GameplayMock/GameEvents.cpp
+            Classes/Mocks/GameplayMock/HealthComp.cpp
+            Classes/Mocks/GameplayMock/Unit.cpp
+            Classes/Integration/Engine/InputRouterImpl.cpp
+            Classes/Integration/Engine/CocosAudioSink.cpp
+            Classes/Integration/SceneFlowServiceImpl.cpp
+            Classes/Mocks/IntegrationMock/SceneFlowService.cpp
+            Classes/Managers/AudioManager/AudioManager.cpp
+            Classes/Scenes/BootScene.cpp
+            Classes/Scenes/GameStageScene.cpp
+            Classes/Scenes/MenuScene.cpp
+            Classes/Scenes/ResultsScene.cpp
+            Classes/Integration/GameServices.cpp
+            Classes/Mocks/Tests/MockTests.cpp
+    )
+    target_include_directories(mock_tests PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            Classes
+            Classes/Contract
+            Classes/Mocks/CocosShim
+    )
+    target_compile_definitions(mock_tests PRIVATE USE_COCOS_ENGINE=0)
+    target_link_libraries(mock_tests PRIVATE cocos_stub)
+
+    add_test(NAME mock_tests COMMAND mock_tests)
+    add_test(NAME include_path_lint COMMAND bash ${CMAKE_SOURCE_DIR}/scripts/check_includes.sh)
+
+    add_library(app_shell STATIC
+            Classes/Main/AppDelegate.cpp
+    )
+    target_include_directories(app_shell PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            Classes
+            Classes/Contract
+            Classes/Mocks/CocosShim
+    )
+    target_compile_definitions(app_shell PRIVATE USE_COCOS_ENGINE=0)
+    target_link_libraries(app_shell PRIVATE cocos_stub)
 endif()
