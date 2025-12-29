@@ -8,6 +8,7 @@
 #include "Classes/Contract/Engine/TilePlacementController.h"
 #include "Core/GameConstants.h"
 #include "Classes/Contract/Gameplay/Building.h"
+#include "Classes/Contract/Gameplay/CostQuery.h"
 #include "Classes/Contract/Gameplay/EconomySystem.h"
 #include "Classes/Contract/Gameplay/GameEvents.h"
 #include "Classes/Contract/Gameplay/HealthComp.h"
@@ -19,7 +20,9 @@
 #include "Classes/Managers/LevelManager.h"
 #include "Classes/Mocks/Audio/AudioSinkMock.h"
 #include "Classes/Mocks/IntegrationMock/SceneFlowService.h"
+#include "Classes/Scenes/GameStageScene.h"
 #include "Classes/Scenes/MenuScene.h"
+#include "Classes/Scenes/ResultsScene.h"
 #include "Classes/UI/UiStateModels.h"
 
 int GetWorldToTileCallCountForTesting();
@@ -310,11 +313,44 @@ void TestMenuSceneMapSelectionPropagation() {
     delete scene_flow;
 }
 
+void TestMenuSceneInputWiring() {
+    Integration::SceneFlowService* scene_flow = Integration::CreateSceneFlowService();
+    cocos2d::Scene* menu_scene_wrapper = scene_flow->ShowMenuScene();
+    auto* menu_scene = static_cast<MenuScene*>(menu_scene_wrapper);
+    LevelManager* level_manager = LevelManager::GetInstance();
+
+    level_manager->ResetSelection();
+    bool consumed = menu_scene->HandleTap(cocos2d::Vec2(540.0f, 200.0f));
+    assert(consumed);
+    assert(menu_scene->GetLastMenuActionForTest() == "map_b");
+    assert(level_manager->GetSelectedMapPath() == level_manager->GetMapBPath());
+
+    consumed = menu_scene->HandleTap(cocos2d::Vec2(260.0f, 100.0f));
+    assert(consumed);
+    assert(menu_scene->GetLastMenuActionForTest() == "leagues");
+
+    consumed = menu_scene->HandleTap(cocos2d::Vec2(540.0f, 100.0f));
+    assert(consumed);
+    assert(menu_scene->GetLastMenuActionForTest() == "replays");
+
+    consumed = menu_scene->HandleTap(cocos2d::Vec2(400.0f, 140.0f));
+    assert(consumed);
+    assert(menu_scene->GetLastMenuActionForTest() == "start");
+    assert(scene_flow->GetCurrentStage() == Integration::SceneStage::kGame);
+
+    consumed = menu_scene->HandleTap(cocos2d::Vec2(10.0f, 10.0f));
+    assert(!consumed);
+
+    delete menu_scene_wrapper;
+    delete scene_flow;
+}
+
 void TestGameServicesSmoke() {
     Integration::SceneFlowService* scene_flow = Integration::ResolveSceneFlowService();
     InputRouter* router = Integration::ResolveInputRouter();
     Gameplay::GameEventManager* event_manager = Integration::ResolveGameEventManager();
 
+    assert(Integration::IsUsingMocksForTest());
     assert(scene_flow != nullptr);
     assert(router != nullptr);
     assert(event_manager != nullptr);
@@ -505,6 +541,10 @@ void TestEconomySystem() {
     assert(economy->GetMaxGold() > 0);
     assert(economy->GetMaxElixir() > 0);
 
+    ResourceCost building_cost = CostQuery::GetInstance()->GetBuildingPlacementCost(Core::BuildingType::kCannon, 1);
+    assert(building_cost.gold > 0);
+    assert(economy->CanAffordCost(building_cost) == false);
+
     int collected_gold = economy->TryCollectResource(gold_mine);
     assert(collected_gold > 0);
     assert(economy->GetCurrentGold() == collected_gold);
@@ -520,22 +560,34 @@ void TestEconomySystem() {
 
     economy->AddGold(50);
     assert(economy->GetCurrentGold() >= previous_gold);
+
+    ResourceCost troop_cost = CostQuery::GetInstance()->GetTroopTrainingCost(Core::TroopType::kBarbarian, 1);
+    economy->AddElixir(troop_cost.elixir);
+    bool afford_troop = economy->CanAffordTroop(Core::TroopType::kBarbarian, 1);
+    assert(afford_troop);
 }
 
 void TestHealthComp() {
     HealthComp health;
     health.InitStats(100);
     assert(std::fabs(health.GetHealthPercentage() - 1.0f) < 0.0001f);
+    assert(std::fabs(health.GetCurrentHealth() - 100.0f) < 0.0001f);
+    assert(std::fabs(health.GetMaxHealth() - 100.0f) < 0.0001f);
     assert(!health.IsDead());
 
     bool died = health.TakeDamage(40);
     assert(!died);
     assert(std::fabs(health.GetHealthPercentage() - 0.6f) < 0.0001f);
+    assert(std::fabs(health.GetCurrentHealth() - 60.0f) < 0.0001f);
 
     died = health.TakeDamage(60);
     assert(died);
     assert(health.IsDead());
     assert(std::fabs(health.GetHealthPercentage() - 0.0f) < 0.0001f);
+
+    health.InitStats(50);
+    health.Heal(10);
+    assert(std::fabs(health.GetCurrentHealth() - 50.0f) < 0.0001f);
 }
 
 void TestUnitAndBuilding() {
@@ -550,9 +602,18 @@ void TestUnitAndBuilding() {
     assert(!cannon->IsConstructing());
     cannon->StartConstruction(3.0f);
     assert(cannon->IsConstructing());
+    assert(cannon->GetConstructionProgress() <= 1.0f);
 
     Building* collector = Building::create(Core::BuildingType::kGoldMine, 1, 0);
     assert(collector->GetStoredResource() > 0);
+    assert(collector->GetStoragePercentage() > 0.0f);
+    int collected = collector->CollectResource(10);
+    assert(collected >= 0);
+    assert(collector->GetStoredResource() <= static_cast<int>(collector->GetStoragePercentage() * 200));
+
+    cannon->PlayAttackAnimation();
+    cannon->PlayHurtEffect();
+    cannon->PlayDestroyedAnimation();
 }
 
 void TestHudStateUpdates() {
@@ -840,6 +901,357 @@ void TestUiStateStoreDeploymentBar() {
     assert(snapshot.deployment[0].troop_counts[0].remaining_count == 3);
 }
 
+void TestUiStateStoreBuildingProgress() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    UiStateStore store(/*local_owner_id=*/0);
+    store.Attach(manager);
+
+    Gameplay::EntitySpawnEvent building_spawn{};
+    building_spawn.instance_id = 77;
+    building_spawn.is_building = true;
+    building_spawn.building_type = Core::BuildingType::kCannon;
+    manager->BroadcastEntitySpawned(building_spawn);
+
+    Gameplay::BuildingStateEvent state_evt{};
+    state_evt.instance_id = 77;
+    state_evt.type = Core::BuildingType::kCannon;
+    state_evt.new_state = Gameplay::BuildingState::kConstructing;
+    state_evt.time_remaining = 5.0f;
+    state_evt.total_build_time = 10.0f;
+    manager->BroadcastBuildingStateChanged(state_evt);
+
+    UiStateSnapshot snapshot = store.GetSnapshot();
+    assert(snapshot.building_progress.size() == 1);
+    const BuildingProgressStatus& progress = snapshot.building_progress[0];
+    assert(progress.entity_id == 77);
+    assert(progress.building_type == Core::BuildingType::kCannon);
+    assert(progress.state == Gameplay::BuildingState::kConstructing);
+    assert(progress.time_remaining == 5.0f);
+    assert(progress.total_build_time == 10.0f);
+
+    Gameplay::EntityDestroyEvent destroy{};
+    destroy.instance_id = 77;
+    manager->BroadcastEntityDestroyed(destroy);
+
+    snapshot = store.GetSnapshot();
+    assert(snapshot.building_progress.empty());
+
+    store.Detach(manager);
+}
+
+void TestUiStateStoreBuildingProgressOutOfOrder() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    UiStateStore store(/*local_owner_id=*/0);
+    store.Attach(manager);
+
+    Gameplay::BuildingStateEvent state_evt{};
+    state_evt.instance_id = 21;
+    state_evt.type = Core::BuildingType::kBarracks;
+    state_evt.new_state = Gameplay::BuildingState::kConstructing;
+    state_evt.time_remaining = 4.0f;
+    state_evt.total_build_time = 8.0f;
+    manager->BroadcastBuildingStateChanged(state_evt);
+
+    UiStateSnapshot snapshot = store.GetSnapshot();
+    assert(snapshot.building_progress.size() == 1);
+    assert(snapshot.building_progress[0].entity_id == 21);
+
+    Gameplay::EntityDestroyEvent destroy{};
+    destroy.instance_id = 21;
+    manager->BroadcastEntityDestroyed(destroy);
+    snapshot = store.GetSnapshot();
+    assert(snapshot.building_progress.empty());
+
+    store.Detach(manager);
+}
+
+void TestUiStateStoreBattleStateAndMode() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    UiStateStore store(/*local_owner_id=*/0);
+    store.Attach(manager);
+
+    store.SetMode(UiMode::kAttack);
+
+    Gameplay::BattleStartEvent start_evt{};
+    start_evt.time_limit_seconds = 180;
+    manager->BroadcastBattleStarted(start_evt);
+
+    UiStateSnapshot snapshot = store.GetSnapshot();
+    assert(snapshot.mode == UiMode::kAttack);
+    assert(snapshot.battle.in_battle);
+    assert(snapshot.battle.time_limit_seconds == 180);
+    assert(!snapshot.battle.has_battle_end);
+
+    Gameplay::BattleEndEvent end_evt{};
+    end_evt.result = Gameplay::BattleResult::kDefeat;
+    end_evt.stars_earned = 1;
+    end_evt.gold_stolen = 50;
+    manager->BroadcastBattleEnded(end_evt);
+
+    snapshot = store.GetSnapshot();
+    assert(!snapshot.battle.in_battle);
+    assert(snapshot.battle.has_battle_end);
+    assert(snapshot.battle.last_battle_end.result == Gameplay::BattleResult::kDefeat);
+    assert(snapshot.battle.last_battle_end.stars_earned == 1);
+    assert(snapshot.battle.last_battle_end.gold_stolen == 50);
+
+    store.Detach(manager);
+}
+
+void TestUiStateStoreBattleRepeatedStart() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    UiStateStore store(/*local_owner_id=*/0);
+    store.Attach(manager);
+
+    Gameplay::BattleStartEvent start_evt{};
+    start_evt.time_limit_seconds = 120;
+    manager->BroadcastBattleStarted(start_evt);
+    start_evt.time_limit_seconds = 90;
+    manager->BroadcastBattleStarted(start_evt);
+
+    UiStateSnapshot snapshot = store.GetSnapshot();
+    assert(snapshot.battle.in_battle);
+    assert(snapshot.battle.time_limit_seconds == 90);
+
+    store.Detach(manager);
+}
+
+void TestUiPresentationBindingRenderPlan() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    UiStateStore store(/*local_owner_id=*/0);
+    store.Attach(manager);
+
+    Gameplay::ResourceUpdateEvent gold{};
+    gold.resource_type = "Gold";
+    gold.current_amount = 150;
+    gold.max_capacity = 300;
+    manager->BroadcastResourceChange(gold);
+
+    Gameplay::ResourceUpdateEvent elixir{};
+    elixir.resource_type = "Elixir";
+    elixir.current_amount = 90;
+    elixir.max_capacity = 200;
+    manager->BroadcastResourceChange(elixir);
+
+    Gameplay::BuildingStateEvent progress_evt{};
+    progress_evt.instance_id = 9;
+    progress_evt.type = Core::BuildingType::kBarracks;
+    progress_evt.new_state = Gameplay::BuildingState::kConstructing;
+    progress_evt.time_remaining = 3.0f;
+    progress_evt.total_build_time = 10.0f;
+    manager->BroadcastBuildingStateChanged(progress_evt);
+
+    UiPresentationBinding binding;
+    UiRenderPlan plan = binding.BuildRenderPlan(store.GetSnapshot());
+    assert(plan.mode == UiMode::kMenu);
+    assert(plan.hud_items.size() == 2);
+    assert(plan.hud_items[0].icon_asset == plan.assets.gold_icon);
+    assert(plan.hud_items[0].label_text == "150/300");
+    assert(plan.hud_items[1].icon_asset == plan.assets.elixir_icon);
+    assert(plan.hud_items[1].label_text == "90/200");
+    assert(plan.menu_panel.start_button_asset == plan.assets.menu_start_button);
+    assert(!plan.battle_panel.show_countdown);
+    assert(plan.battle_panel.star_strip_asset.empty());
+
+    assert(plan.building_overlays.size() == 1);
+    const BuildingOverlayRender& overlay = plan.building_overlays[0];
+    assert(overlay.entity_id == 9);
+    assert(overlay.progress_bar_asset == plan.assets.build_progress_bar);
+    assert(std::fabs(overlay.progress_ratio - 0.7f) < 0.0001f);
+
+    Gameplay::BattleStartEvent start_evt{};
+    start_evt.time_limit_seconds = 150;
+    manager->BroadcastBattleStarted(start_evt);
+    plan = binding.BuildRenderPlan(store.GetSnapshot());
+    assert(plan.battle_panel.show_countdown);
+    assert(plan.battle_panel.countdown_seconds == 150);
+    assert(!plan.battle_panel.show_results);
+
+    Gameplay::BattleEndEvent end_evt{};
+    end_evt.result = Gameplay::BattleResult::kVictory;
+    end_evt.stars_earned = 2;
+    manager->BroadcastBattleEnded(end_evt);
+    plan = binding.BuildRenderPlan(store.GetSnapshot());
+    assert(plan.battle_panel.show_results);
+    assert(plan.battle_panel.background_asset == plan.assets.victory_background);
+    assert(plan.battle_panel.star_strip_asset == plan.assets.star_two);
+
+    store.Detach(manager);
+}
+
+void TestGameStageSceneUiBinding() {
+    Integration::SceneFlowService* flow = Integration::CreateSceneFlowService();
+    Integration::BattleLaunchParams params{"maps/test_ui.tmx", 99};
+    cocos2d::Scene* scene = flow->StartGame(params);
+    auto* game_scene = dynamic_cast<GameStageScene*>(scene);
+    assert(game_scene != nullptr);
+
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+
+    Gameplay::ResourceUpdateEvent gold{};
+    gold.resource_type = "Gold";
+    gold.current_amount = 200;
+    gold.max_capacity = 400;
+    manager->BroadcastResourceChange(gold);
+
+    Gameplay::BuildingStateEvent build{};
+    build.instance_id = 31;
+    build.type = Core::BuildingType::kBarracks;
+    build.new_state = Gameplay::BuildingState::kConstructing;
+    build.time_remaining = 6.0f;
+    build.total_build_time = 12.0f;
+    manager->BroadcastBuildingStateChanged(build);
+
+    game_scene->ForceRenderForTest();
+    UiRenderPlan plan = game_scene->GetLastRenderPlanForTest();
+    assert(plan.hud_items.size() >= 2);
+    assert(plan.hud_items[0].label_text == "200/400");
+    assert(plan.building_overlays.size() == 1);
+
+    Gameplay::TroopCountUpdateEvent irrelevant{};
+    irrelevant.owner_id = 7;
+    irrelevant.troop_type = Core::TroopType::kArcher;
+    irrelevant.remaining_count = 5;
+    manager->BroadcastTroopCountUpdated(irrelevant);
+
+    game_scene->ForceRenderForTest();
+    plan = game_scene->GetLastRenderPlanForTest();
+    assert(plan.building_overlays.size() == 1);
+
+    Gameplay::BattleStartEvent start{};
+    start.time_limit_seconds = 120;
+    manager->BroadcastBattleStarted(start);
+
+    game_scene->ForceRenderForTest();
+    plan = game_scene->GetLastRenderPlanForTest();
+    assert(plan.battle_panel.show_countdown);
+    assert(plan.battle_panel.countdown_seconds == 120);
+
+    Gameplay::BattleEndEvent end{};
+    end.result = Gameplay::BattleResult::kVictory;
+    end.stars_earned = 3;
+    manager->BroadcastBattleEnded(end);
+
+    game_scene->ForceRenderForTest();
+    plan = game_scene->GetLastRenderPlanForTest();
+    assert(plan.battle_panel.show_results);
+    assert(plan.battle_panel.star_strip_asset == plan.assets.star_three);
+
+    scene->onExit();
+    delete scene;
+    delete flow;
+}
+
+void TestGameStageSceneRenderPlanStability() {
+    Integration::SceneFlowService* flow = Integration::CreateSceneFlowService();
+    Integration::BattleLaunchParams params{"maps/test_ui.tmx", 99};
+    cocos2d::Scene* scene = flow->StartGame(params);
+    auto* game_scene = dynamic_cast<GameStageScene*>(scene);
+    assert(game_scene != nullptr);
+
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+
+    Gameplay::BuildingStateEvent build{};
+    build.instance_id = 31;
+    build.type = Core::BuildingType::kBarracks;
+    build.new_state = Gameplay::BuildingState::kConstructing;
+    build.time_remaining = 6.0f;
+    build.total_build_time = 12.0f;
+    manager->BroadcastBuildingStateChanged(build);
+
+    game_scene->ForceRenderForTest();
+    assert(game_scene->GetProgressBarCountForTest() == 1);
+    assert(game_scene->HasProgressBarForEntityForTest(31));
+
+    game_scene->ForceRenderForTest();
+    assert(game_scene->GetProgressBarCountForTest() == 1);
+
+    Gameplay::EntityDestroyEvent destroy{};
+    destroy.instance_id = 31;
+    manager->BroadcastEntityDestroyed(destroy);
+    game_scene->ForceRenderForTest();
+    assert(game_scene->GetProgressBarCountForTest() == 0);
+
+    scene->onExit();
+    delete scene;
+    delete flow;
+}
+
+void TestGameStageSceneInputWiring() {
+    Integration::SceneFlowService* flow = Integration::CreateSceneFlowService();
+    Integration::BattleLaunchParams params{"maps/test_ui.tmx", 99};
+    cocos2d::Scene* scene = flow->StartGame(params);
+    auto* game_scene = dynamic_cast<GameStageScene*>(scene);
+    assert(game_scene != nullptr);
+
+    game_scene->SetModeForTest(UiMode::kBuild);
+    bool consumed = game_scene->HandleTap(cocos2d::Vec2(120.0f, 320.0f));
+    assert(consumed);
+    assert(game_scene->IsBuildPanelOpenForTest());
+
+    consumed = game_scene->HandleTap(cocos2d::Vec2(120.0f, 280.0f));
+    assert(consumed);
+    assert(game_scene->GetLastActionForTest() == "save_base");
+
+    consumed = game_scene->HandleTap(cocos2d::Vec2(120.0f, 250.0f));
+    assert(consumed);
+    assert(game_scene->GetLastActionForTest() == "load_base");
+
+    game_scene->SetModeForTest(UiMode::kAttack);
+    consumed = game_scene->HandleTap(cocos2d::Vec2(680.0f, 320.0f));
+    assert(consumed);
+    assert(game_scene->IsAttackPanelOpenForTest());
+
+    scene->onExit();
+    delete scene;
+    delete flow;
+}
+
+void TestGameStageSceneDetachStopsUpdates() {
+    Integration::SceneFlowService* flow = Integration::CreateSceneFlowService();
+    Integration::BattleLaunchParams params{"maps/test_ui.tmx", 99};
+    cocos2d::Scene* scene = flow->StartGame(params);
+    auto* game_scene = dynamic_cast<GameStageScene*>(scene);
+    assert(game_scene != nullptr);
+
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    Gameplay::ResourceUpdateEvent gold{};
+    gold.resource_type = "Gold";
+    gold.current_amount = 100;
+    gold.max_capacity = 200;
+    manager->BroadcastResourceChange(gold);
+    game_scene->ForceRenderForTest();
+    UiRenderPlan before = game_scene->GetLastRenderPlanForTest();
+    std::string before_label = before.hud_items.empty() ? "" : before.hud_items[0].label_text;
+
+    scene->onExit();
+    gold.current_amount = 200;
+    gold.max_capacity = 400;
+    manager->BroadcastResourceChange(gold);
+    game_scene->ForceRenderForTest();
+    UiRenderPlan after = game_scene->GetLastRenderPlanForTest();
+    std::string after_label = after.hud_items.empty() ? "" : after.hud_items[0].label_text;
+    assert(before_label == after_label);
+
+    delete scene;
+    delete flow;
+}
+
+void TestResultsSceneReplayButton() {
+    Integration::SceneFlowService* flow = Integration::CreateSceneFlowService();
+    Gameplay::BattleEndEvent summary{};
+    Integration::ResultsScreenData results{summary, 10, 1, 1};
+    cocos2d::Scene* scene = flow->ShowResults(results);
+    auto* results_scene = static_cast<ResultsScene*>(scene);
+
+    bool consumed = results_scene->HandleTap(cocos2d::Vec2(400.0f, 140.0f));
+    assert(consumed);
+    assert(results_scene->GetLastResultsActionForTest() == "replay");
+
+    delete scene;
+    delete flow;
+}
+
 void TestAudioManagerPlaysBattleStartMusic() {
     Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
     AudioSinkMock sink;
@@ -892,6 +1304,7 @@ int main() {
     TestSceneFlowMockDelegation();
     TestVerticalSliceSceneFlow();
     TestMenuSceneMapSelectionPropagation();
+    TestMenuSceneInputWiring();
     TestBattleEndPayload();
     TestDeploymentContractExtensions();
     TestGameServicesSmoke();
@@ -902,6 +1315,15 @@ int main() {
     TestUiStateStoreSelectionAndDestroy();
     TestUiStateStoreHealthBars();
     TestUiStateStoreDeploymentBar();
+    TestUiStateStoreBuildingProgress();
+    TestUiStateStoreBuildingProgressOutOfOrder();
+    TestUiStateStoreBattleStateAndMode();
+    TestUiStateStoreBattleRepeatedStart();
+    TestGameStageSceneUiBinding();
+    TestGameStageSceneRenderPlanStability();
+    TestGameStageSceneInputWiring();
+    TestGameStageSceneDetachStopsUpdates();
+    TestResultsSceneReplayButton();
     TestAudioManagerPlaysBattleStartMusic();
     TestAudioManagerNoSoundWithoutEvents();
     TestAudioManagerIgnoresUnmappedEvents();

@@ -27,7 +27,7 @@ void RemoveEntity(cocos2d::Vector<BaseEntity*>& entities,
 
 cocos2d::Vector<BaseEntity*> BaseEntity::global_entities_;
 
-BaseEntity::BaseEntity() : instance_id_(0), is_marked_for_destruction_(false), owner_id_(0) {}
+BaseEntity::BaseEntity() = default;
 
 BaseEntity::~BaseEntity() = default;
 

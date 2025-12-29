@@ -5,7 +5,11 @@
 #include "Classes/Mocks/IntegrationMock/SceneFlowService.h"
 
 namespace {
+#if defined(USE_COCOS_ENGINE) && USE_COCOS_ENGINE
+constexpr bool kUseMocks = false;
+#else
 constexpr bool kUseMocks = true;
+#endif
 }  // namespace
 
 namespace Integration {
@@ -18,17 +22,13 @@ SceneFlowService* ResolveSceneFlowService() {
 }
 
 InputRouter* ResolveInputRouter() {
-    if (kUseMocks) {
-        return new InputRouter();
-    }
-    return nullptr;
+    return new InputRouter();
 }
 
 Gameplay::GameEventManager* ResolveGameEventManager() {
-    if (kUseMocks) {
-        return Gameplay::GameEventManager::GetInstance();
-    }
-    return nullptr;
+    return Gameplay::GameEventManager::GetInstance();
 }
+
+bool IsUsingMocksForTest() { return kUseMocks; }
 
 }  // namespace Integration

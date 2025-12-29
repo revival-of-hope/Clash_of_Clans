@@ -1,4 +1,3 @@
-// Source: AGENTS wiring strategy (single wiring place for mocks)
 #ifndef INTEGRATION_GAMESERVICES_H_
 #define INTEGRATION_GAMESERVICES_H_
 
@@ -12,6 +11,7 @@ namespace Integration {
 SceneFlowService* ResolveSceneFlowService();
 InputRouter* ResolveInputRouter();
 Gameplay::GameEventManager* ResolveGameEventManager();
+bool IsUsingMocksForTest();
 
 }  // namespace Integration
 

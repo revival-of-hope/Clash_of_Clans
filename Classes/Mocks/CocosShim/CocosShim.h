@@ -9,6 +9,16 @@
 #include <utility>
 #include <vector>
 
+#define CREATE_FUNC(__TYPE__)                          \
+    static __TYPE__* create() {                        \
+        auto* obj = new __TYPE__();                    \
+        if (obj && obj->init()) {                      \
+            return obj;                                \
+        }                                              \
+        delete obj;                                    \
+        return nullptr;                                \
+    }
+
 namespace cocos2d {
 
 struct Vec2 {
@@ -43,14 +53,15 @@ public:
     void setPosition(const Vec2& position) { position_ = position; }
     const Vec2& getPosition() const { return position_; }
 
-private:
-    Vec2 position_;
-};
+  private:
+      Vec2 position_;
+  };
 
-class Scene : public Node {};
-class Sprite : public Node {};
-class TMXTiledMap : public Node {};
-class Layer : public Node {};
+  class Scene : public Node {};
+  class Sprite : public Node {};
+  class TMXTiledMap : public Node {};
+  class Layer : public Node {};
+  class DrawNode : public Node {};
 class Label : public Node {
 public:
     static Label* createWithSystemFont(const std::string& /*text*/,

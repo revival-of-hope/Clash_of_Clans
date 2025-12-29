@@ -27,3 +27,40 @@ cmake -S . -B build -DUSE_COCOS_ENGINE=OFF -DBUILD_APP=OFF -DBUILD_TESTS=ON
 cmake --build build
 ctest --test-dir build --output-on-failure
 ```
+
+## UI Assets
+
+Resources/UI
+.
+├── Backgrounds
+│   ├── 0 stars.png
+│   ├── 1 stars.png
+│   ├── 2 stars.png
+│   ├── 3 stars.png
+│   ├── Combat Search.png
+│   ├── Pick Name.png
+│   ├── Real victory.png
+│   ├── accelerate.png
+│   ├── army deploy.png
+│   ├── real settings.png
+│   ├── settings.png
+│   └── shop.png
+├── Buttons
+│   ├── BattleSearchButton.png
+│   ├── InformationButton.png
+│   ├── StoreButton.png
+│   ├── True.png
+│   ├── UpgradeButton.png
+│   ├── false.png
+│   └── return_botton.png
+├── Columns
+│   ├── Troop Placeholder.png
+│   └── resources num display column.png
+├── Icons
+│   ├── coin.png
+│   ├── elixir.png
+│   ├── gem.png
+│   ├── timeleft.png
+│   ├── tip.png
+│   └── victory.png
+└── README.md

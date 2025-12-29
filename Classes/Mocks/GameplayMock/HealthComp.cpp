@@ -1,71 +1,51 @@
 #include "Classes/Contract/Gameplay/HealthComp.h"
 
-#include <unordered_map>
+#include <algorithm>
 
-namespace {
-
-struct HealthState {
-    int current_hp = 0;
-    int max_hp = 0;
-    cocos2d::Vec2 bar_offset{0.0f, 0.0f};
-};
-
-std::unordered_map<const HealthComp*, HealthState>& HealthStates() {
-    static std::unordered_map<const HealthComp*, HealthState> states;
-    return states;
+bool HealthComp::init() {
+    return cocos2d::Node::init();
 }
-
-HealthState& GetState(const HealthComp* comp) {
-    return HealthStates()[comp];
-}
-
-}  // namespace
 
 float HealthComp::GetHealthPercentage() const {
-    const auto& state = GetState(this);
-    if (state.max_hp <= 0) {
+    if (max_hp_ <= 0.0f) {
         return 0.0f;
     }
-    float ratio = static_cast<float>(state.current_hp) / static_cast<float>(state.max_hp);
-    if (ratio < 0.0f) {
-        return 0.0f;
-    }
-    if (ratio > 1.0f) {
-        return 1.0f;
-    }
-    return ratio;
-}
-
-int HealthComp::GetCurrentHP() const {
-    return GetState(this).current_hp;
-}
-
-int HealthComp::GetMaxHP() const {
-    return GetState(this).max_hp;
-}
-
-bool HealthComp::IsDead() const {
-    return GetState(this).current_hp <= 0;
-}
-
-void HealthComp::SetHealthBarOffset(cocos2d::Vec2 offset) {
-    GetState(this).bar_offset = offset;
+    return std::min(1.0f, std::max(0.0f, current_hp_ / max_hp_));
 }
 
 bool HealthComp::TakeDamage(int amount) {
     if (amount <= 0) {
-        return IsDead();
+        return is_dead_;
     }
-    auto& state = GetState(this);
-    state.current_hp -= amount;
-    if (state.current_hp < 0) {
-        state.current_hp = 0;
+    current_hp_ -= static_cast<float>(amount);
+    if (current_hp_ <= 0.0f) {
+        current_hp_ = 0.0f;
+        is_dead_ = true;
     }
-    return state.current_hp <= 0;
+    UpdateHealthBar();
+    return is_dead_;
+}
+
+void HealthComp::Heal(int amount) {
+    if (amount <= 0 || is_dead_) {
+        return;
+    }
+    current_hp_ = std::min(max_hp_, current_hp_ + static_cast<float>(amount));
+    UpdateHealthBar();
 }
 
 void HealthComp::InitStats(int max_hp) {
-    auto& state = GetState(this);
-    state.max_hp = max_hp > 0 ? max_hp : 0;
-    state.current_hp = state.max_hp;
+    max_hp_ = static_cast<float>(std::max(max_hp, 0));
+    current_hp_ = max_hp_;
+    is_dead_ = max_hp_ <= 0;
+    UpdateHealthBar();
 }
+
+void HealthComp::SetHealthBarOffset(cocos2d::Vec2 offset) {
+    bar_offset_ = offset;
+}
+
+void HealthComp::UpdateHealthBar() {
+    // Mock does not draw, but keeps health values consistent.
+}
+

@@ -17,12 +17,10 @@ If behavior is not specified by docs or Contract:
 3. Add a question to `Classes/Contract/CONTRACT_GAPS.md`.
 
 Current mock-only defaults:
-* `Building::CollectResource(max)` returns up to `max` from stored resource, then decrements storage.
-* `Unit::GetDamage()` returns `level * 10` (minimum 1 if level <= 0).
-* `Unit::GetGeneralType()` returns `kAir` for Baby Dragon, otherwise `kGround`.
-* `Unit::GetOccupiedRect()` returns a 1-tile rectangle centered at the unit's current position.
-* `CostQuery::GetBuildingPlacementCost()` returns gold = 100 * level, elixir = 50 * level, population = 0.
-* `CostQuery::GetTroopTrainingCost()` returns gold = 0, elixir = 25 * level, population = 1.
+* `Building::CollectResource(max)` returns up to `max` from stored resource, then decrements storage. Resource buildings start with 50% of capacity and produce at a fixed linear rate capped by capacity.
+* `Unit::GetDamage()` returns `level * 8` (minimum 8 if level <= 0). `CanAttack` respects `GeneralType` bitmasks; Baby Dragon counts as `kAir`.
+* `Unit::GetOccupiedRect()` returns a circle-based bounding box sized by the collision radius (default 20px).
+* `CostQuery` formulas are deterministic: building placement = gold `100 * level` (elixir half of gold), building upgrade = gold `150 * (level+1)` (+50 for Cannons), troop training = elixir `25 * level`, population = 1, with simple time estimates per API.
 * `SaveLoadService::SaveSnapshot()` returns the last loaded blob (default: "MOCK_SNAPSHOT").
 * `SaveLoadService::LoadSnapshot(blob)` returns false when blob is empty; otherwise updates the stored blob and increments the determinism tick.
 * `MapLayer` defaults to 64-unit tiles (matching Core grid constants) and no blocked coordinates until `SetBlockedTilesForTesting` is called.
