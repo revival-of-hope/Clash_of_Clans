@@ -93,11 +93,11 @@ ResourceCost CostQuery::GetTroopTrainingCost(Core::TroopType type, int level) co
         cost.population = 5;
         break;
     case Core::TroopType::kWallBreaker:
-        cost.elixir = 1000;
+        cost.elixir = 50;
         cost.population = 2;
         break;
     case Core::TroopType::kBabyDragon:
-        cost.elixir = 2500;
+        cost.elixir = 500;
         cost.population = 10;
         break;
     default:
