@@ -5,38 +5,38 @@
 // Building class. Handles construction, resources, and defensive logic.
 // [UPDATE] Added animation controller, GameEvents support
 //
-// Path: Classes/Contract/GamePlay/Building.h
+// Path: Classes/Contract/Gameplay/Building.h
 
 #ifndef CONTRACT_GAMEPLAY_BUILDING_H_
 #define CONTRACT_GAMEPLAY_BUILDING_H_
 
-#include "Contract/GamePlay/BaseEntity.h"
+#include "Classes/Contract/Gameplay/BaseEntity.h"
 #include "Core/GameConfig.h"
 
-// 前向声明
+// Forward declaration
 class EntityAnimationController;
 
 /**
- * @brief 建筑实体类
- * 包含建造、升级、资源生产和防御攻击的逻辑。
+ * @brief Building Entity Class
+ * Contains logic for construction, upgrading, resource production, and defense attacks.
  */
 class Building : public BaseEntity {
 public:
-    // 静态创建函数，自动处理内存管理 (autorelease)
+    // Static creation function, automatically handles memory management (autorelease)
     static Building* create(Core::BuildingType type, int level, int owner_id);
 
-    // 初始化函数：读取配置、加载图片
+    // Initialization function: reads config, loads images
     virtual bool init(Core::BuildingType type, int level, int owner_id);
 
-    // 生命周期函数 - 用于障碍物注册和 GameEvents
+    // Lifecycle methods - Used for obstacle registration and GameEvents
     virtual void onEnter() override;
     virtual void onExit() override;
 
-    // 每一帧更新：处理攻击冷却、资源产出、建造进度
+    // Frame update: handles attack cooldowns, resource production, construction progress
     virtual void update(float dt) override;
 
     // ==========================================================================
-    // 属性查询接口
+    // Property Query Interfaces
     // ==========================================================================
 
     int GetLevel() const { return level_; }
@@ -46,39 +46,39 @@ public:
     int GetHeightInTiles() const { return stats_.height_; }
 
     /**
-     * @brief 获取占地矩形 (像素坐标)
+     * @brief Get the occupied rectangle (Pixel coordinates)
      */
     cocos2d::Rect GetOccupiedRect() const;
 
     // ==========================================================================
-    // 建造接口
+    // Construction Interfaces
     // ==========================================================================
 
     /**
-     * @brief 检查是否正在建造/升级中
+     * @brief Checks if currently constructing/upgrading
      */
     bool IsConstructing() const {
         return current_state_ == Core::BuildingAnimationState::kConstructing;
     }
 
     /**
-     * @brief 开始建造或升级
-     * @param duration 建造所需时间 (秒)
+     * @brief Start construction or upgrade
+     * @param duration Time required for construction (seconds)
      */
     void StartConstruction(float duration);
 
     /**
-     * @brief 获取建造进度 (0.0 ~ 1.0)
+     * @brief Get construction progress (0.0 ~ 1.0)
      */
     float GetConstructionProgress() const;
 
     // ==========================================================================
-    // 战斗接口
+    // Combat Interfaces
     // ==========================================================================
 
     /**
-     * @brief 判断是否能攻击目标
-     * @param target_type 目标的类型 (地/空)
+     * @brief Determine if able to attack the target
+     * @param target_type Type of target (Ground/Air)
      */
     bool CanAttack(Core::GeneralType target_type) const {
         return (static_cast<unsigned int>(stats_.target_type_) &
@@ -89,97 +89,97 @@ public:
     float GetRangeInPixels() const { return stats_.range_ * Core::kTileWidth; }
 
     // ==========================================================================
-    // 经济接口
+    // Economy Interfaces
     // ==========================================================================
 
     /**
-     * @brief 获取当前存储的资源量 (针对金矿/收集器)
+     * @brief Get currently stored resource amount (for Mines/Collectors)
      */
     int GetStoredResource() const { return static_cast<int>(stored_resource_); }
 
     /**
-     * @brief 获取存储百分比 (0.0 ~ 1.0)
+     * @brief Get storage percentage (0.0 ~ 1.0)
      */
     float GetStoragePercentage() const;
 
     /**
-     * @brief 收集资源
-     * @param max_amount 此次收集的最大限额 (-1表示不限)
-     * @return int 实际收集到的资源量
+     * @brief Collect resources
+     * @param max_amount Maximum limit for this collection (-1 means unlimited)
+     * @return int Actual amount of resources collected
      */
     int CollectResource(int max_amount = -1);
 
     // ==========================================================================
-    // 动画接口
+    // Animation Interfaces
     // ==========================================================================
 
     /**
-     * @brief 播放攻击动画
+     * @brief Play attack animation
      */
     void PlayAttackAnimation();
 
     /**
-     * @brief 播放受伤闪烁效果
+     * @brief Play hurt blink effect
      */
     void PlayHurtEffect();
 
     /**
-     * @brief 播放摧毁动画
+     * @brief Play destroyed animation
      */
     void PlayDestroyedAnimation();
 
 private:
-    // 核心数据
+    // Core Data
     Core::BuildingStats stats_;
     Core::BuildingType type_;
     int level_;
 
-    // 状态
+    // State
     Core::BuildingAnimationState current_state_ = Core::BuildingAnimationState::kIdle;
     float construction_timer_ = 0.0f;
     float construction_duration_ = 0.0f;
 
-    // 经济状态
+    // Economy State
     float stored_resource_ = 0.0f;
 
-    // 视觉组件
+    // Visual Components
     cocos2d::Sprite* visual_sprite_ = nullptr;
     EntityAnimationController* animation_controller_ = nullptr;
 
-    // 障碍物注册标记
+    // Obstacle registration flag
     bool obstacle_registered_ = false;
 
     // ==========================================================================
-    // 辅助函数
+    // Helper Functions
     // ==========================================================================
 
     /**
-     * @brief 切换建筑状态
+     * @brief Switch building state
      */
     void SetState(Core::BuildingAnimationState new_state);
 
     /**
-     * @brief 战斗逻辑更新
+     * @brief Combat logic update
      */
     void UpdateCombatLogic(float dt);
 
     /**
-     * @brief 资源生产逻辑
+     * @brief Resource production logic
      */
     void ProduceResource(float dt);
 
     /**
-     * @brief 根据建筑类型返回精灵图文件名
+     * @brief Returns sprite sheet filename based on building type
      */
     static std::string GetSpriteSheetFilename(Core::BuildingType type);
 
     /**
-     * @brief 根据建筑类型获取帧尺寸
+     * @brief Gets frame size based on building type
      */
     static void GetFrameSize(Core::BuildingType type, int& out_width, int& out_height);
 
     /**
-     * @brief 将建筑类型转换为投射物类型
+     * @brief Convert building type to projectile type
      */
     static Core::ProjectileType GetProjectileTypeFromBuilding(Core::BuildingType type);
 };

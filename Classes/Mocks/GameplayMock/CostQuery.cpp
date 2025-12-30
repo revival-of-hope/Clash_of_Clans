@@ -67,6 +67,10 @@ int CostQuery::GetTroopMaxLevel(Core::TroopType /*type*/) const {
     return 3;
 }
 
+ResourceCost CostQuery::GetMatchmakingCost() const {
+    return MakeCost(50, 0, 0, 0.0f);
+}
+
 int CostQuery::GetBaseBuildingCost(Core::BuildingType /*type*/) const {
     return 100;
 }
@@ -82,4 +86,3 @@ int CostQuery::GetBaseTroopCost(Core::TroopType /*type*/) const {
 float CostQuery::GetBaseTroopTime(Core::TroopType /*type*/) const {
     return 5.0f;
 }
-

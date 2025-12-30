@@ -1,25 +1,20 @@
-#ifndef __TILE_HIGHLIGHTER_H__
-#define __TILE_HIGHLIGHTER_H__
+#ifndef Contract_ENGINE_TILEHIGHLIGHTER_H_
+#define Contract_ENGINE_TILEHIGHLIGHTER_H_
 
-#include "cocos2d.h"
+namespace cocos2d {
+class TMXTiledMap;
+}
 
-class TileHighlighter
-{
+class TileHighlighter {
 public:
-    TileHighlighter(cocos2d::TMXTiledMap* map);
-    ~TileHighlighter() = default;
+    explicit TileHighlighter(cocos2d::TMXTiledMap* map);
 
-    void enable();    
-    void disable();  
-    void updateHighlight(const cocos2d::Vec2& mousePos);
-    cocos2d::Vec2 screenToTilePos(const cocos2d::Vec2& screenPos);
+    void enable();
+    void disable();
 
 private:
-    cocos2d::TMXTiledMap* _map = nullptr;
-    cocos2d::EventListenerMouse* _listener = nullptr;
-    cocos2d::DrawNode* _highlightNode = nullptr;
-
-    
+    cocos2d::TMXTiledMap* map_ = nullptr;
+    bool is_enabled_ = false;
 };
 
-#endif // __TILE_HIGHLIGHTER_H__
+#endif  // Contract_ENGINE_TILEHIGHLIGHTER_H_

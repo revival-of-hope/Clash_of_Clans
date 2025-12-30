@@ -12,7 +12,9 @@
 #include "Classes/Contract/Gameplay/EconomySystem.h"
 #include "Classes/Contract/Gameplay/GameEvents.h"
 #include "Classes/Contract/Gameplay/HealthComp.h"
+#include "Classes/Contract/Gameplay/TroopCommandService.h"
 #include "Classes/Contract/Gameplay/Unit.h"
+#include "Classes/Contract/Integration/PlayerIdentityService.h"
 #include "Classes/Contract/Integration/SceneFlowService.h"
 #include "Classes/Integration/GameServices.h"
 #include "Classes/Integration/SceneFlowServiceImpl.h"
@@ -20,6 +22,7 @@
 #include "Classes/Managers/LevelManager.h"
 #include "Classes/Mocks/Audio/AudioSinkMock.h"
 #include "Classes/Mocks/IntegrationMock/SceneFlowService.h"
+#include "Classes/Mocks/GameplayMock/TroopCommandServiceMock.h"
 #include "Classes/Scenes/GameStageScene.h"
 #include "Classes/Scenes/MenuScene.h"
 #include "Classes/Scenes/ResultsScene.h"
@@ -150,18 +153,19 @@ void TestSceneFlowService() {
     assert(flow->GetCurrentStage() == Integration::SceneStage::kMenu);
     assert(menu_scene != menu_scene_again);
 
-    Integration::BattleLaunchParams launch{"maps/test.tmx", 42};
+    Integration::BattleLaunchParams launch{"maps/test.tmx", 42, false};
     cocos2d::Scene* game_scene = flow->StartGame(launch);
     assert(game_scene != nullptr);
     assert(flow->GetCurrentStage() == Integration::SceneStage::kGame);
     assert(flow->GetLastLaunchParams().map_path == "maps/test.tmx");
     assert(flow->GetLastLaunchParams().seed == 42);
-    Integration::BattleLaunchParams second_launch{"maps/second.tmx", -1};
+    Integration::BattleLaunchParams second_launch{"maps/second.tmx", -1, true};
     cocos2d::Scene* game_scene_again = flow->StartGame(second_launch);
     assert(game_scene_again != nullptr);
     assert(flow->GetCurrentStage() == Integration::SceneStage::kGame);
     assert(flow->GetLastLaunchParams().map_path == "maps/second.tmx");
     assert(flow->GetLastLaunchParams().seed == -1);
+    assert(flow->GetLastLaunchParams().use_random_base);
 
     Gameplay::BattleEndEvent summary;
     summary.stars_earned = 3;
@@ -219,6 +223,35 @@ void TestSceneFlowMockDelegation() {
     delete game_scene;
     delete results_scene;
     delete mock;
+}
+
+void TestPlayerIdentityService() {
+    Integration::PlayerIdentityService* service = Integration::PlayerIdentityService::GetInstance();
+
+    Integration::PlayerIdentity created = service->CreateIdentity("Alice", "avatar_knight");
+    assert(created.player_id >= 1);
+    assert(created.name == "Alice");
+    assert(created.icon_id == "avatar_knight");
+
+    Integration::PlayerIdentity second = service->CreateIdentity("Bob", "avatar_wizard");
+    assert(second.player_id == created.player_id + 1);
+    assert(second.name == "Bob");
+
+    Integration::PlayerIdentity stored = service->GetIdentity();
+    assert(stored.player_id == second.player_id);
+    assert(stored.name == second.name);
+    assert(stored.icon_id == second.icon_id);
+
+    Integration::PlayerIdentity override_identity;
+    override_identity.player_id = 42;
+    override_identity.name = "Override";
+    override_identity.icon_id = "";
+    service->SetIdentity(override_identity);
+
+    Integration::PlayerIdentity updated = service->GetIdentity();
+    assert(updated.player_id == 42);
+    assert(updated.name == "Override");
+    assert(updated.icon_id.empty());
 }
 
 void TestVerticalSliceSceneFlow() {
@@ -445,6 +478,8 @@ void TestBattleEndPayload() {
     evt.destruction_percent = 75;
     evt.gold_stolen = 500;
     evt.elixir_stolen = 250;
+    evt.trophies_earned = 12;
+    evt.trophies_total = 1400;
     evt.battle_duration_seconds = 140;
     evt.troops_deployed = 6;
     evt.troops_remaining = 3;
@@ -456,6 +491,22 @@ void TestBattleEndPayload() {
     assert(cached.troops_deployed == 6);
     assert(cached.troops_remaining == 3);
     assert(cached.spells_used == 1);
+    assert(cached.trophies_earned == 12);
+    assert(cached.trophies_total == 1400);
+}
+
+void TestLootAvailabilityPayload() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    Gameplay::LootAvailabilityEvent evt{};
+    evt.gold_available = 700;
+    evt.elixir_available = 500;
+    evt.trophies_available = 15;
+    manager->BroadcastLootAvailabilityUpdated(evt);
+
+    Gameplay::LootAvailabilityEvent cached = manager->GetLastLootAvailability();
+    assert(cached.gold_available == 700);
+    assert(cached.elixir_available == 500);
+    assert(cached.trophies_available == 15);
 }
 
 void TestDeploymentContractExtensions() {
@@ -567,6 +618,54 @@ void TestEconomySystem() {
     assert(afford_troop);
 }
 
+void TestMatchmakingCost() {
+    CostQuery* cost_query = CostQuery::GetInstance();
+    ResourceCost matchmaking_cost = cost_query->GetMatchmakingCost();
+    assert(matchmaking_cost.gold == 50);
+    assert(matchmaking_cost.elixir == 0);
+    assert(matchmaking_cost.population == 0);
+
+    EconomySystem* economy = EconomySystem::GetInstance();
+    economy->Reset();
+    economy->AddGold(matchmaking_cost.gold);
+    assert(economy->CanAffordCost(matchmaking_cost));
+    bool spent = economy->SpendGold(matchmaking_cost.gold);
+    assert(spent);
+    assert(economy->GetCurrentGold() == 0);
+}
+
+void TestTroopCommandServiceMock() {
+    Gameplay::TroopCommandServiceMock::Reset();
+    Gameplay::TroopCommandService* service = Gameplay::TroopCommandService::GetInstance();
+
+    Gameplay::TroopTrainRequest train_request{};
+    train_request.troop_type = Core::TroopType::kArcher;
+    train_request.level = 2;
+    train_request.count = 3;
+    train_request.owner_id = 0;
+    bool trained = service->RequestTrainTroop(train_request);
+    assert(trained);
+    assert(Gameplay::TroopCommandServiceMock::GetTrainRequestCount() == 1);
+    Gameplay::TroopTrainRequest cached_train = Gameplay::TroopCommandServiceMock::GetLastTrainRequest();
+    assert(cached_train.troop_type == Core::TroopType::kArcher);
+    assert(cached_train.level == 2);
+    assert(cached_train.count == 3);
+
+    Gameplay::TroopDeployRequest deploy_request{};
+    deploy_request.troop_type = Core::TroopType::kGiant;
+    deploy_request.level = 1;
+    deploy_request.owner_id = 0;
+    deploy_request.world_x = 10.0f;
+    deploy_request.world_y = 20.0f;
+    bool deployed = service->RequestDeployTroop(deploy_request);
+    assert(deployed);
+    assert(Gameplay::TroopCommandServiceMock::GetDeployRequestCount() == 1);
+    Gameplay::TroopDeployRequest cached_deploy = Gameplay::TroopCommandServiceMock::GetLastDeployRequest();
+    assert(cached_deploy.troop_type == Core::TroopType::kGiant);
+    assert(cached_deploy.world_x == 10.0f);
+    assert(cached_deploy.world_y == 20.0f);
+}
+
 void TestHealthComp() {
     HealthComp health;
     health.InitStats(100);
@@ -646,6 +745,22 @@ void TestHudStateUpdates() {
     hud_snapshot = hud_state.GetSnapshot();
     assert(hud_snapshot.gold == 500);
     assert(hud_snapshot.elixir == 250);
+
+    Gameplay::ResourceUpdateEvent gem_evt;
+    gem_evt.resource_type = "Gems";
+    gem_evt.current_amount = 3;
+    gem_evt.max_capacity = 0;
+    hud_state.ApplyResourceUpdate(gem_evt);
+    hud_snapshot = hud_state.GetSnapshot();
+    assert(hud_snapshot.gems == 3);
+
+    Gameplay::ResourceUpdateEvent trophy_evt;
+    trophy_evt.resource_type = "Trophies";
+    trophy_evt.current_amount = 1200;
+    trophy_evt.max_capacity = 0;
+    hud_state.ApplyResourceUpdate(trophy_evt);
+    hud_snapshot = hud_state.GetSnapshot();
+    assert(hud_snapshot.trophies == 1200);
 }
 
 void TestSelectionState() {
@@ -748,6 +863,12 @@ void TestUiStateStoreSnapshot() {
     gold_evt.max_capacity = 500;
     manager->BroadcastResourceChange(gold_evt);
 
+    Gameplay::LootAvailabilityEvent loot_evt{};
+    loot_evt.gold_available = 1000;
+    loot_evt.elixir_available = 800;
+    loot_evt.trophies_available = 20;
+    manager->BroadcastLootAvailabilityUpdated(loot_evt);
+
     Gameplay::EntitySpawnEvent spawn_evt{};
     spawn_evt.instance_id = 10;
     spawn_evt.owner_id = 0;
@@ -758,6 +879,9 @@ void TestUiStateStoreSnapshot() {
     UiStateSnapshot snapshot = store.GetSnapshot();
     assert(snapshot.hud.gold == 400);
     assert(snapshot.hud.gold_capacity == 500);
+    assert(snapshot.loot_availability.gold_available == 1000);
+    assert(snapshot.loot_availability.elixir_available == 800);
+    assert(snapshot.loot_availability.trophies_available == 20);
     assert(snapshot.selection.has_selection);
     assert(snapshot.selection.selected_entity_id == 123);
     assert(snapshot.health_bars.size() == 1);
@@ -1044,11 +1168,13 @@ void TestUiPresentationBindingRenderPlan() {
     UiPresentationBinding binding;
     UiRenderPlan plan = binding.BuildRenderPlan(store.GetSnapshot());
     assert(plan.mode == UiMode::kMenu);
-    assert(plan.hud_items.size() == 2);
+    assert(plan.hud_items.size() == 3);
     assert(plan.hud_items[0].icon_asset == plan.assets.gold_icon);
     assert(plan.hud_items[0].label_text == "150/300");
     assert(plan.hud_items[1].icon_asset == plan.assets.elixir_icon);
     assert(plan.hud_items[1].label_text == "90/200");
+    assert(plan.hud_items[2].icon_asset == plan.assets.gem_icon);
+    assert(plan.hud_items[2].label_text == "0/0");
     assert(plan.menu_panel.start_button_asset == plan.assets.menu_start_button);
     assert(!plan.battle_panel.show_countdown);
     assert(plan.battle_panel.star_strip_asset.empty());
@@ -1075,6 +1201,111 @@ void TestUiPresentationBindingRenderPlan() {
     assert(plan.battle_panel.show_results);
     assert(plan.battle_panel.background_asset == plan.assets.victory_background);
     assert(plan.battle_panel.star_strip_asset == plan.assets.star_two);
+    assert(!plan.build_palette_items.empty());
+    assert(!plan.matchmaking.cost_text.empty());
+
+    store.Detach(manager);
+}
+
+void TestUiPresentationBindingDefaultHudAndMenu() {
+    UiPresentationBinding binding;
+    UiStateSnapshot snapshot{};
+    UiRenderPlan plan = binding.BuildRenderPlan(snapshot);
+    assert(plan.hud_items.size() == 3);
+    assert(plan.hud_items[0].icon_asset == plan.assets.gold_icon);
+    assert(plan.hud_items[0].label_text == "0/0");
+    assert(plan.hud_items[1].icon_asset == plan.assets.elixir_icon);
+    assert(plan.hud_items[1].label_text == "0/0");
+    assert(plan.hud_items[2].icon_asset == plan.assets.gem_icon);
+    assert(plan.hud_items[2].label_text == "0/0");
+    assert(plan.menu_panel.background_asset == plan.assets.menu_background);
+    assert(plan.menu_panel.start_button_asset == plan.assets.menu_start_button);
+}
+
+void TestUiPresentationBindingLootAvailability() {
+    UiPresentationBinding binding;
+    UiStateSnapshot snapshot{};
+    snapshot.loot_availability.gold_available = 250;
+    snapshot.loot_availability.elixir_available = 150;
+    snapshot.loot_availability.trophies_available = 12;
+    UiRenderPlan plan = binding.BuildRenderPlan(snapshot);
+    assert(plan.loot_items.size() == 1);
+    assert(plan.loot_items[0].label_text == "Loot 250g 150e 12t");
+}
+
+void TestUiPresentationBindingBuildingOverlayOrdering() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    UiStateStore store(/*local_owner_id=*/0);
+    store.Attach(manager);
+
+    Gameplay::BuildingStateEvent progress_a{};
+    progress_a.instance_id = 5;
+    progress_a.type = Core::BuildingType::kBarracks;
+    progress_a.new_state = Gameplay::BuildingState::kConstructing;
+    progress_a.time_remaining = 3.0f;
+    progress_a.total_build_time = 6.0f;
+    manager->BroadcastBuildingStateChanged(progress_a);
+
+    Gameplay::BuildingStateEvent progress_b{};
+    progress_b.instance_id = 3;
+    progress_b.type = Core::BuildingType::kCannon;
+    progress_b.new_state = Gameplay::BuildingState::kConstructing;
+    progress_b.time_remaining = 2.0f;
+    progress_b.total_build_time = 4.0f;
+    manager->BroadcastBuildingStateChanged(progress_b);
+
+    UiPresentationBinding binding;
+    UiRenderPlan plan = binding.BuildRenderPlan(store.GetSnapshot());
+    assert(plan.building_overlays.size() == 2);
+    assert(plan.building_overlays[0].entity_id == 3);
+    assert(plan.building_overlays[1].entity_id == 5);
+
+    store.Detach(manager);
+}
+
+void TestUiPresentationBindingBattleDefeatAssets() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    UiStateStore store(/*local_owner_id=*/0);
+    store.Attach(manager);
+
+    Gameplay::BattleEndEvent end_evt{};
+    end_evt.result = Gameplay::BattleResult::kDefeat;
+    end_evt.stars_earned = 0;
+    manager->BroadcastBattleEnded(end_evt);
+
+    UiPresentationBinding binding;
+    UiRenderPlan plan = binding.BuildRenderPlan(store.GetSnapshot());
+    assert(plan.battle_panel.show_results);
+    assert(plan.battle_panel.background_asset == plan.assets.defeat_background);
+    assert(plan.battle_panel.star_strip_asset == plan.assets.star_zero);
+
+    store.Detach(manager);
+}
+
+void TestUiPresentationBindingDeploymentRender() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    UiStateStore store(/*local_owner_id=*/0);
+    store.Attach(manager);
+
+    Gameplay::TroopCountUpdateEvent count_evt{};
+    count_evt.owner_id = 0;
+    count_evt.troop_type = Core::TroopType::kArcher;
+    count_evt.remaining_count = 4;
+    manager->BroadcastTroopCountUpdated(count_evt);
+
+    Gameplay::DeploymentSelectionEvent selection_evt{};
+    selection_evt.owner_id = 0;
+    selection_evt.has_selection = true;
+    selection_evt.troop_type = Core::TroopType::kArcher;
+    manager->BroadcastDeploymentSelectionChanged(selection_evt);
+
+    UiPresentationBinding binding;
+    UiRenderPlan plan = binding.BuildRenderPlan(store.GetSnapshot());
+    assert(plan.deployment_items.size() == 1);
+    assert(plan.deployment_items[0].troop_type == Core::TroopType::kArcher);
+    assert(plan.deployment_items[0].remaining_count == 4);
+    assert(plan.deployment_items[0].is_selected);
+    assert(plan.troop_inspect.show);
 
     store.Detach(manager);
 }
@@ -1136,6 +1367,7 @@ void TestGameStageSceneUiBinding() {
     plan = game_scene->GetLastRenderPlanForTest();
     assert(plan.battle_panel.show_results);
     assert(plan.battle_panel.star_strip_asset == plan.assets.star_three);
+    assert(!plan.build_palette_items.empty());
 
     scene->onExit();
     delete scene;
@@ -1201,6 +1433,29 @@ void TestGameStageSceneInputWiring() {
     consumed = game_scene->HandleTap(cocos2d::Vec2(680.0f, 320.0f));
     assert(consumed);
     assert(game_scene->IsAttackPanelOpenForTest());
+
+    scene->onExit();
+    delete scene;
+    delete flow;
+}
+
+void TestGameStageSceneMatchmakingButton() {
+    Integration::SceneFlowService* flow = Integration::CreateSceneFlowService();
+    Integration::BattleLaunchParams params{"maps/test_ui.tmx", 99};
+    cocos2d::Scene* scene = flow->StartGame(params);
+    auto* game_scene = dynamic_cast<GameStageScene*>(scene);
+    assert(game_scene != nullptr);
+
+    EconomySystem* economy = EconomySystem::GetInstance();
+    economy->Reset();
+    ResourceCost matchmaking_cost = CostQuery::GetInstance()->GetMatchmakingCost();
+    economy->AddGold(matchmaking_cost.gold);
+
+    game_scene->SetModeForTest(UiMode::kAttack);
+    bool consumed = game_scene->HandleTap(cocos2d::Vec2(680.0f, 280.0f));
+    assert(consumed);
+    assert(game_scene->GetLastActionForTest() == "find_match");
+    assert(economy->GetCurrentGold() == 0);
 
     scene->onExit();
     delete scene;
@@ -1291,6 +1546,22 @@ void TestAudioManagerIgnoresUnmappedEvents() {
     assert(sink.GetPlays().empty());
 }
 
+void TestAudioManagerMenuMusicAndClick() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    AudioSinkMock sink;
+    sink.Reset();
+
+    AudioManager audio_manager(manager, &sink);
+    audio_manager.PlayMenuMusic();
+    audio_manager.PlayUiClick();
+
+    const std::vector<RecordedClip>& plays = sink.GetPlays();
+    assert(plays.size() == 2);
+    assert(plays[0].clip_id == "Resources/music/Background Music/Home music 1.mp3");
+    assert(plays[0].loop);
+    assert(plays[1].clip_id == "Resources/music/UI effects/ui_click.mp3");
+}
+
 int main() {
     TestTilePlacementController();
     TestInputRouter();
@@ -1298,14 +1569,18 @@ int main() {
     TestInputRouterUiIgnoresRoutesToMap();
     TestInputRouterWithoutMapIsSafe();
     TestEconomySystem();
+    TestMatchmakingCost();
+    TestTroopCommandServiceMock();
     TestHealthComp();
     TestUnitAndBuilding();
     TestSceneFlowService();
     TestSceneFlowMockDelegation();
+    TestPlayerIdentityService();
     TestVerticalSliceSceneFlow();
     TestMenuSceneMapSelectionPropagation();
     TestMenuSceneInputWiring();
     TestBattleEndPayload();
+    TestLootAvailabilityPayload();
     TestDeploymentContractExtensions();
     TestGameServicesSmoke();
     TestHudStateUpdates();
@@ -1319,13 +1594,21 @@ int main() {
     TestUiStateStoreBuildingProgressOutOfOrder();
     TestUiStateStoreBattleStateAndMode();
     TestUiStateStoreBattleRepeatedStart();
+    TestUiPresentationBindingRenderPlan();
+    TestUiPresentationBindingDefaultHudAndMenu();
+    TestUiPresentationBindingLootAvailability();
+    TestUiPresentationBindingBuildingOverlayOrdering();
+    TestUiPresentationBindingBattleDefeatAssets();
+    TestUiPresentationBindingDeploymentRender();
     TestGameStageSceneUiBinding();
     TestGameStageSceneRenderPlanStability();
     TestGameStageSceneInputWiring();
+    TestGameStageSceneMatchmakingButton();
     TestGameStageSceneDetachStopsUpdates();
     TestResultsSceneReplayButton();
     TestAudioManagerPlaysBattleStartMusic();
     TestAudioManagerNoSoundWithoutEvents();
     TestAudioManagerIgnoresUnmappedEvents();
+    TestAudioManagerMenuMusicAndClick();
     return 0;
 }

@@ -61,6 +61,9 @@ endif()
 # Automatic collector
 file(GLOB_RECURSE GAME_SOURCE "Classes/*.cpp")
 file(GLOB_RECURSE GAME_HEADER "Classes/*.h")
+# Exclude mocks/tests from the app target sources.
+list(FILTER GAME_SOURCE EXCLUDE REGEX "Classes/Mocks/")
+list(FILTER GAME_HEADER EXCLUDE REGEX "Classes/Mocks/")
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
@@ -132,15 +135,17 @@ if(BUILD_APP)
     else()
         target_compile_definitions(${APP_NAME} PRIVATE USE_COCOS_ENGINE=0)
     endif()
-
+    # Keep "Classes/..." includes working by adding the repo root to include paths.
     if(USE_COCOS_ENGINE)
         target_link_libraries(${APP_NAME} cocos2d)
         target_include_directories(${APP_NAME}
+            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
                 PRIVATE Classes
                 PRIVATE Classes/Core
                 PRIVATE Classes/Entities
                 PRIVATE Classes/Map
                 PRIVATE Classes/Managers
+                PRIVATE Classes/Main
                 PRIVATE Classes/UI
                 PRIVATE Classes/Scenes
                 PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
@@ -190,12 +195,15 @@ if(BUILD_TESTS)
             Classes/Mocks/GameplayMock/EconomySystem.cpp
             Classes/Mocks/GameplayMock/GameEvents.cpp
             Classes/Mocks/GameplayMock/HealthComp.cpp
+            Classes/Mocks/GameplayMock/TroopCommandService.cpp
             Classes/Mocks/GameplayMock/Unit.cpp
             Classes/Integration/Engine/InputRouterImpl.cpp
             Classes/Integration/Engine/CocosAudioSink.cpp
             Classes/Integration/SceneFlowServiceImpl.cpp
+            Classes/Mocks/IntegrationMock/PlayerIdentityService.cpp
             Classes/Mocks/IntegrationMock/SceneFlowService.cpp
             Classes/Managers/AudioManager/AudioManager.cpp
+            Classes/Core/GameConfig.cpp
             Classes/Scenes/BootScene.cpp
             Classes/Scenes/GameStageScene.cpp
             Classes/Scenes/MenuScene.cpp

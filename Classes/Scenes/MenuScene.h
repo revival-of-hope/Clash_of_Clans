@@ -4,6 +4,7 @@
 #include <cassert>
 #include <string>
 
+#include "Classes/Integration/GameServices.h"
 #include "Classes/Contract/Integration/SceneFlowService.h"
 #include "Classes/Managers/LevelManager.h"
 #include "cocos2d.h"
@@ -35,6 +36,7 @@ class MenuScene : public cocos2d::Scene {
 
   Integration::SceneFlowService* scene_flow_ = nullptr;
   LevelManager* level_manager_ = nullptr;
+  AudioManager* audio_manager_ = nullptr;
   std::string last_action_{};
 };
 

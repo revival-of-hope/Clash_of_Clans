@@ -594,7 +594,7 @@ private:
      * Reads the next character from the Data. Returns EOF if the end of the Data is reached.
      */
 
-    // XXX: hack in order to simulate GamePlay's Stream with Cocos2d's Data
+    // XXX: hack in order to simulate Gameplay's Stream with Cocos2d's Data
     ssize_t *_dataIdx;
     Data *_data;
 

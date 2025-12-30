@@ -6,41 +6,41 @@
 // Manages State Machine (Idle, Move, Attack) and Components.
 // [UPDATE] Added onEnter() for GameEvents, animation controller members
 //
-// Path: Classes/Contract/GamePlay/Unit.h
+// Path: Classes/Contract/Gameplay/Unit.h
 
 #ifndef CONTRACT_GAMEPLAY_UNIT_H_
 #define CONTRACT_GAMEPLAY_UNIT_H_
 
-#include "Contract/GamePlay/BaseEntity.h"
+#include "Classes/Contract/Gameplay/BaseEntity.h"
 #include "Core/GameConfig.h"
 
-// 前向声明
+// Forward declaration
 class EntityAnimationController;
 
 /**
- * @brief 兵种单位类
- * 继承自 BaseEntity，拥有移动、攻击和状态机逻辑。
+ * @brief Troop Unit Class
+ * Inherits from BaseEntity, possessing movement, attack, and state machine logic.
  */
 class Unit : public BaseEntity {
 public:
     /**
-     * @brief 静态工厂方法，创建 Unit 实例
-     * @param type 兵种类型
-     * @param level 等级
-     * @param owner_id 所有者 ID
-     * @return Unit* 创建成功的对象，autorelease
+     * @brief Static factory method to create a Unit instance
+     * @param type Troop type
+     * @param level Level
+     * @param owner_id Owner ID
+     * @return Unit* The created object, autorelease
      */
     static Unit* create(Core::TroopType type, int level, int owner_id);
 
     virtual bool init(Core::TroopType type, int level, int owner_id);
 
-    // [NEW] 生命周期函数 - 用于广播 EntitySpawnEvent
+    // [NEW] Lifecycle method - Used to broadcast EntitySpawnEvent
     virtual void onEnter() override;
 
     virtual void update(float dt) override;
 
     // ==========================================================================
-    // 属性查询接口
+    // Property Query Interfaces
     // ==========================================================================
 
     Core::GeneralType GetGeneralType() const { return stats_.unit_type_; }
@@ -51,35 +51,35 @@ public:
     float GetCollisionRadius() const { return collision_radius_; }
 
     /**
-     * @brief 获取单位占用的矩形区域
+     * @brief Get the rectangular area occupied by the unit
      */
     cocos2d::Rect GetOccupiedRect() const;
 
     // ==========================================================================
-    // 战斗接口
+    // Combat Interfaces
     // ==========================================================================
 
     /**
-     * @brief 核心接口：判断我能否攻击某种类型的目标
-     * @param target_type 目标的 GeneralType (Ground/Air)
-     * @return true 如果可以攻击，false 则不能
+     * @brief Core Interface: Determine if I can attack a specific target type
+     * @param target_type Target's GeneralType (Ground/Air)
+     * @return true if attackable, false otherwise
      */
     bool CanAttack(Core::GeneralType target_type) const;
 
     // ==========================================================================
-    // 状态与动画接口
+    // State and Animation Interfaces
     // ==========================================================================
 
     /**
-     * @brief 切换单位状态
-     * 会处理状态切换时的逻辑，如播放动画、停止寻路等
-     * @param new_state 新状态 (Core::UnitAnimationState)
+     * @brief Switch unit state
+     * Handles logic during state switching, such as playing animation, stopping pathfinding, etc.
+     * @param new_state New state (Core::UnitAnimationState)
      */
     void SetState(Core::UnitAnimationState new_state);
 
     /**
-     * @brief 设置朝向
-     * @param facing 新朝向
+     * @brief Set facing direction
+     * @param facing New facing direction
      */
     void SetFacing(Core::Facing facing);
 
@@ -87,46 +87,46 @@ public:
     Core::Facing GetFacing() const { return current_facing_; }
 
     /**
-     * @brief 播放攻击动画
+     * @brief Play attack animation
      */
     void PlayAttackAnimation();
 
     /**
-     * @brief 播放受伤闪烁效果
+     * @brief Play hurt blink effect
      */
     void PlayHurtEffect();
 
     /**
-     * @brief 播放死亡动画
+     * @brief Play death animation
      */
     void PlayDeathAnimation();
 
 private:
-    // 核心数据
+    // Core Data
     Core::UnitStats stats_;
     Core::TroopType type_;
     int level_;
     float collision_radius_ = 20.0f;
 
-    // 状态
+    // State
     Core::UnitAnimationState current_state_ = Core::UnitAnimationState::kIdle;
     Core::Facing current_facing_ = Core::Facing::kRight;
 
-    // 视觉组件
+    // Visual Components
     cocos2d::Sprite* visual_sprite_ = nullptr;
     EntityAnimationController* animation_controller_ = nullptr;
 
     // ==========================================================================
-    // 辅助函数
+    // Helper Functions
     // ==========================================================================
 
     /**
-     * @brief 根据兵种类型返回精灵图文件名
+     * @brief Returns sprite sheet filename based on troop type
      */
     static std::string GetSpriteSheetFilename(Core::TroopType type);
 
     /**
-     * @brief 根据兵种类型获取帧尺寸
+     * @brief Gets frame size based on troop type
      */
     static void GetFrameSize(Core::TroopType type, int& out_width, int& out_height);
 };

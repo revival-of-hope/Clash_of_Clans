@@ -1,7 +1,7 @@
 # SceneFlowService (Dev C Integration Notes)
 
 ## Purpose
-`SceneFlowService` owns the Boot → Menu → Game → Results orchestration for Dev C, exposing scene creation and stage tracking without implementing gameplay or engine internals.
+`SceneFlowService` owns the Boot → Menu → Game → Results orchestration for Dev C, exposing scene creation and stage tracking without implementing Gameplay or engine internals.
 
 ## Contract reference
 - API: `Classes/Contract/Integration/SceneFlowService.h`

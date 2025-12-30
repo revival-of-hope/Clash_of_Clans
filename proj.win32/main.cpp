@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "main.h"
-#include "Main/AppDelegate.h"
+#include "AppDelegate.h"
 #include "cocos2d.h"
 
 USING_NS_CC;

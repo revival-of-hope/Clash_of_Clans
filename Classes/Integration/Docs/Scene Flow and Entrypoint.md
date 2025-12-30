@@ -19,9 +19,9 @@ SceneStage SceneFlowService::GetCurrentStage() const;
 ```
 
 ### Semantics
-* **CreateBootScene()** – returns a lightweight splash/loading scene. Does not start gameplay logic.
+* **CreateBootScene()** – returns a lightweight splash/loading scene. Does not start Gameplay logic.
 * **ShowMenuScene()** – returns the menu scene and sets the stage to `kMenu`.
-* **StartGame(params)** – transitions to gameplay; `params.map_path` is opaque; `params.seed` seeds deterministic mocks.
+* **StartGame(params)** – transitions to Gameplay; `params.map_path` is opaque; `params.seed` seeds deterministic mocks. When `params.use_random_base` is true, the map path may be empty and the seed drives random base generation.
 * **ShowResults(results)** – transitions to the settlement scene using the provided `ResultsScreenData` (see Results payload spec).
 * **Idempotency:** Calling the same transition twice reuses the latest stage value but returns a fresh `Scene` instance for safety in UI tests.
 
@@ -36,7 +36,7 @@ auto menu = flow->ShowMenuScene();
 Director::getInstance()->replaceScene(menu);
 
 // Starting a battle
-Integration::BattleLaunchParams launch{"maps/mock.tmx", /*seed=*/42};
+Integration::BattleLaunchParams launch{"maps/mock.tmx", /*seed=*/42, /*use_random_base=*/false};
 auto game_scene = flow->StartGame(launch);
 Director::getInstance()->replaceScene(game_scene);
 

@@ -1,54 +1,46 @@
-# **Core — README**
+# Core Source of Truth (SOT)
 
-This small module defines the foundational data structures, constants, and configuration helpers used by the game engine.
+`Classes/Core` is the **authoritative, read-only source of shared game data** (constants, enums, structs, tunables). Every module MUST pull common values from here to prevent drift, conflicting IDs, or mismatched balance numbers.
 
----
+## Purpose and scope
+- Centralize globally shared identifiers and configuration to **eliminate hardcoded duplicates**.
+- Define stable shapes (structs/enums) so UI, integration, and Gameplay speak the same language.
+- Core is not business logic; it is the data contract the rest of the project consumes.
 
-## **File Overview**
+## What belongs here (authoritative only)
+- Canonical constants/identifiers used across features (`GameConstants.h`).
+- Shared data structures that model cross-cutting game entities (`GameStructs.h`).
+- Tunables and lookup tables surfaced through the config layer (`GameConfig.h` / `GameConfig.cpp`).
 
-### **1. `GameConstants.h`**
+## What does NOT belong here
+- Feature-specific logic or helper functions.
+- UI-only constants, screen/layout values, or scene wiring.
+- One-off values used in a single module.
+- Private structs/types intended to live only inside a feature or test.
 
-This header defines all core, global constants and enumerations used throughout the engine:
+## How to depend on Core
+- Treat Core as **read-only contract**: other modules MUST NOT redefine or shadow its constants, enums, or structs locally.
+- Include the needed headers instead of copying values (e.g., `#include "Classes/Core/GameConstants.h"`).
+- Query `GameConfig` for tunables; do not hardcode numbers, IDs, or asset names that already exist here.
+- If a value is missing, add it to Core first, then update callers to consume it.
 
-* **Grid and world constants** (`kTileWidth`, `kMapHeight`, etc.)
-* **Strongly typed enums** (`enum class`) for units, buildings, projectiles, and rendering layers
-* **Physics/collision tags** for hit detection
+## Change workflow checklist
+1. Add or update the canonical constant/struct/tunable in the appropriate Core file.
+2. Prefer extending existing enums/structs before introducing new types.
+3. Update all call sites to **read from Core** instead of keeping local copies.
+4. Remove duplicated literals/definitions elsewhere after the Core change.
+5. Keep Core entries neutral and cross-feature (no feature-specific helpers).
 
-This file acts as the "authoritative source" for identifiers used universally across the engine.
-
----
-
-### **2. `GameStructs.h`**
-
-Defines the core **data structures** used during gameplay:
-
-* `BuildingData` – Represents buildings as saved in a player’s village
-* `UnitStats` – Combat statistics for troops
-* `BuildingStats` – Combat/resource statistics for buildings
-
----
-
-### **3. `GameConfig.h`**
-
-Provides configuration and stat lookup behavior:
-
-* Implements the **singleton** access point:
-
-  ```cpp
-  static GameConfig* GetInstance();
-  ```
-* Provides **lookup functions** that return fully populated stat structs:
-
-  * `GetTroopStats(type, level)`
-  * `GetBuildingStats(type, level)`
-  * `GetUpgradeCost(type, level)`
-
-Uses the renamed struct fields from `GameStructs.h`:
-
+## Examples
+**Bad (hardcoded/duplicated):**
 ```cpp
-stats.max_hp_ = 300 + (level * 50);
-stats.move_speed_ = 1.5f;
-stats.favorite_target_ = BuildingType::kCannon;
+// In a UI controller
+const int kArcherCost = 50;  // drift risk if balance changes
 ```
 
-This file centralizes all balancing values, making tuning predictable and consistent.
+**Good (Core-based):**
+```cpp
+#include "Classes/Core/GameConfig.h"
+
+const int archer_cost = GameConfig::GetTroopCost(TroopType::kArcher);
+```

@@ -4,15 +4,15 @@
 #include "audio/include/AudioEngine.h"
 
 int CocosAudioSink::Play(const std::string& clip_id, bool loop) {
-    return cocos2d::experimental::AudioEngine::play2d(clip_id, loop);
+    return cocos2d::AudioEngine::play2d(clip_id, loop);
 }
 
 void CocosAudioSink::Stop(int handle) {
-    cocos2d::experimental::AudioEngine::stop(handle);
+    cocos2d::AudioEngine::stop(handle);
 }
 
 void CocosAudioSink::StopAll() {
-    cocos2d::experimental::AudioEngine::stopAll();
+    cocos2d::AudioEngine::stopAll();
 }
 
 #else

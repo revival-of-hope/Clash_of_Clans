@@ -28,6 +28,7 @@ Current mock-only defaults:
 * `InputRouter` returns `false` when UI consumption is enabled; otherwise it snaps to the map grid and enables the attached highlighter.
 * `SceneFlowService` transitions through Boot → Menu → Game → Results and stores the last launch/results parameters.
 * `GameEventManager::GetLastBattleEnded` returns the most recently broadcast `BattleEndEvent` (including duration, troop counts, and spells used).
+* `PlayerIdentityService` stores the most recent identity in memory; `CreateIdentity` assigns incrementing IDs starting at 1.
 
 ## CocosShim Policy (Stub-Only)
 Mocks must compile against the stubbed Cocos boundary in `Classes/Mocks/CocosShim/**`.
@@ -39,7 +40,7 @@ Tests are intended to run against the mock-only configuration:
 - `BUILD_APP=OFF`
 - `BUILD_TESTS=ON`
 
-In this mode, `mock_tests` should link only mock/contract surfaces (`Classes/Mocks/**`, `Classes/Contract/**`, `Classes/Integration/GameServices.cpp`) and should not require real engine assets or gameplay logic.
+In this mode, `mock_tests` should link only mock/contract surfaces (`Classes/Mocks/**`, `Classes/Contract/**`, `Classes/Integration/GameServices.cpp`) and should not require real engine assets or Gameplay logic.
 
 Smoke coverage for `GameServices` relies on the mocks shipped in this repo; no external downloads or additional libraries are required beyond the standard toolchain.
 

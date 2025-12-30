@@ -1,6 +1,6 @@
 # Run Game After Merge (UI + Integration)
 
-These steps assume the real engine/gameplay project is available and that this UI/Integration module is merged in.
+These steps assume the real engine/Gameplay project is available and that this UI/Integration module is merged in.
 
 ---
 
@@ -14,7 +14,7 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-### Real game build (Cocos + gameplay + engine)
+### Real game build (Cocos + Gameplay + engine)
 Use the Windows CMake workflow from `README.md` and explicitly enable the real engine:
 ```
 cmake -S . -B build -G "Visual Studio 17 2022" -A win32 -T v143 -DUSE_COCOS_ENGINE=ON -DBUILD_APP=ON -DBUILD_TESTS=OFF
@@ -57,13 +57,13 @@ If your host project uses a different app entrypoint, mirror this wiring so the 
 **Demo operator steps (Menu → Build → Attack → Results):**
 1. Launch the app (it will enter the Menu scene after Boot in demo mode).
 2. Tap **Map A** or **Map B** to change map selection (uses `LevelManager`).
-3. Tap **Start** to enter the Game scene (`BattleLaunchParams{selected_map_path, seed}`).
+3. Tap **Start** to enter the Game scene (`BattleLaunchParams{selected_map_path, seed, use_random_base}`).
 4. Use **Demo Controls** in the Game scene:
    - **Build** toggles build HUD state.
    - **Attack** toggles attack HUD state.
    - **Results** shows the Results scene using the last `BattleEndEvent` cached in `GameEventManager`.
 
-**Note:** The **Results** button does not fabricate gameplay outcomes; it uses the existing cached event payload. If gameplay has not produced a `BattleEndEvent`, the results screen will show default (zeroed) values.
+**Note:** The **Results** button does not fabricate Gameplay outcomes; it uses the existing cached event payload. If Gameplay has not produced a `BattleEndEvent`, the results screen will show default (zeroed) values.
 
 ---
 
@@ -90,7 +90,7 @@ Ensure these assets exist in the merged project’s `Resources/` folder and are 
 3. **Map selection**
    - Selecting Map A/B should update the selected map path.
 4. **Start Game**
-   - Pressing **Start** should transition to the game scene using `BattleLaunchParams` (map path + seed).
+   - Pressing **Start** should transition to the game scene using `BattleLaunchParams` (map path + seed + optional `use_random_base`).
 5. **Results Scene**
    - Triggering results should show the results scene, fed by the `BattleEndEvent` payload.
 

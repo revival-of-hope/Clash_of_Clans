@@ -1,24 +1,16 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
- http://www.cocos2d-x.org
- ****************************************************************************/
-
-#ifndef  _APP_DELEGATE_H_
-#define  _APP_DELEGATE_H_
+#ifndef CLASH_OF_CLANS_LOCAL_CLASSES_MAIN_APPDELEGATE_H_
+#define CLASH_OF_CLANS_LOCAL_CLASSES_MAIN_APPDELEGATE_H_
 
 #include "cocos2d.h"
 
-class  AppDelegate : private cocos2d::Application
-{
+class AppDelegate : private cocos2d::Application {
 public:
-    AppDelegate();
-    virtual ~AppDelegate();
+    AppDelegate() = default;
+    ~AppDelegate() override = default;
 
-    virtual void initGLContextAttrs();
-    virtual bool applicationDidFinishLaunching();
-    virtual void applicationDidEnterBackground();
-    virtual void applicationWillEnterForeground();
+    bool applicationDidFinishLaunching() override;
+    void applicationDidEnterBackground() override;
+    void applicationWillEnterForeground() override;
 };
 
-#endif // _APP_DELEGATE_H_
+#endif  // CLASH_OF_CLANS_LOCAL_CLASSES_MAIN_APPDELEGATE_H_

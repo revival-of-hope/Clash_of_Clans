@@ -1,6 +1,6 @@
 # Input Routing Policy (Dev C SOT)
 
-Dev C scenes route pointer input through a UI-first router to avoid engine/gameplay coupling.
+Dev C scenes route pointer input through a UI-first router to avoid engine/Gameplay coupling.
 
 ## Contract
 * `InputRouter` (Contract path: `Classes/Contract/Engine/InputRouter.h`).

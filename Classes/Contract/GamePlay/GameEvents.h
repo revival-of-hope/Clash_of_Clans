@@ -2,9 +2,8 @@
 //
 // GameEvents.h - Event System for Gameplay-UI decoupling
 // Uses Observer Pattern for push-based notifications
-// [UPDATE] Added StarUpdateEvent for battle star tracking
 //
-// Path: Classes/Contract/GamePlay/GameEvents.h
+// Path: Classes/Contract/Gameplay/GameEvents.h
 
 #ifndef CONTRACT_GAMEPLAY_GAMEEVENTS_H_
 #define CONTRACT_GAMEPLAY_GAMEEVENTS_H_
@@ -17,21 +16,23 @@
 namespace Gameplay {
 
     // =============================================================================
-    // 事件数据结构定义
+    // Event Data Structure Definitions
     // =============================================================================
 
     /**
-     * @brief 资源变化事件
+     * @brief Resource Update Event
+     * Trigger timing: When Gold/Elixir/Population/Gems/Trophies increases or decreases
      */
     struct ResourceUpdateEvent {
-        std::string resource_type;   // "Gold", "Elixir", "Population"
-        int current_amount = 0;
-        int max_capacity = 0;
-        int change_amount = 0;
+        std::string resource_type;   // "Gold", "Elixir", "Population", "Gems", "Trophies"
+        int current_amount = 0;      // Current value after change
+        int max_capacity = 0;        // Max capacity
+        int change_amount = 0;       // Amount changed (+50 or -200)
     };
 
     /**
-     * @brief 兵种数量变化事件
+     * @brief Troop Count Update Event
+     * Trigger timing: Troop training complete, deployment, death
      */
     struct TroopCountUpdateEvent {
         int owner_id = 0;
@@ -40,7 +41,8 @@ namespace Gameplay {
     };
 
     /**
-     * @brief 部署选择事件
+     * @brief Deployment Selection Event
+     * Trigger timing: Player selects/deselects a troop to deploy
      */
     struct DeploymentSelectionEvent {
         int owner_id = 0;
@@ -49,23 +51,25 @@ namespace Gameplay {
     };
 
     /**
-     * @brief 实体生成事件
+     * @brief Entity Spawn Event
+     * Trigger timing: Unit deployment, building placement, map initialization
      */
     struct EntitySpawnEvent {
-        int instance_id = 0;
-        int owner_id = 0;
-        float x = 0.0f;
+        int instance_id = 0;         // Global unique ID
+        int owner_id = 0;            // Faction ID (0: Player, 1: Enemy)
+        float x = 0.0f;              // World coordinate
         float y = 0.0f;
-        int level = 0;
-        int current_hp = 0;
-        int max_hp = 0;
-        bool is_building = false;
+        int level = 0;               // Level
+        int current_hp = 0;          // Current HP
+        int max_hp = 0;              // Max HP
+        bool is_building = false;    // Is building
         Core::TroopType troop_type = Core::TroopType::kBarbarian;
         Core::BuildingType building_type = Core::BuildingType::kTownHall;
     };
 
     /**
-     * @brief 实体销毁事件
+     * @brief Entity Destroy Event
+     * Trigger timing: Unit death, building destruction
      */
     struct EntityDestroyEvent {
         int instance_id = 0;
@@ -73,48 +77,52 @@ namespace Gameplay {
     };
 
     /**
-     * @brief 建筑状态枚举
+     * @brief Building State Enum
      */
     enum class BuildingState {
-        kConstructing,
-        kIdle,
-        kDestroyed
+        kConstructing,   // Constructing
+        kIdle,           // Normal/Idle
+        kDestroyed       // Destroyed
     };
 
     /**
-     * @brief 建筑状态变化事件
+     * @brief Building State Change Event
+     * Trigger timing: Start construction, construction complete, destroyed
      */
     struct BuildingStateEvent {
         int instance_id = 0;
         Core::BuildingType type = Core::BuildingType::kTownHall;
         BuildingState new_state = BuildingState::kIdle;
-        float time_remaining = 0.0f;
-        float total_build_time = 0.0f;
+        float time_remaining = 0.0f;    // Remaining construction time
+        float total_build_time = 0.0f;  // Total construction time
     };
 
     /**
-     * @brief 伤害事件
+     * @brief Damage Event
+     * Trigger timing: Entity takes damage
      */
     struct DamageEvent {
         int target_instance_id = 0;
         int damage_amount = 0;
         int current_hp = 0;
         int max_hp = 0;
-        bool is_critical = false;
+        bool is_critical = false;    // Reserved: Critical hit
     };
 
     /**
-     * @brief 投射物发射事件
+     * @brief Projectile Fired Event
+     * Trigger timing: Ranged attack fired
      */
     struct ProjectileEvent {
-        int source_id = 0;
-        float target_x = 0.0f;
+        int source_id = 0;           // Shooter ID
+        float target_x = 0.0f;       // Target position
         float target_y = 0.0f;
         Core::ProjectileType projectile_type = Core::ProjectileType::kNone;
     };
 
     /**
-     * @brief 投射物命中事件
+     * @brief Projectile Hit Event
+     * Trigger timing: Projectile reaches target
      */
     struct ProjectileHitEvent {
         float x = 0.0f;
@@ -123,16 +131,14 @@ namespace Gameplay {
     };
 
     /**
-     * @brief 战斗开始事件
+     * @brief Battle Start Event
      */
     struct BattleStartEvent {
         int time_limit_seconds = 0;
-        int total_buildings = 0;      // [NEW] 总建筑数
-        bool has_town_hall = false;   // [NEW] 是否有大本营
     };
 
     /**
-     * @brief 战斗结果枚举
+     * @brief Battle Result Enum
      */
     enum class BattleResult {
         kVictory,
@@ -141,7 +147,7 @@ namespace Gameplay {
     };
 
     /**
-     * @brief 战斗结束事件
+     * @brief Battle End Event
      */
     struct BattleEndEvent {
         BattleResult result = BattleResult::kVictory;
@@ -149,6 +155,8 @@ namespace Gameplay {
         int destruction_percent = 0;
         int gold_stolen = 0;
         int elixir_stolen = 0;
+        int trophies_earned = 0;
+        int trophies_total = 0;
         int battle_duration_seconds = 0;
         int troops_deployed = 0;
         int troops_remaining = 0;
@@ -156,18 +164,23 @@ namespace Gameplay {
     };
 
     /**
-     * @brief 大本营等级变化事件
-     * 触发时机: 大本营升级完成时
+     * @brief Loot Availability Event
+     * Trigger timing: Match preview/scouting provides available loot/trophies.
      */
-    struct TownHallLevelChangedEvent {
-        int new_level = 1;               // 新等级
-        int old_level = 1;               // 旧等级
+    struct LootAvailabilityEvent {
+        int gold_available = 0;
+        int elixir_available = 0;
+        int trophies_available = 0;
     };
 
     // =============================================================================
-    // 事件监听器接口
+    // Event Listener Interface
     // =============================================================================
 
+    /**
+     * @brief Game Event Listener Interface
+     * UI/Audio layers need to inherit this interface and implement interested callbacks
+     */
     class IGameEventListener {
     public:
         virtual ~IGameEventListener() = default;
@@ -183,22 +196,26 @@ namespace Gameplay {
         virtual void OnProjectileHit(const ProjectileHitEvent& evt) {}
         virtual void OnBattleStarted(const BattleStartEvent& evt) {}
         virtual void OnBattleEnded(const BattleEndEvent& evt) {}
-        virtual void OnTownHallLevelChanged(const TownHallLevelChangedEvent& evt) {}  // [NEW]
+        virtual void OnLootAvailabilityUpdated(const LootAvailabilityEvent& evt) {}
     };
 
     // =============================================================================
-    // 事件管理器 (单例)
+    // Event Manager (Singleton)
     // =============================================================================
 
+    /**
+     * @brief Game Event Manager
+     * Responsible for managing listeners and broadcasting events
+     */
     class GameEventManager {
     public:
         static GameEventManager* GetInstance();
 
-        // 监听器管理
+        // Listener Management
         void AddListener(IGameEventListener* listener);
         void RemoveListener(IGameEventListener* listener);
 
-        // 事件广播
+        // Event Broadcasting
         void BroadcastResourceChange(const ResourceUpdateEvent& evt);
         void BroadcastTroopCountUpdated(const TroopCountUpdateEvent& evt);
         void BroadcastDeploymentSelectionChanged(const DeploymentSelectionEvent& evt);
@@ -210,16 +227,18 @@ namespace Gameplay {
         void BroadcastProjectileHit(const ProjectileHitEvent& evt);
         void BroadcastBattleStarted(const BattleStartEvent& evt);
         void BroadcastBattleEnded(const BattleEndEvent& evt);
-        void BroadcastTownHallLevelChanged(const TownHallLevelChangedEvent& evt);  // [NEW]
+        void BroadcastLootAvailabilityUpdated(const LootAvailabilityEvent& evt);
 
-        // 获取上次战斗结果
+        // Get last battle result (for settlement screen)
         BattleEndEvent GetLastBattleEnded() const;
+        LootAvailabilityEvent GetLastLootAvailability() const;
 
     private:
         GameEventManager() = default;
 
         std::vector<IGameEventListener*> listeners_;
         BattleEndEvent last_battle_end_{};
+        LootAvailabilityEvent last_loot_availability_{};
     };
 
 }  // namespace Gameplay

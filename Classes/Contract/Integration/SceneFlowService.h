@@ -19,6 +19,7 @@ enum class SceneStage {
 struct BattleLaunchParams {
     std::string map_path;
     int seed = 0;
+    bool use_random_base = false;
 };
 
 struct ResultsScreenData {

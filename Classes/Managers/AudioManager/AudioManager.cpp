@@ -6,9 +6,14 @@ struct ClipMapping {
     const char* key;
     const char* clip_id;
     bool loop = false;
+
+    constexpr ClipMapping(const char* in_key, const char* in_clip_id, bool in_loop)
+        : key(in_key), clip_id(in_clip_id), loop(in_loop) {}
 };
 
-constexpr ClipMapping kClipMappings[] = {
+const ClipMapping kClipMappings[] = {
+        {"menu_music", "Resources/music/Background Music/Home music 1.mp3", true},
+        {"ui_click", "Resources/music/UI effects/ui_click.mp3", false},
         {"battle_start", "Resources/music/UI effects/start_up.mp3", false},
         {"battle_end", "Resources/music/UI effects/builder-base-combat-end.mp3", false},
         {"projectile_fired", "Resources/music/Combat effects/archer tower.mp3", false},
@@ -63,6 +68,14 @@ void AudioManager::OnEntityDestroyed(const Gameplay::EntityDestroyEvent& evt) {
         return;
     }
     PlayMappedClip("entity_destroyed_unit");
+}
+
+void AudioManager::PlayMenuMusic() {
+    PlayMappedClip("menu_music", true);
+}
+
+void AudioManager::PlayUiClick() {
+    PlayMappedClip("ui_click");
 }
 
 void AudioManager::PlayMappedClip(const std::string& key, bool loop) {

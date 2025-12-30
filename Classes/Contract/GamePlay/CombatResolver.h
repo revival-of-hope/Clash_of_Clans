@@ -5,45 +5,45 @@
 // Singleton for managing projectiles and resolving damage calculation.
 // Contract header for external modules.
 //
-// Path: Classes/Contract/GamePlay/CombatResolver.h
+// Path: Classes/Contract/Gameplay/CombatResolver.h
 
 #ifndef CONTRACT_GAMEPLAY_COMBAT_RESOLVER_H_
 #define CONTRACT_GAMEPLAY_COMBAT_RESOLVER_H_
 
 #include "cocos2d.h"
 #include "Core/GameConstants.h"
-#include "Contract/GamePlay/BaseEntity.h"
+#include "Classes/Contract/Gameplay/BaseEntity.h"
 #include <vector>
 
 /**
- * @brief 战斗仲裁系统 (单例)
- * 职责:
- * 1. 投射物管理: 生成、移动、销毁所有飞行的箭矢、炮弹、火球。
- * 2. 伤害仲裁: 负责最终扣血的执行。
- * 3. 伤害计算: 未来可以添加防御力减免、属性克制等公式。
+ * @brief Combat Resolver System (Singleton)
+ * Responsibilities:
+ * 1. Projectile Management: Generate, move, and destroy all flying arrows, shells, fireballs.
+ * 2. Damage Arbitration: Responsible for the execution of final HP deduction.
+ * 3. Damage Calculation: Future extension for defense reduction, attribute counters, etc.
  */
 class CombatResolver {
 public:
     static CombatResolver* GetInstance();
 
     /**
-     * @brief 初始化战斗系统
-     * @param battle_layer 传入战斗场景的 Layer
+     * @brief Initialize Combat System
+     * @param battle_layer Pass in the Layer of the combat scene
      */
     void Initialize(cocos2d::Node* battle_layer);
 
     /**
-     * @brief 帧更新：处理投射物飞行
+     * @brief Frame Update: Handle projectile flight
      */
     void Update(float dt);
 
     /**
-     * @brief 发起近战攻击 (Instant Hit)
+     * @brief Initiate Melee Attack (Instant Hit)
      */
     void ResolveMeleeAttack(BaseEntity* attacker, BaseEntity* target, int damage);
 
     /**
-     * @brief 发起远程攻击 (Ranged Attack)
+     * @brief Initiate Ranged Attack (Ranged Attack)
      */
     void SpawnProjectile(BaseEntity* attacker, BaseEntity* target, int damage, Core::ProjectileType type);
 

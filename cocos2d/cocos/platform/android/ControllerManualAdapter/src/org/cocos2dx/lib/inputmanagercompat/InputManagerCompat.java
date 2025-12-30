@@ -83,7 +83,7 @@ public interface InputManagerCompat {
     /**
      * Tell the V9 input manager that it should start polling for disconnected
      * devices. You can call this during onResume in your activity, although you
-     * might want to call it less often (only when the gameplay is actually
+     * might want to call it less often (only when the Gameplay is actually
      * active)
      */
     public void onResume();

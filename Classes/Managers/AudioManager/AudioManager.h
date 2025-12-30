@@ -21,6 +21,9 @@ public:
     void OnBattleEnded(const Gameplay::BattleEndEvent& evt) override;
     void OnEntityDestroyed(const Gameplay::EntityDestroyEvent& evt) override;
 
+    void PlayMenuMusic();
+    void PlayUiClick();
+
 private:
     void PlayMappedClip(const std::string& key, bool loop = false);
 

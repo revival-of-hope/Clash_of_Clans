@@ -1,25 +1,24 @@
-# **CLASH OF CLANS (DRAFT)**
+# **CLASH OF CLANS (DEV-FACING-README)**
 
 ### **Overview**
 
-This project is a real-time strategy (RTS) and simulation game. The game blends resource gathering, base building, troop training, and combat simulation, referencing the gameplay mechanics of "Clash of Clans".
+This project is a real-time strategy (RTS) and simulation game. The game blends resource gathering, base building, troop training, and combat simulation, referencing the Gameplay mechanics of "Clash of Clans".
 
 Team Size: 3 Developers  
 Timeline: 1 Month
 
 ### **Table of Contents**
-
+Please take the English version as the standard/authoritative one.
 1. [Core Features](https://www.google.com/search?q=%23core-features)  
 2. [Game Content & Assets](https://www.google.com/search?q=%23game-content--assets)  
 3. [Architecture Philosophy](https://www.google.com/search?q=%23architecture-philosophy)  
 4. [Project Structure](https://www.google.com/search?q=%23project-structure)  
 5. [Responsibility & Dependency](https://www.google.com/search?q=%23responsibility-and-dependency)  
 6. [Coding Conventions](https://www.google.com/search?q=%23coding-conventions)
-7. [Chinese Version(Machine Translated)]()
 
 ### ---
 
-**Core Features**
+### **Core Features**
 
 The game focuses on a "Main Village" hub system involving economy management and automated combat.
 
@@ -41,7 +40,7 @@ The game focuses on a "Main Village" hub system involving economy management and
 
 ### ---
 
-**Game Content & Assets**
+### **Game Content & Assets**
 
 #### **1\. Troops (Class Base: Troop)**
 
@@ -75,7 +74,7 @@ The game focuses on a "Main Village" hub system involving economy management and
 
 ### ---
 
-**Architecture Philosophy**
+### **Architecture Philosophy**
 
 * **Unidirectional Data Flow:** Avoid circular dependencies and minimize coupling.  
 * **Clear Structure:** Maintain a logical, consistent hierarchy.  
@@ -84,49 +83,102 @@ The game focuses on a "Main Village" hub system involving economy management and
 
 ### ---
 
-**Project Structure**
+### **Project Structure**
 
 The directory structure is strictly divided by developer responsibility to minimize merge conflicts.
+Currently, its a draft. Reference only.
 
 ```text
 Classes/
-├── Core/                       <-- SHARED TYPES (No Logic)
-│   ├── GameConstants.h         (Team Colors, Screen Dims, UI Constants)
-│   ├── GameEvents.h            (Observer Pattern: "OnUnitDied", "OnGoldChanged")
-│   └── ResourceStructs.h       (Stats for Troops/Buildings loaded from JSON)
-│
-├── Engine/                     <-- DEV A (Rendering & Physics ONLY)
-│   ├── RenderSystem/
-│   │   ├── SpriteBatch.cpp
-│   │   └── AnimationController.cpp
-│   ├── MapSystem/
-│   │   ├── IsometricGrid.cpp   (Math: Screen <-> Iso coords)
-│   │   └── MapLayer.cpp        (Draws the tiles)
-│   └── Input/
-│       └── TouchHandler.cpp    (Raw input detection)
-│
-├── Gameplay/                   <-- DEV B (Logic & Rules ONLY)
-│   ├── Entities/
-│   │   ├── BaseEntity.h        (ID, Position, Owner)
-│   │   ├── Unit.cpp            (Handles Move/Attack logic for ALL troops)
-│   │   └── Building.cpp        (Handles Production/Defense logic)
-│   ├── Components/             (Composition over Inheritance)
-│   │   ├── HealthComp.cpp
-│   │   ├── AttackComp.cpp      (Range, Damage, Rate)
-│   │   └── PathAgent.cpp       (A* implementation)
-│   └── Logic/
-│       ├── CombatResolver.cpp  (Who hit whom?)
-│       └── EconomySystem.cpp   (Resource ticks)
-│
-├── Managers/                   <-- DEV C (Orchestration)
-│   ├── LevelManager.cpp        (Loads Map + Entities)
-│   ├── AudioManager.cpp        (Listens to GameEvents)
-│   └── UIManager.cpp           (The bridge between Logic and Screen)
-│
-└── UI/                         <-- DEV C (Visuals)
-    ├── Widgets/                (Reusable buttons/bars)
-    ├── HUDScene.cpp            (In-game overlay)
-    └── Menus/                  (Main Menu, Shop)
+├── Contract/
+│   ├── CONTRACT_GAPS.md
+│   ├── Engine
+│   ├── Gameplay
+│   ├── GAP_RESOLUTION_LOG.md
+│   ├── Integration
+│   └── README.md
+├── Core/
+│   ├── GameConfig.cpp
+│   ├── GameConfig.h
+│   ├── GameConstants.h
+│   ├── GameStructs.h
+│   └── README.md
+├── Engine/
+│   ├── Input
+│   ├── Logic
+│   ├── MapSystem
+│   ├── Public
+│   └── RenderSystem
+├── Gameplay/
+│   ├── Components
+│   ├── Entities
+│   ├── Logic
+│   └── Public
+├── Integration/
+│   ├── Docs/ (SOT)
+        ├── DevC_Spec.md
+        ├── Engine Module API Reference.md
+        ├── Gameplay Cost Query API.md
+        ├── Gameplay Module API Reference.md.md
+        ├── Gameplay_Public_GameEvents_Documentation.md
+        ├── Input Routing Policy.md
+        ├── Placement Validation and TMX Conventions.md
+        ├── readme_core.md
+        ├── SaveLoad and Determinism API.md
+        └── Scene Flow and Entrypoint.md 
+│   ├── GameServices.cpp
+│   └── GameServices.h
+├── Main/
+│   ├── AppDelegate.cpp
+│   ├── AppDelegate.h
+│   ├── TestScene.cpp
+│   └── TestScene.h
+├── Mocks/
+│   ├── CocosShim
+│   ├── EngineMock
+│   ├── GameplayMock
+│   ├── IntegrationMock
+│   ├── README.md
+│   └── Tests
+└── Scenes/
+    ├── GameScene.cpp
+    └── GameScene.h
+
+(below is a DRAFT TBD by dev C)
+├── Managers/                                <-- Dev C orchestration (NEW) – “glue layer”, no Gameplay rules.
+│   ├── LevelManager.h/.cpp                  <-- Owns map selection, spawn lists, authoritative all_buildings/all_units registry.
+│   ├── UIManager.h/.cpp                     <-- UI flow + input routing; calls EconomySystem/GameConfig; never Gameplay internals.
+│   ├── AudioManager.h/.cpp                  <-- Event→sound mapping + only place calling AudioEngine (wrapper + listener).
+│   └── GameDirector.h/.cpp                  <-- (Optional) high-level state machine: BuildMode/BattleMode/Results.
+
+├── Scenes/                                  <-- Dev C scenes (NEW) – keep Main/TestScene thin.
+│   ├── GameScene.h/.cpp                     <-- The real scene: creates MapLayer + Managers + HUD overlay layers.
+│   ├── BootScene.h/.cpp                     <-- (Optional) preload assets, go to menu/game.
+│   └── MenuScene.h/.cpp                     <-- (Optional) main menu / map select.
+
+├── UI/                                      <-- Dev C visuals (NEW) – purely presentation.
+│   ├── HUD/                                 <-- Screen-space HUD (resource bars, popups).
+│   │   ├── HUDLayer.h/.cpp
+│   │   └── HealthBarWidget.h/.cpp
+│   ├── Menus/                               <-- Shop, pause menu, results popup.
+│   │   ├── ShopPanel.h/.cpp
+│   │   └── ResultsPopup.h/.cpp
+│   └── Widgets/                             <-- Reusable buttons/bars; no Gameplay includes.
+
+└── Integration/                             <-- Dev C Contract + adapters (NEW, optional but strongly recommended)
+    ├── Input/                               <-- “UI consumes first” helpers; translates cocos events into engine/game commands.
+    │   └── InputRouter.h/.cpp
+    ├── Events/                              <-- If GameEvents exists: event queue, adapters.
+    │   └── GameEventBridge.h/.cpp
+    └── Docs/                                <-- Dev C facing docs (or keep in root Docs/)
+        ├── DevC_Contract.md
+        ├── Dependencies.md
+        └── Determinism.md
+└── Main/
+    ├── AppDelegate.cpp
+    ├── AppDelegate.h
+    ├── TestScene.cpp
+    └── TestScene.h
 ```
 
 ### ---
@@ -141,7 +193,7 @@ Classes/
 
 ### ---
 
-**Coding Conventions**
+### **Naming Conventions**
 
 We follow the **Google Style** naming conventions.
 
@@ -164,162 +216,77 @@ C++
 // TODO(DevB): Implement A\* pathfinding optimization here.  
 
 
-# **部落冲突 (草案)**
 
-### **概览**
+### ---
+### **DEV INFO**
 
-本项目是一个即时战略 (RTS) 与模拟游戏。游戏融合了资源采集、基地建设、部队训练和战斗模拟，参考了《部落冲突》(Clash of Clans) 的游戏机制。
+**NOTE:** Windows is the primary supported build environment for now, but contributors (including you) may be on other OS (such as macOS). You MUST NOT introduce OS-locked solutions (such as Windows-only APIs) anywhere unless they’re explicitly isolated and labeled.
 
-团队规模：3 名开发人员
-时间表：1 个月
+#### **Engine**
 
-### **目录**
+- Engine: **Cocos2d-x** (vendored/forked in-repo)
+- Declared version: **4.0.0** (`COCOS2D_VERSION = 0x00040000`)
+- Commit: `508fbe2cb50910bbc34e00d000cf700e67b38750`
 
-1.  [核心功能](https://www.google.com/search?q=%23core-features)
-2.  [游戏内容与资产](https://www.google.com/search?q=%23game-content--assets)
-3.  [架构理念](https://www.google.com/search?q=%23architecture-philosophy)
-4.  [项目结构](https://www.google.com/search?q=%23project-structure)
-5.  [职责与依赖](https://www.google.com/search?q=%23responsibility-and-dependency)
-6.  [编码规范](https://www.google.com/search?q=%23coding-conventions)
 
-### \---
+#### **Build Environment (Locked)**
 
-**核心功能**
 
-游戏主要围绕涉及经济管理和自动战斗的“主村庄”中心系统展开。
+- Engine target: **Cocos2d-x v4.0** (CMake + Visual Studio 2022 workflow)
+- C++ standard: **C++17**
+- Windows toolchain:
+  - Visual Studio: **Visual Studio 2022** (v17.x)
+  - MSVC toolset: **v143** (CMake `-T v143`)
+  - Architecture: **Win32** (CMake `-A win32`)
+- CMake: **source-of-truth** for building. Minimum required CMake version in this codebase is 3.6.
+  - Note: if legacy `.proj` files exist, treat them as secondary/obsolete compared to CMake.
+- Third-party dependencies: fetched via `download-deps.py` (e.g., openssl/curl/zlib/etc.).
+- Python: **Python 2.7.18** is mandatory for cocos setup tools. Do **not** add it to PATH (avoid system conflicts).
 
-  * **经济与资源：** 管理金币、圣水和人口/容量。
-  * **建筑系统：** 包括资源生成（矿井）、兵营、防御塔和仓库。所有建筑至少支持 3 个升级等级。
-  * **战斗系统：**
-      * **部队：** 弓箭手、野蛮人、炸弹人 (Wall Breakers) 和巨人。
-      * **AI：** 寻路 (A\*)、攻击判定和建筑优先级（例如巨人优先攻击防御设施）。
-      * **流程：** 部署 -\> 自动战斗 -\> 胜负判定。
-  * **地图：** 支持至少 2 张不同的地图。
-  * **音频：** 背景音乐和动态战斗音效。
+#### **Repo bootstrap (first-time setup)**
 
-#### **可选 / 扩展功能**
+1. Install **Python 2.7.18** (do **not** add to PATH).
+2. Run `python setup.py` in the **cocos root**. TODO(cocos_root_path): fill the path in this repo where `setup.py` lives.
+3. Run `python download-deps.py` (Internet required) to fetch third-party libraries.
+4. Configure the project with CMake (next section).
 
-  * 空中部队（如飞龙宝宝）和防空设施。
-  * 陷阱与炸弹系统。
-  * 回放系统。
-  * 多人游戏/联盟系统。
+#### **Build & run (Windows, canonical)**
 
-### \---
+Open **Developer Command Prompt for VS 2022**, then:
 
-**游戏内容与资产**
+```bat
+cd /d <Project_Root>
+cmake -S . -B build -G "Visual Studio 17 2022" -A win32 -T v143
+cmake --build build --config Debug
+````
 
-#### **1. 部队 (基类: Troop)**
+* Build outputs typically go to: `build/bin/Debug/`
 
-*规范：* 每个单位需要四个状态序列帧：**待机 (Idle)、移动 (Move)、攻击 (Attack)、死亡 (Die)**。
+#### Run (Windows)
 
-  * **野蛮人 (Barbarian)：** 近战单位。
-  * **弓箭手 (Archer)：** 远程单位（投射物：箭矢）。
-  * **巨人 (Giant)：** 高生命值坦克（优先攻击防御设施）。
-  * **炸弹人 (Wall Breaker)：** 携带炸弹（自杀式单位）。
-  * **飞龙宝宝 (Baby Dragon) (可选)：** 空中单位（需要阴影渲染）。
+* Executable to run: TODO(exe_name): identify the produced `.exe` under `build/bin/Debug/`.
 
-#### **2. 建筑 (基类: Building)**
+  * Possible (unconfirmed): `Clash_of_Clans_Combat_Test.exe` (based on window title in `AppDelegate.cpp`), or a default `cocos_test.exe`.
+* Working directory must be a folder that contains `Resources/`.
 
-*规范：* 每个建筑必须提供 3 个等级的视觉外观 (lvl1, lvl2, lvl3)。
+  * If assets fail to load, set the working directory to the project root **or** ensure `Resources/` is copied into the build output folder.
 
-  * **经济：** 金矿、圣水收集器、储金罐、圣水瓶。
-  * **军事：** 训练营（生产部队）、兵营。
-  * **防御：** 加农炮（旋转炮塔）、箭塔、防空火箭（可选）、城墙。
-  * **核心：** 大本营。
+#### Platform support
 
-#### **3. 特效 (VFX) & 投射物**
+* Windows: supported (primary dev environment).
+* iOS: planned (AudioEngine hooks exist in `AppDelegate`, but current docs are Windows-only).
+* Android: out-of-scope (docs explicitly say to skip NDK setup).
 
-  * **投射物：** 箭矢、加农炮弹、火箭、火球。
-  * **特效：** 爆炸（炸弹人/炮弹）、火焰冲击、生成烟雾（部署时）。
+#### Known build pitfalls (Windows)
 
-#### **4. UI 元素**
+* Missing runtime DLLs like `MSVCR100.dll` / `MSVCR110.dll` / `MSVCR120.dll`:
 
-  * **HUD：** 单位头顶血条（背景/友方/敌方）。
-  * **图标：** 金币/圣水资源。
-  * **控制：** 部署卡牌（屏幕底部）、选择高亮框。
+  * Cause: some prebuilt cocos v4 libraries depend on older MSVC runtimes.
+  * Fix: install Visual C++ Redistributables for **VS2010 / VS2012 / VS2013** (**x86**).
 
-### \---
+#### iOS build steps
 
-**架构理念**
+* Status: TBD. TODO(iOS_build_details): add Xcode version + signing + build instructions once available.
 
-  * **单向数据流：** 避免循环依赖并最大限度地减少耦合。
-  * **清晰的结构：** 保持逻辑清晰、一致的层级结构。
-  * **自包含模块：** 尽可能保持模块独立。
-  * **集中化共享定义：** 将共享常量和变量放置在核心契约/模块中。
 
-### \---
-
-**项目结构**
-
-目录结构严格按开发人员职责划分，以最大限度地减少合并冲突。
-
-```text
-Classes/
-├── Core/                       <-- 共享类型 (无逻辑)
-│   ├── GameConstants.h         (团队颜色, 屏幕尺寸, UI 常量)
-│   ├── GameEvents.h            (观察者模式: "OnUnitDied", "OnGoldChanged")
-│   └── ResourceStructs.h       (从 JSON 加载的部队/建筑属性)
-├── Engine/                     <-- 开发人员 A (仅限渲染与物理)
-│   ├── RenderSystem/
-│   │   ├── TilePlacementController.cpp (放置单位)
-│   │   └── //
-│   ├── MapSystem/
-│   │   ├── TileHighlighter.cpp (高亮瓦片)
-│   │   └── MapLayer.cpp        (绘制瓦片)
-│   └── Input/
-│       └── MouseController.cpp    (鼠标输入处理)
-├── Gameplay/                   <-- 开发人员 B (仅限逻辑与规则)
-│   ├── Entities/
-│   │   ├── BaseEntity.h        (ID, 位置, 所有者)
-│   │   ├── Unit.cpp            (处理所有部队的移动/攻击逻辑)
-│   │   └── Building.cpp        (处理生产/防御逻辑)
-│   ├── Components/             (组合优于继承)
-│   │   ├── HealthComp.cpp
-│   │   ├── AttackComp.cpp      (范围, 伤害, 速率)
-│   │   └── PathAgent.cpp       (A* 实现)
-│   └── Logic/
-│       ├── CombatResolver.cpp  (判定谁击中了谁?)
-│       └── EconomySystem.cpp   (资源Tick)
-├── Managers/                   <-- 开发人员 C (编排)
-│   ├── LevelManager.cpp        (加载地图 + 实体)
-│   ├── AudioManager.cpp        (监听游戏事件)
-│   └── UIManager.cpp           (逻辑与屏幕之间的桥梁)
-└── UI/                         <-- 开发人员 C (视觉)
-    ├── Widgets/                (可复用的按钮/条)
-    ├── HUDScene.cpp            (游戏内覆盖层)
-    └── Menus/                  (主菜单, 商店)
-```
-
-### \---
-
-**职责与依赖**
-
-| 层级 | 负责人 | 职责 | 架构约束 |
-| :---- | :---- | :---- | :---- |
-| **App / UI** | **Dev C** (全栈) | 菜单, HUD, 输入处理, 音频 | 可以访问 Gameplay 和 Engine。 |
-| **Gameplay** | **Dev B** (玩法) | 规则, AI, 单位属性, 地图逻辑 | 可以访问 Engine。**不能**访问 UI。 |
-| **Core Engine** | **Dev A** (引擎) | 渲染, 物理数学, 资产加载 | **不能**访问 Gameplay 或 UI。 |
-
-### \---
-
-**编码规范**
-
-我们遵循 **Google Style** 命名约定。
-
-| 类别 | 约定 | 示例 |
-| :---- | :---- | :---- |
-| **类型** (class/struct/enums) | PascalCase (帕斯卡命名法) | GameConfig, UnitStats |
-| **方法** | PascalCase (帕斯卡命名法) | GetTroopStats() |
-| **变量** | snake\_case\_ (成员变量) snake\_case (局部变量) | max\_hp\_, attack\_speed temp\_damage |
-| **枚举值** | kPascalCase | kTownHall, kGiant |
-| **编译时常量** | kPascalCase | kTileWidth, kMaxTroops |
-
-#### **TODO 注释**
-
-使用 Google 风格的 TODO 注解来分配任务或标记未完成的功能：
-
-C++
-
-// TODO(developer\_name): Explanation of what needs to be done.  
-// Example:  
-// TODO(DevB): Implement A\* pathfinding optimization here.
+**Notes:** Adds the REPORT’s environment lock, bootstrap steps, copy-pasteable CMake/VS2022 build commands (Win32/v143), platform support notes, and the known DLL pitfall + fix, without changing existing project content.

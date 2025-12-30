@@ -10,7 +10,9 @@ cocos2d::Rect MakeButtonRect(const cocos2d::Vec2& center, float width, float hei
 }  // namespace
 
 MenuScene::MenuScene(Integration::SceneFlowService* scene_flow)
-    : scene_flow_(scene_flow), level_manager_(LevelManager::GetInstance()) {}
+    : scene_flow_(scene_flow),
+      level_manager_(LevelManager::GetInstance()),
+      audio_manager_(Integration::ResolveAudioManager()) {}
 
 MenuScene* MenuScene::Create(Integration::SceneFlowService* scene_flow) {
   auto* scene = new MenuScene(scene_flow);
@@ -90,6 +92,10 @@ bool MenuScene::init() {
     addChild(replays_label);
   }
 
+  if (audio_manager_) {
+    audio_manager_->PlayMenuMusic();
+  }
+
   return true;
 }
 
@@ -111,32 +117,48 @@ cocos2d::Scene* MenuScene::StartSelectedMap() {
   if (!scene_flow_ || !level_manager_) {
     return nullptr;
   }
-  Integration::BattleLaunchParams params{level_manager_->GetSelectedMapPath(),
-                                         level_manager_->GetSeed()};
+  Integration::BattleLaunchParams params;
+  params.map_path = level_manager_->GetSelectedMapPath();
+  params.seed = level_manager_->GetSeed();
   return scene_flow_->StartGame(params);
 }
 
 bool MenuScene::HandleTap(const cocos2d::Vec2& screen_pos) {
   if (HitTest(GetStartButtonBounds(), screen_pos)) {
     RecordAction("start");
+    if (audio_manager_) {
+      audio_manager_->PlayUiClick();
+    }
     return StartSelectedMap() != nullptr;
   }
   if (HitTest(GetMapAButtonBounds(), screen_pos)) {
     SelectMapA();
     RecordAction("map_a");
+    if (audio_manager_) {
+      audio_manager_->PlayUiClick();
+    }
     return true;
   }
   if (HitTest(GetMapBButtonBounds(), screen_pos)) {
     SelectMapB();
     RecordAction("map_b");
+    if (audio_manager_) {
+      audio_manager_->PlayUiClick();
+    }
     return true;
   }
   if (HitTest(GetLeaguesButtonBounds(), screen_pos)) {
     RecordAction("leagues");
+    if (audio_manager_) {
+      audio_manager_->PlayUiClick();
+    }
     return true;
   }
   if (HitTest(GetReplaysButtonBounds(), screen_pos)) {
     RecordAction("replays");
+    if (audio_manager_) {
+      audio_manager_->PlayUiClick();
+    }
     return true;
   }
   return false;
@@ -151,8 +173,15 @@ void MenuScene::VerifyStage() const {
 
 bool MenuScene::HitTest(const cocos2d::Rect& bounds,
                         const cocos2d::Vec2& screen_pos) const {
+#if USE_COCOS_ENGINE
+  return screen_pos.x >= bounds.origin.x &&
+         screen_pos.x <= bounds.origin.x + bounds.size.width &&
+         screen_pos.y >= bounds.origin.y &&
+         screen_pos.y <= bounds.origin.y + bounds.size.height;
+#else
   return screen_pos.x >= bounds.x && screen_pos.x <= bounds.x + bounds.width &&
          screen_pos.y >= bounds.y && screen_pos.y <= bounds.y + bounds.height;
+#endif
 }
 
 void MenuScene::RecordAction(const std::string& action) {

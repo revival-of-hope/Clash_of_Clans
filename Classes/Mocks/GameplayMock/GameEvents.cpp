@@ -91,8 +91,19 @@ void GameEventManager::BroadcastBattleEnded(const BattleEndEvent& evt) {
     }
 }
 
+void GameEventManager::BroadcastLootAvailabilityUpdated(const LootAvailabilityEvent& evt) {
+    last_loot_availability_ = evt;
+    for (auto* listener : listeners_) {
+        listener->OnLootAvailabilityUpdated(evt);
+    }
+}
+
 BattleEndEvent GameEventManager::GetLastBattleEnded() const {
     return last_battle_end_;
+}
+
+LootAvailabilityEvent GameEventManager::GetLastLootAvailability() const {
+    return last_loot_availability_;
 }
 
 }  // namespace Gameplay

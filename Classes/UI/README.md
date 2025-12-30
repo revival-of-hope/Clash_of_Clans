@@ -16,8 +16,8 @@ Plain C++ models in `UiStateModels.h` that store deterministic UI-facing state d
 
 ## Non-goals
 - No rendering code or widget references
-- No gameplay rules or predictions (state is driven only by contract events)
-- No engine/Cocos dependencies beyond the gameplay contract listener interface
+- No Gameplay rules or predictions (state is driven only by contract events)
+- No engine/Cocos dependencies beyond the Gameplay contract listener interface
 
 ## Tests (Stage 4 coverage)
 Run the mock-only suite to validate the state models:

@@ -87,7 +87,7 @@ bool GameScene::init() {
         ui_layer->addChild(status_label_);
     }
 
-    // TODO(DevC): Replace label update with actual battle results once gameplay emits events.
+    // TODO(DevC): Replace label update with actual battle results once Gameplay emits events.
     return true;
 }
 

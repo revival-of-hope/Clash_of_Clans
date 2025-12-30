@@ -1,6 +1,6 @@
 # Save/Load and Determinism API (Dev C)
 
-This document defines the canonical API for save/load snapshots and determinism inspection. It is **opaque** and does not expose gameplay rules.
+This document defines the canonical API for save/load snapshots and determinism inspection. It is **opaque** and does not expose Gameplay rules.
 
 ## 1. SaveLoadService
 

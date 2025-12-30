@@ -29,12 +29,14 @@ public:
 
     ResourceCost GetBuildingPlacementCost(Core::BuildingType type, int level) const;
     ResourceCost GetTroopTrainingCost(Core::TroopType type, int level) const;
+    ResourceCost GetMatchmakingCost() const;
 };
 ```
 
 **Semantics:**
 * `GetBuildingPlacementCost(...)` returns the resource cost to place/build a building at the specified level.
 * `GetTroopTrainingCost(...)` returns the resource + population cost to train/deploy one troop of the specified level.
+* `GetMatchmakingCost()` returns the gold-only cost (50) to start matchmaking.
 * Functions are **read-only** and do not mutate state.
 * If an invalid `level` is provided, the implementation may clamp to level 1.
 
@@ -44,7 +46,7 @@ public:
 auto cost_query = CostQuery::GetInstance();
 auto cannon_cost = cost_query->GetBuildingPlacementCost(Core::BuildingType::kCannon, 1);
 auto barb_cost = cost_query->GetTroopTrainingCost(Core::TroopType::kBarbarian, 1);
+auto matchmaking_cost = cost_query->GetMatchmakingCost();
 
-// UI shows: cannon_cost.gold / cannon_cost.elixir, barb_cost.population
+// UI shows: cannon_cost.gold / cannon_cost.elixir, barb_cost.population, matchmaking_cost.gold
 ```
-

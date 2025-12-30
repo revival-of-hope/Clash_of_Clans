@@ -5,7 +5,7 @@
 // Singleton for managing global resources (Gold, Elixir, Population).
 // Contract header for external modules.
 //
-// Path: Classes/Contract/GamePlay/EconomySystem.h
+// Path: Classes/Contract/Gameplay/EconomySystem.h
 
 #ifndef CONTRACT_GAMEPLAY_ECONOMY_SYSTEM_H_
 #define CONTRACT_GAMEPLAY_ECONOMY_SYSTEM_H_
@@ -18,14 +18,14 @@ class Building;
 struct ResourceCost;
 
 /**
- * @brief 经济系统 (单例)
+ * @brief Economy System (Singleton)
  *
- * 职责:
- * 1. 维护全局资源 (金币, 圣水) 的当前值与最大上限
- * 2. 维护人口 (Housing Space) 的当前占用与最大上限
- * 3. 处理资源的 收集(Collect) 和 消费(Spend)
- * 4. 动态计算上限 (基于场上建筑)
- * 5. 提供便捷的支付能力检查方法
+ * Responsibilities:
+ * 1. Maintain global resources (Gold, Elixir) current values and max limits.
+ * 2. Maintain Population (Housing Space) current usage and max limits.
+ * 3. Handle resource Collection and Spending.
+ * 4. Dynamically calculate limits (based on buildings on the field).
+ * 5. Provide convenient affordability check methods.
  */
 class EconomySystem {
 public:
@@ -34,7 +34,7 @@ public:
     void Reset();
 
     // =========================================================================
-    // 资源操作
+    // Resource Operations
     // =========================================================================
 
     void AddGold(int amount);
@@ -44,24 +44,25 @@ public:
     bool SpendCost(const ResourceCost& cost);
 
     // =========================================================================
-    // 支付能力检查 - 契约层
+    // Affordability Check - Contract Layer
     // =========================================================================
 
     bool CanAfford(int gold_cost, int elixir_cost) const;
     bool CanAffordCost(const ResourceCost& cost, bool check_population = true) const;
+    // Matchmaking affordability: CostQuery::GetMatchmakingCost() -> CanAffordCost(...) + SpendGold(...).
     bool CanAffordBuilding(Core::BuildingType type, int level = 1) const;
     bool CanAffordBuildingUpgrade(Core::BuildingType type, int current_level) const;
     bool CanAffordTroop(Core::TroopType type, int level = 1) const;
     bool HasPopulationSpace(int housing_space) const;
 
     // =========================================================================
-    // 收集逻辑
+    // Collection Logic
     // =========================================================================
 
     int TryCollectResource(Building* building);
 
     // =========================================================================
-    // 人口管理
+    // Population Management
     // =========================================================================
 
     bool AddTroopPopulation(int housing_space);
@@ -71,13 +72,13 @@ public:
     }
 
     // =========================================================================
-    // 上限计算
+    // Limit Calculation
     // =========================================================================
 
     void RecalculateLimits(const cocos2d::Vector<Building*>& buildings);
 
     // =========================================================================
-    // 只读访问器 - 契约层
+    // Read-only Accessors - Contract Layer
     // =========================================================================
 
     int GetCurrentGold() const { return current_gold_; }

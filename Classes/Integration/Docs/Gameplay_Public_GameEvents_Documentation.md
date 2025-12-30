@@ -18,7 +18,7 @@ This is the complete event contract that the Gameplay layer promises to send to 
 
 | Event Interface Name | Trigger Timing | Core Payload | Expected Behavior (UI/Dev C) |
 | :---- | :---- | :---- | :---- |
-| **OnResourceChanged** | Resource collection, troop training cost, upgrade cost | Type (Gold/Elixir/Pop), Current, Max, Delta (Change Amount) | Refresh top resource bar numbers; if Delta > 0, play resource fly-in animation. |
+| **OnResourceChanged** | Resource collection, troop training cost, upgrade cost | Type (Gold/Elixir/Pop/Gems/Trophies), Current, Max, Delta (Change Amount) | Refresh top resource bar numbers; if Delta > 0, play resource fly-in animation. |
 | **OnTroopCountUpdated** | Troop counts change from training/consumption | OwnerID, TroopType, RemainingCount | Update deployment bar counts for the matching troop type. |
 | **OnDeploymentSelectionChanged** | Player selects or clears a troop slot for deployment | OwnerID, HasSelection, TroopType | Highlight selected troop in deployment bar or clear highlight when HasSelection is false. |
 | **OnEntitySpawned** | Player places unit, map initializes buildings | InstanceID, Type, Level, Pos, OwnerID | Create Sprite Node; Create HealthBar component; **Must** maintain an ID -> Node mapping table. |
@@ -29,6 +29,7 @@ This is the complete event contract that the Gameplay layer promises to send to 
 | **OnProjectileHit** | Projectile arrives at target or hits/vanishes | Pos, ProjectileType | **VFX**: Play explosion/hit effect at Pos. **Audio**: Play hit sound. |
 | **OnBattleStarted** | Placing the first troop or entering combat scene | TimeLimit (Seconds) | Start top-screen countdown; Play battle BGM. |
 | **OnBattleEnded** | Win/Loss condition met or time runs out | Result (Win/Loss), Stars, Percentage, Loot | Pause countdown; Stop BGM; Pop up settlement panel showing stars and resources gained. |
+| **OnLootAvailabilityUpdated** | Enemy base scouted or match preview available | GoldAvail, ElixirAvail, TrophiesAvail | Show available loot/trophies preview (left HUD). |
 
 ## **3. Payload Definitions**
 
@@ -36,16 +37,26 @@ All events carry specific structure data to convey context information.
 
 ### **3.1 Resource Update (ResourceUpdateEvent)**
 
-Triggered when Gold, Elixir, or Population changes.
+Triggered when Gold, Elixir, Population, Gems, or Trophies changes.
 
 | Field Name | Type | Description |
 | :---- | :---- | :---- |
-| resource_type | string | Resource type string ("Gold", "Elixir", "Population") |
+| resource_type | string | Resource type string ("Gold", "Elixir", "Population", "Gems", "Trophies") |
 | current_amount | int | Current value after change |
 | max_capacity | int | Current maximum capacity |
 | change_amount | int | Difference in this change (e.g., -200 or +50) |
 
-### **3.2 Troop Count Update (TroopCountUpdateEvent)**
+### **3.2 Loot Availability (LootAvailabilityEvent)**
+
+Triggered when the game has a loot preview for the current target (e.g., match preview or scouting).
+
+| Field Name | Type | Description |
+| :---- | :---- | :---- |
+| gold_available | int | Available gold to steal |
+| elixir_available | int | Available elixir to steal |
+| trophies_available | int | Available trophies to win/lose |
+
+### **3.3 Troop Count Update (TroopCountUpdateEvent)**
 
 Triggered when a troop's remaining count changes (training completed or troop deployed). Counts are scoped by owner.
 
@@ -55,7 +66,7 @@ Triggered when a troop's remaining count changes (training completed or troop de
 | troop_type | enum | Troop type enumeration |
 | remaining_count | int | Remaining troop count after the change |
 
-### **3.3 Deployment Selection (DeploymentSelectionEvent)**
+### **3.4 Deployment Selection (DeploymentSelectionEvent)**
 
 Triggered when a player selects or clears a troop slot for deployment.
 
@@ -65,7 +76,7 @@ Triggered when a player selects or clears a troop slot for deployment.
 | has_selection | bool | `true` when a troop slot is selected; `false` to clear selection |
 | troop_type | enum | Selected troop type (valid only when `has_selection` is true) |
 
-### **3.4 Entity Spawn (EntitySpawnEvent)**
+### **3.5 Entity Spawn (EntitySpawnEvent)**
 
 Triggered when a unit is deployed or map buildings are loaded.
 
@@ -81,7 +92,7 @@ Triggered when a unit is deployed or map buildings are loaded.
 | troop_type | enum | Troop type enumeration (if it is a troop) |
 | building_type | enum | Building type enumeration (if it is a building) |
 
-### **3.5 Entity Destroy (EntityDestroyEvent)**
+### **3.6 Entity Destroy (EntityDestroyEvent)**
 
 Triggered when a unit dies or a building completely collapses.
 
@@ -90,7 +101,7 @@ Triggered when a unit dies or a building completely collapses.
 | instance_id | int | ID of the corresponding entity |
 | is_building | bool | Whether it is a building |
 
-### **3.6 Building State Change (BuildingStateEvent)**
+### **3.7 Building State Change (BuildingStateEvent)**
 
 Used to handle construction progress bars and ruin state switching.
 
@@ -102,7 +113,7 @@ Used to handle construction progress bars and ruin state switching.
 | time_remaining | float | Remaining construction time (seconds) |
 | total_build_time | float | Total construction time (used to calculate progress bar percentage) |
 
-### **3.7 Damage & Health (DamageEvent)**
+### **3.8 Damage & Health (DamageEvent)**
 
 Triggered when an entity is attacked.
 
@@ -114,12 +125,12 @@ Triggered when an entity is attacked.
 | max_hp | int | Max HP (UI can use this to calculate health bar percentage) |
 | is_critical | bool | Is critical hit (Reserved) |
 
-### **3.8 Projectile Events**
+### **3.9 Projectile Events**
 
 *   **Fired (ProjectileEvent)**: Triggered when a ranged unit finishes attack pre-cast and fires a bullet.
 *   **Hit (ProjectileHitEvent)**: Triggered when a bullet hits a target or the ground.
 
-### **3.9 Battle End (BattleEndEvent)**
+### **3.10 Battle End (BattleEndEvent)**
 
 Triggered when the battle ends. This payload is the authoritative settlement dataset for the results scene.
 
@@ -130,6 +141,8 @@ Triggered when the battle ends. This payload is the authoritative settlement dat
 | destruction_percent | int | Destruction rate (0-100) |
 | gold_stolen | int | Total gold looted |
 | elixir_stolen | int | Total elixir looted |
+| trophies_earned | int | Trophy delta earned (can be negative) |
+| trophies_total | int | Player's total trophies after settlement |
 | battle_duration_seconds | int | Total elapsed battle time (seconds) |
 | troops_deployed | int | Total count of troops deployed |
 | troops_remaining | int | Troops still alive when the battle ended |

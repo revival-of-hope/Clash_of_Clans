@@ -1,43 +1,39 @@
-﻿#ifndef TILE_PLACEMENT_CONTROLLER_H
-#define TILE_PLACEMENT_CONTROLLER_H
+// Source: Classes/Integration/Docs/Engine Module API Reference.md (TilePlacementController)
+//         Classes/Integration/Docs/Placement Validation and TMX Conventions.md
+#ifndef Contract_ENGINE_TILEPLACEMENTCONTROLLER_H_
+#define Contract_ENGINE_TILEPLACEMENTCONTROLLER_H_
 
-#include "cocos2d.h"
-#include "Contract/Engine/MapLayer.h"
+#include <string>
 
-USING_NS_CC;
+namespace cocos2d {
+class Scene;
+class Sprite;
+struct Vec2;
+}
 
-class TilePlacementController
-{
+class MapLayer;
+
+class TilePlacementController {
 public:
-    TilePlacementController(Node* owner);
-    ~TilePlacementController();
-    void bindMenuIcon(
-        Sprite* menuIcon,
-        MapLayer* map,
-        const std::string& unitSpriteFile
-    );
+    explicit TilePlacementController(cocos2d::Scene* scene);
 
-    void startPlacement(MapLayer* map,
-        const std::string& unitSpriteFile,
-        const Vec2& worldPos);
+    void startPlacement(MapLayer* map, const std::string& unit_sprite_file, const cocos2d::Vec2& world_pos);
 
     void cancelPlacement();
+
     bool isPlacing() const;
 
-private:
-    void initMouseListener();
-    void placeToTile(const Vec2& worldPos);
-    bool worldPosToTileCenter(const Vec2& worldPos, Vec2& outTileCenter);
+    cocos2d::Vec2 SnapToValidTile(const cocos2d::Vec2& world_pos) const;
+    bool CanPlaceAt(const cocos2d::Vec2& world_pos) const;
+
+    void bindMenuIcon(cocos2d::Sprite* menu_icon, MapLayer* map, const std::string& unit_sprite_file);
 
 private:
-    Node* _owner = nullptr;          // Scene / UI Root
-    MapLayer* _gameMap = nullptr;
-    TMXTiledMap* _map = nullptr;
-
-    Sprite* _dragSprite = nullptr;   
-    bool _placing = false;
-
-    EventListenerMouse* _mouseListener = nullptr;
+    cocos2d::Scene* scene_ = nullptr;
+    cocos2d::Sprite* menu_icon_ = nullptr;
+    MapLayer* map_ = nullptr;
+    std::string unit_sprite_file_;
+    bool is_placement_active_ = false;
 };
 
-#endif
+#endif  // Contract_ENGINE_TILEPLACEMENTCONTROLLER_H_
