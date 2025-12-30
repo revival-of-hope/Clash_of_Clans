@@ -47,7 +47,7 @@ bool HealthComp::TakeDamage(int amount) {
     // 获取父实体信息用于事件广播
     auto parent = this->getParent();
     int instance_id = -1;
-
+    
     if (auto entity = dynamic_cast<BaseEntity*>(parent)) {
         instance_id = entity->get_instance_id();
     }
@@ -66,7 +66,7 @@ bool HealthComp::TakeDamage(int amount) {
     // 触发受伤视觉效果
     if (auto unit = dynamic_cast<Unit*>(parent)) {
         if (!is_dead_) unit->PlayHurtEffect();
-    }
+    } 
     else if (auto building = dynamic_cast<Building*>(parent)) {
         if (!is_dead_) building->PlayHurtEffect();
     }
@@ -78,7 +78,7 @@ bool HealthComp::TakeDamage(int amount) {
 
         if (auto unit = dynamic_cast<Unit*>(parent)) {
             unit->PlayDeathAnimation();
-        }
+        } 
         else if (auto building = dynamic_cast<Building*>(parent)) {
             building->PlayDestroyedAnimation();
         }
@@ -98,11 +98,10 @@ void HealthComp::Heal(int amount) {
     if (current_hp_ > max_hp_) {
         current_hp_ = max_hp_;
         health_bar_node_->setVisible(false);
-    }
-    else {
+    } else {
         UpdateHealthBar();
     }
-
+    
     // [EVENT] 广播治疗 (作为负伤害)
     auto parent = this->getParent();
     if (auto entity = dynamic_cast<BaseEntity*>(parent)) {

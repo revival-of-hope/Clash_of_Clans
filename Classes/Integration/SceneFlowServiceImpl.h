@@ -1,7 +1,7 @@
 #ifndef CLASSES_INTEGRATION_SCENEFLOWSERVICEIMPL_H_
 #define CLASSES_INTEGRATION_SCENEFLOWSERVICEIMPL_H_
 
-#include "Classes/Contract/Integration/SceneFlowService.h"
+#include "Contract/Integration/SceneFlowService.h"
 
 namespace Integration {
 

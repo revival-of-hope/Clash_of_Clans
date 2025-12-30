@@ -42,10 +42,10 @@ void EconomySystem::AddGold(int amount) {
     if (current_gold_ > max_gold_) {
         current_gold_ = max_gold_;
     }
-
+    
     int actual_change = current_gold_ - old_val;
     cocos2d::log("Economy: Gold +%d -> %d/%d", amount, current_gold_, max_gold_);
-
+    
     // [EVENT] 广播资源变化
     Gameplay::ResourceUpdateEvent evt;
     evt.resource_type = "Gold";
@@ -61,10 +61,10 @@ void EconomySystem::AddElixir(int amount) {
     if (current_elixir_ > max_elixir_) {
         current_elixir_ = max_elixir_;
     }
-
+    
     int actual_change = current_elixir_ - old_val;
     cocos2d::log("Economy: Elixir +%d -> %d/%d", amount, current_elixir_, max_elixir_);
-
+    
     // [EVENT] 广播资源变化
     Gameplay::ResourceUpdateEvent evt;
     evt.resource_type = "Elixir";
@@ -78,7 +78,7 @@ bool EconomySystem::SpendGold(int amount) {
     if (current_gold_ >= amount) {
         current_gold_ -= amount;
         cocos2d::log("Economy: Gold -%d -> %d/%d", amount, current_gold_, max_gold_);
-
+        
         // [EVENT] 广播资源变化
         Gameplay::ResourceUpdateEvent evt;
         evt.resource_type = "Gold";
@@ -86,7 +86,7 @@ bool EconomySystem::SpendGold(int amount) {
         evt.max_capacity = max_gold_;
         evt.change_amount = -amount;  // 负数表示消耗
         Gameplay::GameEventManager::GetInstance()->BroadcastResourceChange(evt);
-
+        
         return true;
     }
     cocos2d::log("Economy: Not enough Gold! Need %d, have %d", amount, current_gold_);
@@ -97,7 +97,7 @@ bool EconomySystem::SpendElixir(int amount) {
     if (current_elixir_ >= amount) {
         current_elixir_ -= amount;
         cocos2d::log("Economy: Elixir -%d -> %d/%d", amount, current_elixir_, max_elixir_);
-
+        
         // [EVENT] 广播资源变化
         Gameplay::ResourceUpdateEvent evt;
         evt.resource_type = "Elixir";
@@ -105,7 +105,7 @@ bool EconomySystem::SpendElixir(int amount) {
         evt.max_capacity = max_elixir_;
         evt.change_amount = -amount;
         Gameplay::GameEventManager::GetInstance()->BroadcastResourceChange(evt);
-
+        
         return true;
     }
     cocos2d::log("Economy: Not enough Elixir! Need %d, have %d", amount, current_elixir_);
@@ -116,33 +116,33 @@ bool EconomySystem::SpendCost(const ResourceCost& cost) {
     if (!CanAffordCost(cost, false)) {
         return false;
     }
-
+    
     // 分别扣除，各自会触发事件
     if (cost.gold > 0) {
         current_gold_ -= cost.gold;
-
+        
         Gameplay::ResourceUpdateEvent evt;
         evt.resource_type = "Gold";
         evt.current_amount = current_gold_;
         evt.max_capacity = max_gold_;
         evt.change_amount = -cost.gold;
         Gameplay::GameEventManager::GetInstance()->BroadcastResourceChange(evt);
-
+        
         cocos2d::log("Economy: Gold -%d -> %d/%d", cost.gold, current_gold_, max_gold_);
     }
     if (cost.elixir > 0) {
         current_elixir_ -= cost.elixir;
-
+        
         Gameplay::ResourceUpdateEvent evt;
         evt.resource_type = "Elixir";
         evt.current_amount = current_elixir_;
         evt.max_capacity = max_elixir_;
         evt.change_amount = -cost.elixir;
         Gameplay::GameEventManager::GetInstance()->BroadcastResourceChange(evt);
-
+        
         cocos2d::log("Economy: Elixir -%d -> %d/%d", cost.elixir, current_elixir_, max_elixir_);
     }
-
+    
     return true;
 }
 
@@ -157,11 +157,11 @@ bool EconomySystem::CanAfford(int gold_cost, int elixir_cost) const {
 bool EconomySystem::CanAffordCost(const ResourceCost& cost, bool check_population) const {
     if (current_gold_ < cost.gold) return false;
     if (current_elixir_ < cost.elixir) return false;
-
+    
     if (check_population && cost.population > 0) {
         if (!HasPopulationSpace(cost.population)) return false;
     }
-
+    
     return true;
 }
 
@@ -227,9 +227,9 @@ int EconomySystem::TryCollectResource(Building* building) {
 bool EconomySystem::AddTroopPopulation(int housing_space) {
     if (HasPopulationSpace(housing_space)) {
         current_population_ += housing_space;
-        cocos2d::log("Economy: Population +%d -> %d/%d",
-            housing_space, current_population_, max_population_);
-
+        cocos2d::log("Economy: Population +%d -> %d/%d", 
+                     housing_space, current_population_, max_population_);
+        
         // [EVENT] 广播人口变化
         Gameplay::ResourceUpdateEvent evt;
         evt.resource_type = "Population";
@@ -237,20 +237,20 @@ bool EconomySystem::AddTroopPopulation(int housing_space) {
         evt.max_capacity = max_population_;
         evt.change_amount = housing_space;
         Gameplay::GameEventManager::GetInstance()->BroadcastResourceChange(evt);
-
+        
         return true;
     }
-    cocos2d::log("Economy: Not enough Housing Space! Need %d, have %d free",
-        housing_space, GetRemainingPopulation());
+    cocos2d::log("Economy: Not enough Housing Space! Need %d, have %d free", 
+                 housing_space, GetRemainingPopulation());
     return false;
 }
 
 void EconomySystem::FreeTroopPopulation(int housing_space) {
     current_population_ -= housing_space;
     if (current_population_ < 0) current_population_ = 0;
-    cocos2d::log("Economy: Population Freed -%d -> %d/%d",
-        housing_space, current_population_, max_population_);
-
+    cocos2d::log("Economy: Population Freed -%d -> %d/%d", 
+                 housing_space, current_population_, max_population_);
+    
     // [EVENT] 广播人口变化
     Gameplay::ResourceUpdateEvent evt;
     evt.resource_type = "Population";
@@ -308,7 +308,7 @@ void EconomySystem::RecalculateLimits(const cocos2d::Vector<Building*>& /*ignore
     if (current_elixir_ > max_elixir_) current_elixir_ = max_elixir_;
 
     cocos2d::log("Economy: Limits Updated. GoldCap: %d, ElixirCap: %d, PopCap: %d",
-        max_gold_, max_elixir_, max_population_);
+                 max_gold_, max_elixir_, max_population_);
 
     // [EVENT] 广播容量变化 (change_amount = 0 表示仅容量变化)
     if (gold_changed) {

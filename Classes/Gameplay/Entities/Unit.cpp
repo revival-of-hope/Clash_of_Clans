@@ -14,7 +14,7 @@
 #include "Gameplay/Components/PathAgent.h"
 #include "Gameplay/Components/EntityAnimationController.h"
 
-// é™æ€ ID ç”Ÿæˆå™¨
+// ¾²Ì¬ ID Éú³ÉÆ÷
 static int s_next_unit_id = 10000;
 
 Unit* Unit::create(Core::TroopType type, int level, int owner_id) {
@@ -30,16 +30,16 @@ Unit* Unit::create(Core::TroopType type, int level, int owner_id) {
 bool Unit::init(Core::TroopType type, int level, int owner_id) {
     if (!BaseEntity::init()) return false;
 
-    // åˆ†é…å”¯ä¸€ ID
+    // ·ÖÅäÎ¨Ò» ID
     this->set_instance_id(s_next_unit_id++);
-
+    
     this->setLocalZOrder(static_cast<int>(Core::ZOrder::kUnits));
     this->type_ = type;
     this->level_ = level;
     this->stats_ = Core::GameConfig::GetInstance()->GetTroopStats(type, level);
     this->set_owner_id(owner_id);
 
-    // æ ¹æ®å…µç§ç±»å‹è®¾ç½®ç¢°æ’åŠå¾„
+    // ¸ù¾İ±øÖÖÀàĞÍÉèÖÃÅö×²°ë¾¶
     switch (type) {
     case Core::TroopType::kGiant:
         collision_radius_ = 30.0f;
@@ -55,23 +55,23 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
         break;
     }
 
-    // ç²¾çµå’ŒåŠ¨ç”»åˆå§‹åŒ–
+    // ¾«ÁéºÍ¶¯»­³õÊ¼»¯
     std::string sprite_sheet = GetSpriteSheetFilename(type);
     int frame_w, frame_h;
     GetFrameSize(type, frame_w, frame_h);
 
-    // [DEBUG] æ‰“å°ç²¾çµå›¾å°ºå¯¸ä¿¡æ¯
+    // [DEBUG] ´òÓ¡¾«ÁéÍ¼³ß´çĞÅÏ¢
     auto texture = cocos2d::Director::getInstance()
-        ->getTextureCache()
-        ->addImage(sprite_sheet);
+                       ->getTextureCache()
+                       ->addImage(sprite_sheet);
     if (texture) {
         cocos2d::Size size = texture->getContentSize();
         cocos2d::log("=== Sprite Sheet Debug: %s ===", sprite_sheet.c_str());
         cocos2d::log("  Actual Size: %.0f x %.0f", size.width, size.height);
         cocos2d::log("  Using Frame Size: %d x %d", frame_w, frame_h);
-        cocos2d::log("  Expected (4x4): %.0f x %.0f", size.width / 4, size.height / 4);
-
-        if (std::abs(size.width / 4 - frame_w) > 1 || std::abs(size.height / 4 - frame_h) > 1) {
+        cocos2d::log("  Expected (4x4): %.0f x %.0f", size.width/4, size.height/4);
+        
+        if (std::abs(size.width/4 - frame_w) > 1 || std::abs(size.height/4 - frame_h) > 1) {
             cocos2d::log("  [WARNING] Frame size mismatch! Adjust GetFrameSize()");
         }
     }
@@ -84,23 +84,22 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
         animation_controller_ = EntityAnimationController::create();
         if (animation_controller_) {
             animation_controller_->InitWithSprite(
-                visual_sprite_,
+                visual_sprite_, 
                 sprite_sheet,
                 EntityAnimationController::LayoutType::kUnit,
-                frame_w,
+                frame_w, 
                 frame_h
             );
             animation_controller_->setName("AnimationController");
             this->addChild(animation_controller_);
         }
-    }
-    else {
+    } else {
         auto debugDraw = cocos2d::DrawNode::create();
         debugDraw->drawSolidCircle(cocos2d::Vec2::ZERO, 10, 0, 10, cocos2d::Color4F::BLUE);
         this->addChild(debugDraw);
     }
 
-    // Debug ç¢°æ’ä½“ç§¯
+    // Debug Åö×²Ìå»ı
     auto debug_collider = cocos2d::DrawNode::create();
     debug_collider->drawCircle(cocos2d::Vec2::ZERO, collision_radius_, 0, 30, false, cocos2d::Color4F::GREEN);
     this->addChild(debug_collider, 100);
@@ -117,8 +116,8 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
 
     // AttackComp
     auto attack_comp = AttackComp::create();
-    attack_comp->InitStats(stats_.damage_per_shot_, this->GetRangeInPixels(),
-        stats_.attack_speed_, stats_.projectile_);
+    attack_comp->InitStats(stats_.damage_per_shot_, this->GetRangeInPixels(), 
+                           stats_.attack_speed_, stats_.projectile_);
     attack_comp->setName("AttackComp");
     this->addChild(attack_comp);
 
@@ -136,10 +135,10 @@ bool Unit::init(Core::TroopType type, int level, int owner_id) {
 
 void Unit::onEnter() {
     BaseEntity::onEnter();
-
-    // [EVENT] å¹¿æ’­å®ä½“ç”Ÿæˆäº‹ä»¶
+    
+    // [EVENT] ¹ã²¥ÊµÌåÉú³ÉÊÂ¼ş
     cocos2d::Vec2 pos = this->getPosition();
-
+    
     Gameplay::EntitySpawnEvent evt;
     evt.instance_id = this->get_instance_id();
     evt.owner_id = this->get_owner_id();
@@ -151,11 +150,11 @@ void Unit::onEnter() {
     evt.is_building = false;
     evt.troop_type = type_;
     evt.building_type = Core::BuildingType::kNone;
-
+    
     Gameplay::GameEventManager::GetInstance()->BroadcastEntitySpawned(evt);
-
+    
     cocos2d::log("Unit Spawned: ID=%d, Type=%d, Owner=%d, Pos=(%.0f, %.0f)",
-        evt.instance_id, static_cast<int>(type_), evt.owner_id, pos.x, pos.y);
+                 evt.instance_id, static_cast<int>(type_), evt.owner_id, pos.x, pos.y);
 }
 
 bool Unit::CanAttack(Core::GeneralType target_type) const {
@@ -175,7 +174,7 @@ bool Unit::CanAttack(Core::GeneralType target_type) const {
 cocos2d::Rect Unit::GetOccupiedRect() const {
     cocos2d::Vec2 pos = this->getPosition();
     float size = collision_radius_ * 2.0f;
-
+    
     return cocos2d::Rect(
         pos.x - collision_radius_,
         pos.y - collision_radius_,
@@ -201,7 +200,7 @@ void Unit::SetState(Core::UnitAnimationState new_state) {
 void Unit::SetFacing(Core::Facing facing) {
     if (current_facing_ == facing) return;
     current_facing_ = facing;
-
+    
     if (animation_controller_) {
         animation_controller_->SetFacing(facing);
     }
@@ -232,15 +231,15 @@ void Unit::update(float dt) {
     if (hp_comp && hp_comp->IsDead() && current_state_ != Core::UnitAnimationState::kDead) {
         SetState(Core::UnitAnimationState::kDead);
         this->is_marked_for_destruction_ = false;
-
-        // [EVENT] å¹¿æ’­å®ä½“é”€æ¯äº‹ä»¶
+        
+        // [EVENT] ¹ã²¥ÊµÌåÏú»ÙÊÂ¼ş
         Gameplay::EntityDestroyEvent evt;
         evt.instance_id = this->get_instance_id();
         evt.is_building = false;
         Gameplay::GameEventManager::GetInstance()->BroadcastEntityDestroyed(evt);
-
-        cocos2d::log("Unit Destroyed: ID=%d, Type=%d",
-            this->get_instance_id(), static_cast<int>(type_));
+        
+        cocos2d::log("Unit Destroyed: ID=%d, Type=%d", 
+                     this->get_instance_id(), static_cast<int>(type_));
     }
 
     BaseEntity::update(dt);
@@ -249,9 +248,9 @@ void Unit::update(float dt) {
     if (current_state_ == Core::UnitAnimationState::kDead) {
         if (visual_sprite_ && visual_sprite_->getActionByTag(999) == nullptr) {
             auto fade = cocos2d::FadeOut::create(1.0f);
-            auto remove = cocos2d::CallFunc::create([this]() {
-                this->MarkForDestruction();
-                });
+            auto remove = cocos2d::CallFunc::create([this]() { 
+                this->MarkForDestruction(); 
+            });
             auto seq = cocos2d::Sequence::create(fade, remove, nullptr);
             seq->setTag(999);
             visual_sprite_->runAction(seq);
@@ -271,7 +270,7 @@ std::string Unit::GetSpriteSheetFilename(Core::TroopType type) {
 }
 
 void Unit::GetFrameSize(Core::TroopType type, int& out_width, int& out_height) {
-    // 500x500 ç²¾çµå›¾ï¼Œ4x4 å¸ƒå±€ï¼Œæ¯å¸§ 125x125
+    // 500x500 ¾«ÁéÍ¼£¬4x4 ²¼¾Ö£¬Ã¿Ö¡ 125x125
     out_width = 125;
     out_height = 125;
 }

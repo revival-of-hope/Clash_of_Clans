@@ -27,9 +27,8 @@ public:
 
 private:
     bool Route(const cocos2d::Vec2& screen_pos);
-
-    MapLayer* map_layer_ = nullptr;
     TileHighlighter* highlighter_ = nullptr;
+    MapLayer* map_layer_ = nullptr;
     bool ui_consumes_input_ = true;
     InputRouteState last_state_{};
 };

@@ -84,10 +84,10 @@ void CombatResolver::Update(float dt) {
             if (!proj.target_lost && proj.target) {
                 ApplyDamage(proj.target, proj.damage);
             }
-
+            
             // 播放命中特效
             PlayImpactVFX(target_current_pos, proj.type);
-
+            
             // [EVENT] 广播投射物命中事件
             Gameplay::ProjectileHitEvent hit_evt;
             hit_evt.x = target_current_pos.x;
@@ -139,7 +139,7 @@ void CombatResolver::ResolveMeleeAttack(BaseEntity* attacker, BaseEntity* target
 
         ApplyDamage(target, final_damage);
         PlayImpactVFX(target->GetCenterPosition(), Core::ProjectileType::kFireBall);
-
+        
         // [EVENT] 广播投射物命中 (自爆算作特殊命中)
         Gameplay::ProjectileHitEvent hit_evt;
         hit_evt.x = target->GetCenterPosition().x;
@@ -189,7 +189,7 @@ void CombatResolver::SpawnProjectile(BaseEntity* attacker, BaseEntity* target, i
         proj.sprite->setLocalZOrder(static_cast<int>(Core::ZOrder::kProjectiles));
         battle_layer_->addChild(proj.sprite);
         projectiles_.push_back(proj);
-
+        
         // [EVENT] 广播投射物发射事件
         Gameplay::ProjectileEvent fire_evt;
         fire_evt.source_id = attacker->get_instance_id();
@@ -197,10 +197,10 @@ void CombatResolver::SpawnProjectile(BaseEntity* attacker, BaseEntity* target, i
         fire_evt.target_y = proj.last_known_pos.y;
         fire_evt.projectile_type = type;
         Gameplay::GameEventManager::GetInstance()->BroadcastProjectileFired(fire_evt);
-
+        
         cocos2d::log("Projectile Fired: Source=%d, Type=%d, Target=(%.0f, %.0f)",
-            fire_evt.source_id, static_cast<int>(type),
-            fire_evt.target_x, fire_evt.target_y);
+                     fire_evt.source_id, static_cast<int>(type), 
+                     fire_evt.target_x, fire_evt.target_y);
     }
     else {
         proj.target->release();

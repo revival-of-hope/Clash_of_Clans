@@ -16,16 +16,16 @@ CostQuery* CostQuery::GetInstance() {
 }
 
 // =============================================================================
-// è´¹ç”¨æŸ¥è¯¢
+// ·ÑÓÃ²éÑ¯
 // =============================================================================
 
 ResourceCost CostQuery::GetBuildingPlacementCost(Core::BuildingType type, int level) const {
     ResourceCost cost;
-
-    // åŸºç¡€è´¹ç”¨è¡¨ (level 1)
+    
+    // »ù´¡·ÑÓÃ±í (level 1)
     switch (type) {
     case Core::BuildingType::kTownHall:
-        cost.gold = 0;  // åˆå§‹å…è´¹
+        cost.gold = 0;  // ³õÊ¼Ãâ·Ñ
         break;
     case Core::BuildingType::kCannon:
         cost.gold = 250;
@@ -55,30 +55,30 @@ ResourceCost CostQuery::GetBuildingPlacementCost(Core::BuildingType type, int le
         cost.elixir = 250;
         break;
     case Core::BuildingType::kAirDefense:
-        cost.gold = 1500;
+        cost.gold = 22500;
         break;
     default:
         cost.gold = 100;
         break;
     }
-
+    
     return cost;
 }
 
 ResourceCost CostQuery::GetBuildingUpgradeCost(Core::BuildingType type, int current_level) const {
     ResourceCost cost = GetBuildingPlacementCost(type, 1);
-
-    // å‡çº§è´¹ç”¨ = åŸºç¡€è´¹ç”¨ * ç­‰çº§å€ç‡
+    
+    // Éı¼¶·ÑÓÃ = »ù´¡·ÑÓÃ * µÈ¼¶±¶ÂÊ
     float multiplier = 1.0f + (current_level * 0.8f);
     cost.gold = static_cast<int>(cost.gold * multiplier);
     cost.elixir = static_cast<int>(cost.elixir * multiplier);
-
+    
     return cost;
 }
 
 ResourceCost CostQuery::GetTroopTrainingCost(Core::TroopType type, int level) const {
     ResourceCost cost;
-
+    
     switch (type) {
     case Core::TroopType::kBarbarian:
         cost.elixir = 25;
@@ -93,11 +93,11 @@ ResourceCost CostQuery::GetTroopTrainingCost(Core::TroopType type, int level) co
         cost.population = 5;
         break;
     case Core::TroopType::kWallBreaker:
-        cost.elixir = 50;
+        cost.elixir = 1000;
         cost.population = 2;
         break;
     case Core::TroopType::kBabyDragon:
-        cost.elixir = 500;
+        cost.elixir = 2500;
         cost.population = 10;
         break;
     default:
@@ -105,20 +105,74 @@ ResourceCost CostQuery::GetTroopTrainingCost(Core::TroopType type, int level) co
         cost.population = 1;
         break;
     }
-
-    // ç­‰çº§åŠ æˆ
+    
+    // µÈ¼¶¼Ó³É
     cost.elixir = static_cast<int>(cost.elixir * (1.0f + (level - 1) * 0.1f));
-
+    
     return cost;
 }
 
+ResourceCost CostQuery::GetMatchmakingCost() const {
+    // Æ¥ÅäÕ½ËÑË÷·ÑÓÃ (¹Ì¶¨750½ğ±Ò)
+    return ResourceCost(750, 0, 0, 0.0f);
+}
+
+float CostQuery::GetBuildingConstructionTime(Core::BuildingType type, int level) const {
+    // »ù´¡½¨ÔìÊ±¼ä (Ãë)
+    float base_time = 0.0f;
+    
+    switch (type) {
+    case Core::BuildingType::kTownHall:
+        base_time = 10.0f;  // ´ó±¾Óª³õÊ¼¿ìËÙ
+        break;
+    case Core::BuildingType::kCannon:
+        base_time = 60.0f;  // 1·ÖÖÓ
+        break;
+    case Core::BuildingType::kArcherTower:
+        base_time = 120.0f;  // 2·ÖÖÓ
+        break;
+    case Core::BuildingType::kWall:
+        base_time = 5.0f;  // ³ÇÇ½ºÜ¿ì
+        break;
+    case Core::BuildingType::kGoldMine:
+    case Core::BuildingType::kElixirCollector:
+        base_time = 30.0f;  // 30Ãë
+        break;
+    case Core::BuildingType::kGoldStorage:
+    case Core::BuildingType::kElixirStorage:
+        base_time = 45.0f;  // 45Ãë
+        break;
+    case Core::BuildingType::kBarracks:
+        base_time = 60.0f;  // 1·ÖÖÓ
+        break;
+    case Core::BuildingType::kArmyCamp:
+        base_time = 90.0f;  // 1.5·ÖÖÓ
+        break;
+    case Core::BuildingType::kAirDefense:
+        base_time = 300.0f;  // 5·ÖÖÓ
+        break;
+    default:
+        base_time = 30.0f;
+        break;
+    }
+    
+    // µÈ¼¶±¶ÂÊ: Ã¿¼¶Ôö¼Ó 50%
+    float multiplier = 1.0f + (level - 1) * 0.5f;
+    return base_time * multiplier;
+}
+
+float CostQuery::GetBuildingUpgradeTime(Core::BuildingType type, int current_level) const {
+    // Éı¼¶Ê±¼ä = ½¨ÔìÊ±¼ä * 1.5
+    return GetBuildingConstructionTime(type, current_level + 1) * 1.5f;
+}
+
 // =============================================================================
-// å¤§æœ¬è¥ç­‰çº§é™åˆ¶
+// ´ó±¾ÓªµÈ¼¶ÏŞÖÆ
 // =============================================================================
 
 /**
- * å¤§æœ¬è¥è§£é”è¡¨ (æœ€é«˜3çº§):
- *
+ * ´ó±¾Óª½âËø±í (×î¸ß3¼¶):
+ * 
  * TH1: TownHall, GoldMine, ElixirCollector, GoldStorage, ElixirStorage, Barracks, ArmyCamp, Cannon
  * TH2: +ArcherTower, +Wall
  * TH3: +AirDefense
@@ -126,7 +180,7 @@ ResourceCost CostQuery::GetTroopTrainingCost(Core::TroopType type, int level) co
 
 int CostQuery::GetRequiredTownHallLevel(Core::BuildingType building_type) const {
     switch (building_type) {
-        // TH1 è§£é”
+    // TH1 ½âËø
     case Core::BuildingType::kTownHall:
     case Core::BuildingType::kGoldMine:
     case Core::BuildingType::kElixirCollector:
@@ -136,16 +190,16 @@ int CostQuery::GetRequiredTownHallLevel(Core::BuildingType building_type) const 
     case Core::BuildingType::kArmyCamp:
     case Core::BuildingType::kCannon:
         return 1;
-
-        // TH2 è§£é”
+    
+    // TH2 ½âËø
     case Core::BuildingType::kArcherTower:
     case Core::BuildingType::kWall:
         return 2;
-
-        // TH3 è§£é”
+    
+    // TH3 ½âËø
     case Core::BuildingType::kAirDefense:
         return 3;
-
+    
     default:
         return 1;
     }
@@ -157,94 +211,94 @@ bool CostQuery::CanUnlockBuilding(int townhall_level, Core::BuildingType buildin
 }
 
 int CostQuery::GetMaxBuildingLevel(int townhall_level, Core::BuildingType building_type) const {
-    // å¤§æœ¬è¥è‡ªèº«ç­‰çº§é™åˆ¶ (æœ€é«˜3çº§)
+    // ´ó±¾Óª×ÔÉíµÈ¼¶ÏŞÖÆ (×î¸ß3¼¶)
     if (building_type == Core::BuildingType::kTownHall) {
         return 3;
     }
-
-    // å¦‚æœè¯¥å»ºç­‘æœªè§£é”ï¼Œè¿”å›0
+    
+    // Èç¹û¸Ã½¨ÖşÎ´½âËø£¬·µ»Ø0
     if (!CanUnlockBuilding(townhall_level, building_type)) {
         return 0;
     }
-
-    // æ‰€æœ‰å»ºç­‘æœ€é«˜3çº§
-    // å»ºç­‘æœ€å¤§ç­‰çº§ = min(å¤§æœ¬è¥ç­‰çº§, 3)
+    
+    // ËùÓĞ½¨Öş×î¸ß3¼¶
+    // ½¨Öş×î´óµÈ¼¶ = min(´ó±¾ÓªµÈ¼¶, 3)
     switch (building_type) {
     case Core::BuildingType::kCannon:
     case Core::BuildingType::kArcherTower:
     case Core::BuildingType::kAirDefense:
-        // é˜²å¾¡å»ºç­‘: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
+        // ·ÀÓù½¨Öş: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
         return std::min(townhall_level, 3);
-
+    
     case Core::BuildingType::kWall:
-        // åŸå¢™: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
+        // ³ÇÇ½: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
         return std::min(townhall_level, 3);
-
+    
     case Core::BuildingType::kGoldMine:
     case Core::BuildingType::kElixirCollector:
-        // èµ„æºå»ºç­‘: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
+        // ×ÊÔ´½¨Öş: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
         return std::min(townhall_level, 3);
-
+    
     case Core::BuildingType::kGoldStorage:
     case Core::BuildingType::kElixirStorage:
-        // å­˜å‚¨å»ºç­‘: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
+        // ´æ´¢½¨Öş: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
         return std::min(townhall_level, 3);
-
+    
     case Core::BuildingType::kBarracks:
     case Core::BuildingType::kArmyCamp:
-        // å†›äº‹å»ºç­‘: æœ€å¤§ç­‰çº§ = å¤§æœ¬è¥ç­‰çº§ï¼Œä¸Šé™3
+        // ¾üÊÂ½¨Öş: ×î´óµÈ¼¶ = ´ó±¾ÓªµÈ¼¶£¬ÉÏÏŞ3
         return std::min(townhall_level, 3);
-
+    
     default:
         return std::min(townhall_level, 3);
     }
 }
 
 int CostQuery::GetMaxBuildingCount(int townhall_level, Core::BuildingType building_type) const {
-    // å¦‚æœè¯¥å»ºç­‘æœªè§£é”ï¼Œè¿”å›0
+    // Èç¹û¸Ã½¨ÖşÎ´½âËø£¬·µ»Ø0
     if (!CanUnlockBuilding(townhall_level, building_type)) {
         return 0;
     }
-
-    // å¤§æœ¬è¥æœ€é«˜3çº§ï¼Œè°ƒæ•´æ•°é‡é™åˆ¶
+    
+    // ´ó±¾Óª×î¸ß3¼¶£¬µ÷ÕûÊıÁ¿ÏŞÖÆ
     switch (building_type) {
     case Core::BuildingType::kTownHall:
-        return 1;  // åªèƒ½æœ‰ä¸€ä¸ªå¤§æœ¬è¥
-
+        return 1;  // Ö»ÄÜÓĞÒ»¸ö´ó±¾Óª
+    
     case Core::BuildingType::kCannon:
         // TH1:2, TH2:3, TH3:4
         return townhall_level + 1;
-
+    
     case Core::BuildingType::kArcherTower:
         // TH2:1, TH3:2
         return townhall_level - 1;
-
+    
     case Core::BuildingType::kWall:
         // TH2:25, TH3:50
         return (townhall_level - 1) * 25;
-
+    
     case Core::BuildingType::kGoldMine:
     case Core::BuildingType::kElixirCollector:
         // TH1:1, TH2:2, TH3:3
         return townhall_level;
-
+    
     case Core::BuildingType::kGoldStorage:
     case Core::BuildingType::kElixirStorage:
         // TH1:1, TH2:1, TH3:2
         return (townhall_level + 1) / 2;
-
+    
     case Core::BuildingType::kBarracks:
         // TH1:1, TH2:1, TH3:2
         return (townhall_level + 1) / 2;
-
+    
     case Core::BuildingType::kArmyCamp:
         // TH1:1, TH2:2, TH3:2
         return std::min(townhall_level, 2);
-
+    
     case Core::BuildingType::kAirDefense:
-        // TH3 è§£é”ååªæœ‰1ä¸ª (è°ƒæ•´ä¸ºTH3è§£é”)
+        // TH3 ½âËøºóÖ»ÓĞ1¸ö (µ÷ÕûÎªTH3½âËø)
         return 1;
-
+    
     default:
         return 1;
     }
@@ -252,8 +306,8 @@ int CostQuery::GetMaxBuildingCount(int townhall_level, Core::BuildingType buildi
 
 std::vector<Core::BuildingType> CostQuery::GetUnlockedBuildings(int townhall_level) const {
     std::vector<Core::BuildingType> result;
-
-    // éå†æ‰€æœ‰å»ºç­‘ç±»å‹
+    
+    // ±éÀúËùÓĞ½¨ÖşÀàĞÍ
     const Core::BuildingType all_types[] = {
         Core::BuildingType::kTownHall,
         Core::BuildingType::kCannon,
@@ -267,12 +321,68 @@ std::vector<Core::BuildingType> CostQuery::GetUnlockedBuildings(int townhall_lev
         Core::BuildingType::kArmyCamp,
         Core::BuildingType::kAirDefense
     };
-
+    
     for (auto type : all_types) {
         if (CanUnlockBuilding(townhall_level, type)) {
             result.push_back(type);
         }
     }
-
+    
     return result;
+}
+
+// =============================================================================
+// ±øÖÖ²éÑ¯
+// =============================================================================
+
+float CostQuery::GetTroopTrainingTime(Core::TroopType type, int /*level*/) const {
+    switch (type) {
+    case Core::TroopType::kBarbarian:   return 5.0f;
+    case Core::TroopType::kArcher:      return 6.0f;
+    case Core::TroopType::kGiant:       return 30.0f;
+    case Core::TroopType::kWallBreaker: return 30.0f;
+    case Core::TroopType::kBabyDragon:  return 45.0f;
+    default:                            return 10.0f;
+    }
+}
+
+int CostQuery::GetTroopHousingSpace(Core::TroopType type) const {
+    switch (type) {
+    case Core::TroopType::kBarbarian:   return 1;
+    case Core::TroopType::kArcher:      return 1;
+    case Core::TroopType::kGiant:       return 5;
+    case Core::TroopType::kWallBreaker: return 2;
+    case Core::TroopType::kBabyDragon:  return 10;
+    default:                            return 1;
+    }
+}
+
+int CostQuery::GetTroopMaxLevel(Core::TroopType /*type*/) const {
+    // µ±Ç°°æ±¾ËùÓĞ±øÖÖ×î¸ß3¼¶
+    return 3;
+}
+
+// =============================================================================
+// »ù´¡ÊıÖµ²éÑ¯
+// =============================================================================
+
+ResourceCost CostQuery::GetBaseBuildingCost(Core::BuildingType type) const {
+    return GetBuildingPlacementCost(type, 1);
+}
+
+float CostQuery::GetBaseBuildingTime(Core::BuildingType type) const {
+    return GetBuildingConstructionTime(type, 1);
+}
+
+ResourceCost CostQuery::GetBaseTroopCost(Core::TroopType type) const {
+    return GetTroopTrainingCost(type, 1);
+}
+
+float CostQuery::GetBaseTroopTime(Core::TroopType type) const {
+    return GetTroopTrainingTime(type, 1);
+}
+
+int CostQuery::GetBuildingMaxLevel(Core::BuildingType /*type*/) const {
+    // µ±Ç°°æ±¾ËùÓĞ½¨Öş×î¸ß3¼¶
+    return 3;
 }

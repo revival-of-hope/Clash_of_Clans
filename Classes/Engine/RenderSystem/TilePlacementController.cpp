@@ -115,7 +115,7 @@ void TilePlacementController::placeToTile(const Vec2& worldPos)
 
 bool TilePlacementController::worldPosToTileCenter(
     const Vec2& worldPos,
-    Vec2& outTileCenter)
+    Vec2& outTileCenter)const
 {
     // ① 世界坐标 → 地图本地坐标
     Vec2 local = _map->convertToNodeSpace(worldPos);
@@ -171,4 +171,39 @@ void TilePlacementController::bindMenuIcon(
 
     _owner->getEventDispatcher()
         ->addEventListenerWithSceneGraphPriority(listener, menuIcon);
+}
+bool TilePlacementController::CanPlaceAt(const Vec2& worldPos) const
+{
+    Vec2 tileCenter;
+    if (!worldPosToTileCenter(worldPos, tileCenter))
+        return false;
+
+    // ① 地图逻辑判断
+    if (!_gameMap->CanPlaceBuildingAt(tileCenter))
+        return false;
+
+    // ② 占用检测（建筑 / 单位）
+    if (_gameMap->IsTileOccupied(tileCenter))
+        return false;
+
+    return true;
+}
+Vec2 TilePlacementController::SnapToValidTile(const Vec2& worldPos) const
+{
+    // 没在放置状态，或地图无效，直接返回原坐标
+    if (!_placing || !_gameMap || !_map)
+        return worldPos;
+
+    Vec2 tileCenter;
+
+    // ① 先尝试吸附到 tile 中心（几何层）
+    if (!worldPosToTileCenter(worldPos, tileCenter))
+        return worldPos;
+
+    // ② 再判断是否允许放置（规则层）
+    if (!CanPlaceAt(tileCenter))
+        return worldPos;
+
+    // ③ 合法，返回吸附后的中心点
+    return tileCenter;
 }

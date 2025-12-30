@@ -2,8 +2,9 @@
 //
 // GameEvents.h - Event System for Gameplay-UI decoupling
 // Uses Observer Pattern for push-based notifications
+// [UPDATE] Added StarUpdateEvent for battle star tracking
 //
-// Path: Classes/Contract/Gameplay/GameEvents.h
+// Path: Classes/Contract/GamePlay/GameEvents.h
 
 #ifndef CONTRACT_GAMEPLAY_GAMEEVENTS_H_
 #define CONTRACT_GAMEPLAY_GAMEEVENTS_H_
@@ -15,231 +16,233 @@
 
 namespace Gameplay {
 
-    // =============================================================================
-    // Event Data Structure Definitions
-    // =============================================================================
+// =============================================================================
+// 事件数据结构定义
+// =============================================================================
 
-    /**
-     * @brief Resource Update Event
-     * Trigger timing: When Gold/Elixir/Population/Gems/Trophies increases or decreases
-     */
-    struct ResourceUpdateEvent {
-        std::string resource_type;   // "Gold", "Elixir", "Population", "Gems", "Trophies"
-        int current_amount = 0;      // Current value after change
-        int max_capacity = 0;        // Max capacity
-        int change_amount = 0;       // Amount changed (+50 or -200)
-    };
+/**
+ * @brief 资源变化事件
+ */
+struct ResourceUpdateEvent {
+    std::string resource_type;   // "Gold", "Elixir", "Population"
+    int current_amount = 0;
+    int max_capacity = 0;
+    int change_amount = 0;
+};
 
-    /**
-     * @brief Troop Count Update Event
-     * Trigger timing: Troop training complete, deployment, death
-     */
-    struct TroopCountUpdateEvent {
-        int owner_id = 0;
-        Core::TroopType troop_type = Core::TroopType::kBarbarian;
-        int remaining_count = 0;
-    };
+/**
+ * @brief 兵种数量变化事件
+ */
+struct TroopCountUpdateEvent {
+    int owner_id = 0;
+    Core::TroopType troop_type = Core::TroopType::kBarbarian;
+    int remaining_count = 0;
+};
 
-    /**
-     * @brief Deployment Selection Event
-     * Trigger timing: Player selects/deselects a troop to deploy
-     */
-    struct DeploymentSelectionEvent {
-        int owner_id = 0;
-        bool has_selection = false;
-        Core::TroopType troop_type = Core::TroopType::kBarbarian;
-    };
+/**
+ * @brief 部署选择事件
+ */
+struct DeploymentSelectionEvent {
+    int owner_id = 0;
+    bool has_selection = false;
+    Core::TroopType troop_type = Core::TroopType::kBarbarian;
+};
 
-    /**
-     * @brief Entity Spawn Event
-     * Trigger timing: Unit deployment, building placement, map initialization
-     */
-    struct EntitySpawnEvent {
-        int instance_id = 0;         // Global unique ID
-        int owner_id = 0;            // Faction ID (0: Player, 1: Enemy)
-        float x = 0.0f;              // World coordinate
-        float y = 0.0f;
-        int level = 0;               // Level
-        int current_hp = 0;          // Current HP
-        int max_hp = 0;              // Max HP
-        bool is_building = false;    // Is building
-        Core::TroopType troop_type = Core::TroopType::kBarbarian;
-        Core::BuildingType building_type = Core::BuildingType::kTownHall;
-    };
+/**
+ * @brief 实体生成事件
+ */
+struct EntitySpawnEvent {
+    int instance_id = 0;
+    int owner_id = 0;
+    float x = 0.0f;
+    float y = 0.0f;
+    int level = 0;
+    int current_hp = 0;
+    int max_hp = 0;
+    bool is_building = false;
+    Core::TroopType troop_type = Core::TroopType::kBarbarian;
+    Core::BuildingType building_type = Core::BuildingType::kTownHall;
+};
 
-    /**
-     * @brief Entity Destroy Event
-     * Trigger timing: Unit death, building destruction
-     */
-    struct EntityDestroyEvent {
-        int instance_id = 0;
-        bool is_building = false;
-    };
+/**
+ * @brief 实体销毁事件
+ */
+struct EntityDestroyEvent {
+    int instance_id = 0;
+    bool is_building = false;
+};
 
-    /**
-     * @brief Building State Enum
-     */
-    enum class BuildingState {
-        kConstructing,   // Constructing
-        kIdle,           // Normal/Idle
-        kDestroyed       // Destroyed
-    };
+/**
+ * @brief 建筑状态枚举
+ */
+enum class BuildingState {
+    kConstructing,
+    kIdle,
+    kDestroyed
+};
 
-    /**
-     * @brief Building State Change Event
-     * Trigger timing: Start construction, construction complete, destroyed
-     */
-    struct BuildingStateEvent {
-        int instance_id = 0;
-        Core::BuildingType type = Core::BuildingType::kTownHall;
-        BuildingState new_state = BuildingState::kIdle;
-        float time_remaining = 0.0f;    // Remaining construction time
-        float total_build_time = 0.0f;  // Total construction time
-    };
+/**
+ * @brief 建筑状态变化事件
+ */
+struct BuildingStateEvent {
+    int instance_id = 0;
+    Core::BuildingType type = Core::BuildingType::kTownHall;
+    BuildingState new_state = BuildingState::kIdle;
+    float time_remaining = 0.0f;
+    float total_build_time = 0.0f;
+};
 
-    /**
-     * @brief Damage Event
-     * Trigger timing: Entity takes damage
-     */
-    struct DamageEvent {
-        int target_instance_id = 0;
-        int damage_amount = 0;
-        int current_hp = 0;
-        int max_hp = 0;
-        bool is_critical = false;    // Reserved: Critical hit
-    };
+/**
+ * @brief 伤害事件
+ */
+struct DamageEvent {
+    int target_instance_id = 0;
+    int damage_amount = 0;
+    int current_hp = 0;
+    int max_hp = 0;
+    bool is_critical = false;
+};
 
-    /**
-     * @brief Projectile Fired Event
-     * Trigger timing: Ranged attack fired
-     */
-    struct ProjectileEvent {
-        int source_id = 0;           // Shooter ID
-        float target_x = 0.0f;       // Target position
-        float target_y = 0.0f;
-        Core::ProjectileType projectile_type = Core::ProjectileType::kNone;
-    };
+/**
+ * @brief 投射物发射事件
+ */
+struct ProjectileEvent {
+    int source_id = 0;
+    float target_x = 0.0f;
+    float target_y = 0.0f;
+    Core::ProjectileType projectile_type = Core::ProjectileType::kNone;
+};
 
-    /**
-     * @brief Projectile Hit Event
-     * Trigger timing: Projectile reaches target
-     */
-    struct ProjectileHitEvent {
-        float x = 0.0f;
-        float y = 0.0f;
-        Core::ProjectileType projectile_type = Core::ProjectileType::kNone;
-    };
+/**
+ * @brief 投射物命中事件
+ */
+struct ProjectileHitEvent {
+    float x = 0.0f;
+    float y = 0.0f;
+    Core::ProjectileType projectile_type = Core::ProjectileType::kNone;
+};
 
-    /**
-     * @brief Battle Start Event
-     */
-    struct BattleStartEvent {
-        int time_limit_seconds = 0;
-    };
+/**
+ * @brief 战斗开始事件
+ */
+struct BattleStartEvent {
+    int time_limit_seconds = 0;
+    int total_buildings = 0;      // [NEW] 总建筑数
+    bool has_town_hall = false;   // [NEW] 是否有大本营
+};
 
-    /**
-     * @brief Battle Result Enum
-     */
-    enum class BattleResult {
-        kVictory,
-        kDefeat,
-        kTimeOut
-    };
+/**
+ * @brief 战斗结果枚举
+ */
+enum class BattleResult {
+    kVictory,
+    kDefeat,
+    kTimeOut
+};
 
-    /**
-     * @brief Battle End Event
-     */
-    struct BattleEndEvent {
-        BattleResult result = BattleResult::kVictory;
-        int stars_earned = 0;
-        int destruction_percent = 0;
-        int gold_stolen = 0;
-        int elixir_stolen = 0;
-        int trophies_earned = 0;
-        int trophies_total = 0;
-        int battle_duration_seconds = 0;
-        int troops_deployed = 0;
-        int troops_remaining = 0;
-        int spells_used = 0;
-    };
+/**
+ * @brief 战斗结束事件
+ */
+struct BattleEndEvent {
+    BattleResult result = BattleResult::kVictory;
+    int stars_earned = 0;
+    int destruction_percent = 0;
+    int gold_stolen = 0;
+    int elixir_stolen = 0;
+    int battle_duration_seconds = 0;
+    int troops_deployed = 0;
+    int troops_remaining = 0;
+    int spells_used = 0;
+    int trophies_earned = 0;         // [NEW] 获得/损失的奖杯数 (负数表示损失)
+    int trophies_total = 0;          // [NEW] 战斗后的总奖杯数
+};
 
-    /**
-     * @brief Loot Availability Event
-     * Trigger timing: Match preview/scouting provides available loot/trophies.
-     */
-    struct LootAvailabilityEvent {
-        int gold_available = 0;
-        int elixir_available = 0;
-        int trophies_available = 0;
-    };
+/**
+ * @brief 大本营等级变化事件
+ * 触发时机: 大本营升级完成时
+ */
+struct TownHallLevelChangedEvent {
+    int new_level = 1;               // 新等级
+    int old_level = 1;               // 旧等级
+};
 
-    // =============================================================================
-    // Event Listener Interface
-    // =============================================================================
+/**
+ * @brief 战利品可用性事件
+ * 触发时机: 匹配到对手时、刷新对手时
+ */
+struct LootAvailabilityEvent {
+    int gold_available = 0;          // 可掠夺金币
+    int elixir_available = 0;        // 可掠夺圣水
+    int trophies_available = 0;      // 可获得奖杯 (胜利时)
+    int trophies_lose = 0;           // 失败损失奖杯
+    int opponent_trophies = 0;       // 对手当前奖杯数
+    std::string opponent_name;       // 对手名称
+    int opponent_townhall_level = 1; // 对手大本营等级
+};
 
-    /**
-     * @brief Game Event Listener Interface
-     * UI/Audio layers need to inherit this interface and implement interested callbacks
-     */
-    class IGameEventListener {
-    public:
-        virtual ~IGameEventListener() = default;
+// =============================================================================
+// 事件监听器接口
+// =============================================================================
 
-        virtual void OnResourceChanged(const ResourceUpdateEvent& evt) {}
-        virtual void OnTroopCountUpdated(const TroopCountUpdateEvent& evt) {}
-        virtual void OnDeploymentSelectionChanged(const DeploymentSelectionEvent& evt) {}
-        virtual void OnEntitySpawned(const EntitySpawnEvent& evt) {}
-        virtual void OnEntityDestroyed(const EntityDestroyEvent& evt) {}
-        virtual void OnBuildingStateChanged(const BuildingStateEvent& evt) {}
-        virtual void OnEntityDamaged(const DamageEvent& evt) {}
-        virtual void OnProjectileFired(const ProjectileEvent& evt) {}
-        virtual void OnProjectileHit(const ProjectileHitEvent& evt) {}
-        virtual void OnBattleStarted(const BattleStartEvent& evt) {}
-        virtual void OnBattleEnded(const BattleEndEvent& evt) {}
-        virtual void OnLootAvailabilityUpdated(const LootAvailabilityEvent& evt) {}
-    };
+class IGameEventListener {
+public:
+    virtual ~IGameEventListener() = default;
 
-    // =============================================================================
-    // Event Manager (Singleton)
-    // =============================================================================
+    virtual void OnResourceChanged(const ResourceUpdateEvent& evt) {}
+    virtual void OnTroopCountUpdated(const TroopCountUpdateEvent& evt) {}
+    virtual void OnDeploymentSelectionChanged(const DeploymentSelectionEvent& evt) {}
+    virtual void OnEntitySpawned(const EntitySpawnEvent& evt) {}
+    virtual void OnEntityDestroyed(const EntityDestroyEvent& evt) {}
+    virtual void OnBuildingStateChanged(const BuildingStateEvent& evt) {}
+    virtual void OnEntityDamaged(const DamageEvent& evt) {}
+    virtual void OnProjectileFired(const ProjectileEvent& evt) {}
+    virtual void OnProjectileHit(const ProjectileHitEvent& evt) {}
+    virtual void OnBattleStarted(const BattleStartEvent& evt) {}
+    virtual void OnBattleEnded(const BattleEndEvent& evt) {}
+    virtual void OnTownHallLevelChanged(const TownHallLevelChangedEvent& evt) {}
+    virtual void OnLootAvailabilityUpdated(const LootAvailabilityEvent& evt) {}  // [NEW]
+};
 
-    /**
-     * @brief Game Event Manager
-     * Responsible for managing listeners and broadcasting events
-     */
-    class GameEventManager {
-    public:
-        static GameEventManager* GetInstance();
+// =============================================================================
+// 事件管理器 (单例)
+// =============================================================================
 
-        // Listener Management
-        void AddListener(IGameEventListener* listener);
-        void RemoveListener(IGameEventListener* listener);
+class GameEventManager {
+public:
+    static GameEventManager* GetInstance();
 
-        // Event Broadcasting
-        void BroadcastResourceChange(const ResourceUpdateEvent& evt);
-        void BroadcastTroopCountUpdated(const TroopCountUpdateEvent& evt);
-        void BroadcastDeploymentSelectionChanged(const DeploymentSelectionEvent& evt);
-        void BroadcastEntitySpawned(const EntitySpawnEvent& evt);
-        void BroadcastEntityDestroyed(const EntityDestroyEvent& evt);
-        void BroadcastBuildingStateChanged(const BuildingStateEvent& evt);
-        void BroadcastEntityDamaged(const DamageEvent& evt);
-        void BroadcastProjectileFired(const ProjectileEvent& evt);
-        void BroadcastProjectileHit(const ProjectileHitEvent& evt);
-        void BroadcastBattleStarted(const BattleStartEvent& evt);
-        void BroadcastBattleEnded(const BattleEndEvent& evt);
-        void BroadcastLootAvailabilityUpdated(const LootAvailabilityEvent& evt);
+    // 监听器管理
+    void AddListener(IGameEventListener* listener);
+    void RemoveListener(IGameEventListener* listener);
 
-        // Get last battle result (for settlement screen)
-        BattleEndEvent GetLastBattleEnded() const;
-        LootAvailabilityEvent GetLastLootAvailability() const;
+    // 事件广播
+    void BroadcastResourceChange(const ResourceUpdateEvent& evt);
+    void BroadcastTroopCountUpdated(const TroopCountUpdateEvent& evt);
+    void BroadcastDeploymentSelectionChanged(const DeploymentSelectionEvent& evt);
+    void BroadcastEntitySpawned(const EntitySpawnEvent& evt);
+    void BroadcastEntityDestroyed(const EntityDestroyEvent& evt);
+    void BroadcastBuildingStateChanged(const BuildingStateEvent& evt);
+    void BroadcastEntityDamaged(const DamageEvent& evt);
+    void BroadcastProjectileFired(const ProjectileEvent& evt);
+    void BroadcastProjectileHit(const ProjectileHitEvent& evt);
+    void BroadcastBattleStarted(const BattleStartEvent& evt);
+    void BroadcastBattleEnded(const BattleEndEvent& evt);
+    void BroadcastTownHallLevelChanged(const TownHallLevelChangedEvent& evt);
+    void BroadcastLootAvailabilityUpdated(const LootAvailabilityEvent& evt);  // [NEW]
 
-    private:
-        GameEventManager() = default;
+    // 获取上次战斗结果
+    BattleEndEvent GetLastBattleEnded() const;
 
-        std::vector<IGameEventListener*> listeners_;
-        BattleEndEvent last_battle_end_{};
-        LootAvailabilityEvent last_loot_availability_{};
-    };
+    // 获取上次战利品信息
+    LootAvailabilityEvent GetLastLootAvailability() const;
+
+private:
+    GameEventManager() = default;
+
+    std::vector<IGameEventListener*> listeners_;
+    BattleEndEvent last_battle_end_{};
+    LootAvailabilityEvent last_loot_availability_{};  // [NEW]
+};
 
 }  // namespace Gameplay
 

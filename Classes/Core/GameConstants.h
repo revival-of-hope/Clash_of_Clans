@@ -96,7 +96,7 @@ constexpr int kTagProjectile = 1003;
 enum class BuildingAnimationState : uint8_t {
     kIdle = 0,           
     kConstructing = 1,
-    // Gameplay   
+    // gameplay   
     kDamaged = 2,        
     kDestroyed = 3
 };

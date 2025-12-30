@@ -1,18 +1,33 @@
-#ifndef Contract_ENGINE_MOUSECONTROLLER_H_
-#define Contract_ENGINE_MOUSECONTROLLER_H_
+#ifndef __MOUSE_CONTROLLER_H__
+#define __MOUSE_CONTROLLER_H__
 
-class MapLayer;
+#include "cocos2d.h"
+#include <functional>
 
-class MouseController {
+class MouseController
+{
 public:
-    explicit MouseController(MapLayer* map_layer);
+    MouseController(cocos2d::Node* target);
+    ~MouseController() = default;
 
     void enable();
     void disable();
 
+    // 获取鼠标对应的瓦片坐标（仅当 target 是 TMXTiledMap 时有效）
+    cocos2d::Vec2 getTilePosAtScreenPos(const cocos2d::Vec2& screenPos);
+
+    // 鼠标移动回调
+    std::function<void(const cocos2d::Vec2&)> onMouseMoveCallback;
+
+
 private:
-    MapLayer* map_layer_ = nullptr;
-    bool is_enabled_ = false;
+    cocos2d::Node* target;
+    cocos2d::EventListenerMouse* listener = nullptr;
+
+    bool isDragging = false;
+    cocos2d::Vec2 lastMousePos;
+
+    void limitMapInsideScreen();
 };
 
-#endif  // Contract_ENGINE_MOUSECONTROLLER_H_
+#endif

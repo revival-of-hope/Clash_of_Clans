@@ -17,7 +17,7 @@
 #include "Gameplay/Components/PathAgent.h"
 #include "Gameplay/Components/EntityAnimationController.h"
 
-// ÈùôÊÄÅ ID ÁîüÊàêÂô®
+// æ≤Ã¨ ID …˙≥…∆˜
 static int s_next_building_id = 1000;
 
 Building* Building::create(Core::BuildingType type, int level, int owner_id) {
@@ -33,7 +33,7 @@ Building* Building::create(Core::BuildingType type, int level, int owner_id) {
 bool Building::init(Core::BuildingType type, int level, int owner_id) {
     if (!BaseEntity::init()) return false;
 
-    // ÂàÜÈÖçÂîØ‰∏Ä ID
+    // ∑÷≈‰Œ®“ª ID
     this->set_instance_id(s_next_building_id++);
 
     this->setLocalZOrder(static_cast<int>(Core::ZOrder::kBuildingBase));
@@ -47,7 +47,7 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
     this->construction_duration_ = 0.0f;
     this->obstacle_registered_ = false;
 
-    // Á≤æÁÅµÂíåÂä®ÁîªÂàùÂßãÂåñ
+    // æ´¡È∫Õ∂Øª≠≥ı ºªØ
     std::string sprite_sheet = GetSpriteSheetFilename(type);
     int frame_w, frame_h;
     GetFrameSize(type, frame_w, frame_h);
@@ -60,24 +60,23 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
         animation_controller_ = EntityAnimationController::create();
         if (animation_controller_) {
             animation_controller_->InitWithSprite(
-                visual_sprite_,
+                visual_sprite_, 
                 sprite_sheet,
                 EntityAnimationController::LayoutType::kBuilding,
-                frame_w,
+                frame_w, 
                 frame_h
             );
             animation_controller_->setName("AnimationController");
             this->addChild(animation_controller_);
         }
-    }
-    else {
+    } else {
         cocos2d::log("Error: Failed to create building sprite for type: %d", static_cast<int>(type));
         auto debugRect = cocos2d::DrawNode::create();
         debugRect->drawSolidRect(cocos2d::Vec2(-30, -30), cocos2d::Vec2(30, 30), cocos2d::Color4F::RED);
         this->addChild(debugRect);
     }
 
-    // Debug Âç†Âú∞ËåÉÂõ¥
+    // Debug ’ºµÿ∑∂Œß
     auto debug_grid = cocos2d::DrawNode::create();
     float total_w = stats_.width_ * Core::kTileWidth;
     float total_h = stats_.height_ * Core::kTileHeight;
@@ -94,7 +93,7 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
     health_comp->SetHealthBarOffset(cocos2d::Vec2(0, 50));
     this->addChild(health_comp);
 
-    // AttackComp (‰ªÖÊîªÂáªÂª∫Á≠ë)
+    // AttackComp (Ωˆπ•ª˜Ω®÷˛)
     if (stats_.damage_ > 0) {
         auto attack_comp = AttackComp::create();
         Core::ProjectileType projType = GetProjectileTypeFromBuilding(type);
@@ -110,16 +109,16 @@ bool Building::init(Core::BuildingType type, int level, int owner_id) {
 void Building::onEnter() {
     BaseEntity::onEnter();
 
-    // Ê≥®ÂÜåÈöúÁ¢çÁâ©
+    // ◊¢≤·’œ∞≠ŒÔ
     if (type_ != Core::BuildingType::kNone && !obstacle_registered_) {
         cocos2d::Rect rect = this->GetOccupiedRect();
         PathAgent::UpdateObstacle(rect, true);
         obstacle_registered_ = true;
     }
-
-    // [EVENT] ÂπøÊí≠ÂÆû‰ΩìÁîüÊàê‰∫ã‰ª∂
+    
+    // [EVENT] π„≤• µÃÂ…˙≥… ¬º˛
     cocos2d::Vec2 pos = this->getPosition();
-
+    
     Gameplay::EntitySpawnEvent evt;
     evt.instance_id = this->get_instance_id();
     evt.owner_id = this->get_owner_id();
@@ -129,13 +128,13 @@ void Building::onEnter() {
     evt.current_hp = stats_.max_hp_;
     evt.max_hp = stats_.max_hp_;
     evt.is_building = true;
-    evt.troop_type = Core::TroopType::kBarbarian;  // Êó†ÊïàÂÄº
+    evt.troop_type = Core::TroopType::kBarbarian;  // Œﬁ–ß÷µ
     evt.building_type = type_;
-
+    
     Gameplay::GameEventManager::GetInstance()->BroadcastEntitySpawned(evt);
-
+    
     cocos2d::log("Building Spawned: ID=%d, Type=%d, Owner=%d, Pos=(%.0f, %.0f)",
-        evt.instance_id, static_cast<int>(type_), evt.owner_id, pos.x, pos.y);
+                 evt.instance_id, static_cast<int>(type_), evt.owner_id, pos.x, pos.y);
 }
 
 void Building::onExit() {
@@ -149,7 +148,7 @@ void Building::onExit() {
 
 void Building::SetState(Core::BuildingAnimationState new_state) {
     if (current_state_ == new_state) return;
-
+    
     Core::BuildingAnimationState old_state = current_state_;
     current_state_ = new_state;
 
@@ -157,13 +156,13 @@ void Building::SetState(Core::BuildingAnimationState new_state) {
         animation_controller_->SetBuildingAnimationState(new_state);
     }
 
-    // [EVENT] ÂπøÊí≠Âª∫Á≠ëÁä∂ÊÄÅÂèòÂåñ
+    // [EVENT] π„≤•Ω®÷˛◊¥Ã¨±‰ªØ
     Gameplay::BuildingStateEvent state_evt;
     state_evt.instance_id = this->get_instance_id();
     state_evt.type = type_;
     state_evt.time_remaining = construction_timer_;
     state_evt.total_build_time = construction_duration_;
-
+    
     switch (new_state) {
     case Core::BuildingAnimationState::kConstructing:
         state_evt.new_state = Gameplay::BuildingState::kConstructing;
@@ -178,26 +177,26 @@ void Building::SetState(Core::BuildingAnimationState new_state) {
         state_evt.new_state = Gameplay::BuildingState::kIdle;
         break;
     }
-
+    
     Gameplay::GameEventManager::GetInstance()->BroadcastBuildingStateChanged(state_evt);
 
-    // ÈîÄÊØÅÂ§ÑÁêÜ
+    // œ˙ªŸ¥¶¿Ì
     if (current_state_ == Core::BuildingAnimationState::kDestroyed) {
-        // ÁßªÈô§ÈöúÁ¢çÁâ©
+        // “∆≥˝’œ∞≠ŒÔ
         if (obstacle_registered_) {
             cocos2d::Rect rect = this->GetOccupiedRect();
             PathAgent::UpdateObstacle(rect, false);
             obstacle_registered_ = false;
         }
 
-        // [EVENT] ÂπøÊí≠ÂÆû‰ΩìÈîÄÊØÅ‰∫ã‰ª∂
+        // [EVENT] π„≤• µÃÂœ˙ªŸ ¬º˛
         Gameplay::EntityDestroyEvent destroy_evt;
         destroy_evt.instance_id = this->get_instance_id();
         destroy_evt.is_building = true;
         Gameplay::GameEventManager::GetInstance()->BroadcastEntityDestroyed(destroy_evt);
-
-        cocos2d::log("Building Destroyed: ID=%d, Type=%d",
-            this->get_instance_id(), static_cast<int>(type_));
+        
+        cocos2d::log("Building Destroyed: ID=%d, Type=%d", 
+                     this->get_instance_id(), static_cast<int>(type_));
 
         this->is_marked_for_destruction_ = false;
 
@@ -211,15 +210,14 @@ void Building::SetState(Core::BuildingAnimationState new_state) {
                 collapse,
                 cocos2d::CallFunc::create([this]() {
                     this->MarkForDestruction();
-                    }),
+                }),
                 nullptr
             );
             visual_sprite_->runAction(seq);
 
             auto hp_comp = dynamic_cast<HealthComp*>(this->getChildByName("HealthComp"));
             if (hp_comp) hp_comp->setVisible(false);
-        }
-        else {
+        } else {
             this->MarkForDestruction();
         }
     }
@@ -236,11 +234,11 @@ float Building::GetConstructionProgress() const {
     if (current_state_ != Core::BuildingAnimationState::kConstructing) {
         return 1.0f;
     }
-
+    
     if (construction_duration_ <= 0.0f) {
         return 1.0f;
     }
-
+    
     float elapsed = construction_duration_ - construction_timer_;
     return std::min(1.0f, std::max(0.0f, elapsed / construction_duration_));
 }
@@ -288,7 +286,7 @@ void Building::update(float dt) {
     BaseEntity::update(dt);
     if (IsMarkedForDestruction()) return;
 
-    // Âª∫ÈÄ†ÈÄªËæë
+    // Ω®‘Ï¬ﬂº≠
     if (current_state_ == Core::BuildingAnimationState::kConstructing) {
         construction_timer_ -= dt;
         if (construction_timer_ <= 0.0f) {
@@ -297,19 +295,18 @@ void Building::update(float dt) {
             if (visual_sprite_) visual_sprite_->setColor(cocos2d::Color3B::WHITE);
             cocos2d::Vector<Building*> dummy;
             EconomySystem::GetInstance()->RecalculateLimits(dummy);
-        }
-        else {
+        } else {
             if (visual_sprite_) visual_sprite_->setColor(cocos2d::Color3B::GRAY);
             return;
         }
     }
 
-    // ËµÑÊ∫êÁîü‰∫ß
+    // ◊ ‘¥…˙≤˙
     if (stats_.production_rate_ > 0) {
         ProduceResource(dt);
     }
 
-    // Èò≤Âæ°Á¥¢Êïå
+    // ∑¿”˘À˜µ–
     if (stats_.damage_ > 0) {
         UpdateCombatLogic(dt);
     }
@@ -390,7 +387,7 @@ std::string Building::GetSpriteSheetFilename(Core::BuildingType type) {
 }
 
 void Building::GetFrameSize(Core::BuildingType type, int& out_width, int& out_height) {
-    // 500x500 Á≤æÁÅµÂõæÔºå2x2 Â∏ÉÂ±ÄÔºåÊØèÂ∏ß 250x250
+    // 500x500 æ´¡ÈÕº£¨2x2 ≤ºæ÷£¨√ø÷° 250x250
     out_width = 250;
     out_height = 250;
 }
