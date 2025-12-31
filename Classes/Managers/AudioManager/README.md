@@ -6,7 +6,7 @@ Authoritative list of audio identifiers and their intended usage for AudioManage
 - `Resources/music/Background Music/Home music 1.mp3` — Home screen background loop.
 - `Resources/music/Background Music/Home music 2.mp3` — Alternate home screen background loop.
 - `Resources/music/Background Music/shorter part1.mp3` — Shorter background intro.
-- `Resources/music/Background Music/shorter part2.mp3` — Shorter background loop/continuation.
+- `Resources/music/Background Music/shorter part2.mp3` — Battle background loop (shorter background loop/continuation).
 
 ## Building Effects
 - `Resources/music/Building effects/bad-placement.mp3` — Invalid placement warning.

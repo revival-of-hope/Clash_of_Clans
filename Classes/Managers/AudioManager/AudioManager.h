@@ -25,10 +25,14 @@ public:
     void PlayUiClick();
 
 private:
-    void PlayMappedClip(const std::string& key, bool loop = false);
+    int PlayMappedClip(const std::string& key, bool loop = false);
+    int StartLoopedClip(const std::string& key, int* handle);
+    void StopHandle(int* handle);
 
     Gameplay::GameEventManager* event_manager_ = nullptr;
     IAudioSink* sink_ = nullptr;
+    int menu_music_handle_ = 0;
+    int battle_bgm_handle_ = 0;
 };
 
 #endif  // MANAGERS_AUDIOMANAGER_AUDIOMANAGER_H_

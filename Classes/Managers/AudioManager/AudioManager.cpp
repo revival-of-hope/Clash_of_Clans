@@ -13,9 +13,10 @@ struct ClipMapping {
 
 const ClipMapping kClipMappings[] = {
         {"menu_music", "Resources/music/Background Music/Home music 1.mp3", true},
-        {"ui_click", "Resources/music/UI effects/ui_click.mp3", false},
         {"battle_start", "Resources/music/UI effects/start_up.mp3", false},
+        {"battle_bgm", "Resources/music/Background Music/shorter part2.mp3", true},
         {"battle_end", "Resources/music/UI effects/builder-base-combat-end.mp3", false},
+        {"ui_click", "Resources/music/UI effects/ui_click.mp3", false},
         {"projectile_fired", "Resources/music/Combat effects/archer tower.mp3", false},
         {"projectile_hit", "Resources/music/Combat effects/arrow-hit.mp3", false},
         {"entity_destroyed_building", "Resources/music/Combat effects/building destroyed.mp3", false},
@@ -56,9 +57,11 @@ void AudioManager::OnProjectileHit(const Gameplay::ProjectileHitEvent& /*evt*/) 
 
 void AudioManager::OnBattleStarted(const Gameplay::BattleStartEvent& /*evt*/) {
     PlayMappedClip("battle_start");
+    StartLoopedClip("battle_bgm", &battle_bgm_handle_);
 }
 
 void AudioManager::OnBattleEnded(const Gameplay::BattleEndEvent& /*evt*/) {
+    StopHandle(&battle_bgm_handle_);
     PlayMappedClip("battle_end");
 }
 
@@ -71,20 +74,47 @@ void AudioManager::OnEntityDestroyed(const Gameplay::EntityDestroyEvent& evt) {
 }
 
 void AudioManager::PlayMenuMusic() {
-    PlayMappedClip("menu_music", true);
+    StartLoopedClip("menu_music", &menu_music_handle_);
 }
 
 void AudioManager::PlayUiClick() {
     PlayMappedClip("ui_click");
 }
 
-void AudioManager::PlayMappedClip(const std::string& key, bool loop) {
+int AudioManager::StartLoopedClip(const std::string& key, int* handle) {
     if (!sink_) {
-        return;
+        return 0;
     }
     const ClipMapping* mapping = LookupClip(key);
     if (!mapping) {
+        return 0;
+    }
+    StopHandle(handle);
+    if (!handle) {
+        return 0;
+    }
+    *handle = sink_->Play(mapping->clip_id, true);
+    return *handle;
+}
+
+void AudioManager::StopHandle(int* handle) {
+    if (!sink_ || !handle) {
         return;
     }
-    sink_->Play(mapping->clip_id, loop || mapping->loop);
+    if (*handle <= 0) {
+        return;
+    }
+    sink_->Stop(*handle);
+    *handle = 0;
+}
+
+int AudioManager::PlayMappedClip(const std::string& key, bool loop) {
+    if (!sink_) {
+        return 0;
+    }
+    const ClipMapping* mapping = LookupClip(key);
+    if (!mapping) {
+        return 0;
+    }
+    return sink_->Play(mapping->clip_id, loop || mapping->loop);
 }

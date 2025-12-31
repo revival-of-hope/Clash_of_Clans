@@ -1517,9 +1517,12 @@ void TestAudioManagerPlaysBattleStartMusic() {
     Gameplay::BattleStartEvent battle_start{};
     manager->BroadcastBattleStarted(battle_start);
 
-    assert(!sink.GetPlays().empty());
-    const RecordedClip& play = sink.GetPlays().back();
-    assert(play.clip_id == "Resources/music/UI effects/start_up.mp3");
+    const std::vector<RecordedClip>& plays = sink.GetPlays();
+    assert(plays.size() == 2);
+    assert(plays[0].clip_id == "Resources/music/UI effects/start_up.mp3");
+    assert(!plays[0].loop);
+    assert(plays[1].clip_id == "Resources/music/Background Music/shorter part2.mp3");
+    assert(plays[1].loop);
 }
 
 void TestAudioManagerNoSoundWithoutEvents() {
@@ -1560,6 +1563,75 @@ void TestAudioManagerMenuMusicAndClick() {
     assert(plays[0].clip_id == "Resources/music/Background Music/Home music 1.mp3");
     assert(plays[0].loop);
     assert(plays[1].clip_id == "Resources/music/UI effects/ui_click.mp3");
+}
+
+void TestAudioManagerProjectileAudioClips() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    AudioSinkMock sink;
+    sink.Reset();
+
+    AudioManager audio_manager(manager, &sink);
+
+    Gameplay::ProjectileEvent fired{};
+    manager->BroadcastProjectileFired(fired);
+
+    Gameplay::ProjectileHitEvent hit{};
+    manager->BroadcastProjectileHit(hit);
+
+    const std::vector<RecordedClip>& plays = sink.GetPlays();
+    assert(plays.size() == 2);
+    assert(plays[0].clip_id == "Resources/music/Combat effects/archer tower.mp3");
+    assert(plays[1].clip_id == "Resources/music/Combat effects/arrow-hit.mp3");
+}
+
+void TestAudioManagerEntityDestroyedAudioClips() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    AudioSinkMock sink;
+    sink.Reset();
+
+    AudioManager audio_manager(manager, &sink);
+
+    Gameplay::EntityDestroyEvent building_destroy{};
+    building_destroy.is_building = true;
+    manager->BroadcastEntityDestroyed(building_destroy);
+
+    Gameplay::EntityDestroyEvent unit_destroy{};
+    unit_destroy.is_building = false;
+    manager->BroadcastEntityDestroyed(unit_destroy);
+
+    const std::vector<RecordedClip>& plays = sink.GetPlays();
+    assert(plays.size() == 2);
+    assert(plays[0].clip_id == "Resources/music/Combat effects/building destroyed.mp3");
+    assert(plays[1].clip_id == "Resources/music/Combat effects/barbarian-death-cry.mp3");
+}
+
+void TestAudioManagerBattleEndStopsBattleBgmOnly() {
+    Gameplay::GameEventManager* manager = Gameplay::GameEventManager::GetInstance();
+    AudioSinkMock sink;
+    sink.Reset();
+
+    AudioManager audio_manager(manager, &sink);
+
+    audio_manager.PlayMenuMusic();
+
+    Gameplay::BattleStartEvent start_evt{};
+    manager->BroadcastBattleStarted(start_evt);
+
+    const std::vector<RecordedClip>& plays = sink.GetPlays();
+    assert(plays.size() == 3);
+    int menu_handle = plays[0].handle;
+    int battle_bgm_handle = plays[2].handle;
+    assert(plays[2].clip_id == "Resources/music/Background Music/shorter part2.mp3");
+    assert(plays[2].loop);
+
+    Gameplay::BattleEndEvent end_evt{};
+    manager->BroadcastBattleEnded(end_evt);
+
+    const std::vector<int>& stops = sink.GetStops();
+    assert(stops.size() == 1);
+    assert(stops[0] == battle_bgm_handle);
+    assert(stops[0] != menu_handle);
+    assert(sink.GetStopAllCalls() == 0);
 }
 
 int main() {
@@ -1610,5 +1682,8 @@ int main() {
     TestAudioManagerNoSoundWithoutEvents();
     TestAudioManagerIgnoresUnmappedEvents();
     TestAudioManagerMenuMusicAndClick();
+    TestAudioManagerProjectileAudioClips();
+    TestAudioManagerEntityDestroyedAudioClips();
+    TestAudioManagerBattleEndStopsBattleBgmOnly();
     return 0;
 }
