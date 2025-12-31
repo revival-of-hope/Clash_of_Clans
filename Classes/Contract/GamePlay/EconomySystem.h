@@ -3,9 +3,9 @@
 // Author: Developer B
 //
 // Singleton for managing global resources (Gold, Elixir, Population).
-// [UPDATE] Added missing interface declarations
+// Contract header for external modules.
 //
-// Path: Classes/Contract/GamePlay/EconomySystem.h
+// Path: Classes/Contract/Gameplay/EconomySystem.h
 
 #ifndef CONTRACT_GAMEPLAY_ECONOMY_SYSTEM_H_
 #define CONTRACT_GAMEPLAY_ECONOMY_SYSTEM_H_
@@ -14,162 +14,104 @@
 #include "Core/GameConstants.h"
 #include <vector>
 
-// 前向声明
 class Building;
 struct ResourceCost;
 
 /**
- * @brief 经济系统 (单例)
- * 职责:
- * 1. 维护全局资源 (金币, 圣水) 的当前值与最大上限。
- * 2. 维护人口 (Housing Space) 的当前占用与最大上限。
- * 3. 处理资源的 收集(Collect) 和 消费(Spend)。
- * 4. 动态计算上限 (基于场上建筑)。
+ * @brief Economy System (Singleton)
+ *
+ * Responsibilities:
+ * 1. Maintain global resources (Gold, Elixir) current values and max limits.
+ * 2. Maintain Population (Housing Space) current usage and max limits.
+ * 3. Handle resource Collection and Spending.
+ * 4. Dynamically calculate limits (based on buildings on the field).
+ * 5. Provide convenient affordability check methods.
  */
 class EconomySystem {
 public:
     static EconomySystem* GetInstance();
 
-    // 初始化数据
     void Reset();
 
-    // ==========================================================================
-    // 资源操作 (Resource Operations)
-    // ==========================================================================
+    // =========================================================================
+    // Resource Operations
+    // =========================================================================
 
-    /**
-     * @brief 增加金币 (来源: 收集、任务奖励、调试)
-     * 会自动执行上限截断 (Clamp to Max)
-     */
     void AddGold(int amount);
-
-    /**
-     * @brief 增加圣水
-     */
     void AddElixir(int amount);
-
-    /**
-     * @brief 尝试消费金币 (来源: 造兵、升级)
-     * @return true 表示扣款成功; false 表示余额不足
-     */
     bool SpendGold(int amount);
-
-    /**
-     * @brief 尝试消费圣水
-     */
     bool SpendElixir(int amount);
-
-    /**
-     * @brief 批量消费资源
-     * @param cost 资源消耗结构
-     * @return true 扣款成功
-     */
     bool SpendCost(const ResourceCost& cost);
 
-    // ==========================================================================
-    // 支付能力检查 (仅检查，不扣款)
-    // ==========================================================================
+    // =========================================================================
+    // Affordability Check - Contract Layer
+    // =========================================================================
 
-    /**
-     * @brief 检查是否买得起 (金币+圣水)
-     */
     bool CanAfford(int gold_cost, int elixir_cost) const;
-
-    /**
-     * @brief 检查是否能支付 ResourceCost
-     * @param cost 资源消耗结构
-     * @param check_population 是否检查人口
-     * @return true 可以支付
-     */
-    bool CanAffordCost(const ResourceCost& cost, bool check_population = false) const;
-
-    /**
-     * @brief 检查是否能建造建筑
-     */
-    bool CanAffordBuilding(Core::BuildingType type, int level) const;
-
-    /**
-     * @brief 检查是否能升级建筑
-     */
+    bool CanAffordCost(const ResourceCost& cost, bool check_population = true) const;
+    // Matchmaking affordability: CostQuery::GetMatchmakingCost() -> CanAffordCost(...) + SpendGold(...).
+    bool CanAffordBuilding(Core::BuildingType type, int level = 1) const;
     bool CanAffordBuildingUpgrade(Core::BuildingType type, int current_level) const;
-
-    /**
-     * @brief 检查是否能训练兵种
-     */
-    bool CanAffordTroop(Core::TroopType type, int level) const;
-
-    /**
-     * @brief 检查是否有足够人口空间
-     */
+    bool CanAffordTroop(Core::TroopType type, int level = 1) const;
     bool HasPopulationSpace(int housing_space) const;
 
-    // ==========================================================================
-    // 收集逻辑 (Collection Logic)
-    // ==========================================================================
+    // =========================================================================
+    // Collection Logic
+    // =========================================================================
 
-    /**
-     * @brief 尝试从建筑收集资源
-     * @param building 目标建筑 (金矿/收集器)
-     * @return int 实际收集到的数量 (如果库满了则是 0)
-     */
     int TryCollectResource(Building* building);
 
-    // ==========================================================================
-    // 人口管理 (Population / Housing Space)
-    // ==========================================================================
+    // =========================================================================
+    // Population Management
+    // =========================================================================
 
-    /**
-     * @brief 增加当前人口占用 (造兵时调用)
-     * @return true 成功, false 人口已满
-     */
     bool AddTroopPopulation(int housing_space);
-
-    /**
-     * @brief 释放人口 (士兵死亡/捐兵时调用)
-     */
     void FreeTroopPopulation(int housing_space);
+    int GetRemainingPopulation() const {
+        return max_population_ - current_population_;
+    }
 
-    /**
-     * @brief 获取剩余人口空间
-     */
-    int GetRemainingPopulation() const { return max_population_ - current_population_; }
+    // =========================================================================
+    // Limit Calculation
+    // =========================================================================
 
-    // ==========================================================================
-    // 上限计算 (Capacity Calculation)
-    // ==========================================================================
-
-    /**
-     * @brief 重新计算所有资源的上限
-     * 触发时机: 游戏加载完毕、储金罐/兵营 建造或升级完成时
-     * @param buildings 场上所有建筑的列表 (可忽略，会自动遍历)
-     */
     void RecalculateLimits(const cocos2d::Vector<Building*>& buildings);
 
-    // ==========================================================================
-    // Getters (UI 用于显示)
-    // ==========================================================================
+    // =========================================================================
+    // Read-only Accessors - Contract Layer
+    // =========================================================================
 
     int GetCurrentGold() const { return current_gold_; }
     int GetMaxGold() const { return max_gold_; }
-
     int GetCurrentElixir() const { return current_elixir_; }
     int GetMaxElixir() const { return max_elixir_; }
-
     int GetCurrentPopulation() const { return current_population_; }
     int GetMaxPopulation() const { return max_population_; }
 
+    float GetGoldPercentage() const {
+        if (max_gold_ <= 0) return 0.0f;
+        return static_cast<float>(current_gold_) / static_cast<float>(max_gold_);
+    }
+
+    float GetElixirPercentage() const {
+        if (max_elixir_ <= 0) return 0.0f;
+        return static_cast<float>(current_elixir_) / static_cast<float>(max_elixir_);
+    }
+
+    float GetPopulationPercentage() const {
+        if (max_population_ <= 0) return 0.0f;
+        return static_cast<float>(current_population_) / static_cast<float>(max_population_);
+    }
+
 private:
-    // 构造函数私有化
     EconomySystem();
 
     int current_gold_;
     int max_gold_;
-
     int current_elixir_;
     int max_elixir_;
-
-    int current_population_; // 当前已造兵人口
-    int max_population_;     // 兵营提供的总上限
+    int current_population_;
+    int max_population_;
 };
 
 #endif // CONTRACT_GAMEPLAY_ECONOMY_SYSTEM_H_
