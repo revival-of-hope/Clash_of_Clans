@@ -10,7 +10,7 @@ Timeline: 1 Month
 
 ### **Table of Contents**
 
-**Please take the English version as the standard/authoritative one.**
+**devC note: Please take the English version as the standard/authoritative one.**
 
 1. [Core Features](https://www.google.com/search?q=%23core-features)
 2. [Game Content & Assets](https://www.google.com/search?q=%23game-content--assets)
